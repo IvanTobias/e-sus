@@ -1,0 +1,611 @@
+:root {
+    --primary: #007bff;
+    --dark: #21232f;
+    --danger: #d62828;
+    --success: #06d6a0;
+    --white: #f5f6f7;
+    --blue: #244e98;
+  }
+  
+  /* Reset de Estilos Globais */
+  body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background-color: var(--white);
+    color: #343a40;
+  }
+  
+  /* === Sidebar === */
+  .sidebar {
+    padding: 15px;
+    background-color: #333;
+    color: white;
+    width: 200px;
+    height: 100vh;
+    position: fixed;
+  }
+  
+  .sidebar h3 {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: #fff;
+  }
+  
+  .sidebar a {
+    display: block;
+    padding: 10px 15px;
+    font-size: 14px;
+    color: #bbb;
+    text-decoration: none;
+    cursor: pointer;
+    margin-bottom: 5px;
+    border-radius: 5px;
+    white-space: nowrap;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+  
+  .sidebar a.active {
+    background-color: var(--primary);
+    color: white;
+    font-weight: bold;
+    border-left: 4px solid white;
+  }
+  
+  .sidebar a:hover {
+    background-color: #555;
+    color: white;
+  }
+  
+  /* === Conteúdo Geral === */
+  .content {
+    margin-left: 220px;
+    padding: 40px 30px;
+    background-color: var(--white);
+  }
+  
+  h1, h2 {
+    color: var(--dark);
+    margin-bottom: 20px;
+  }
+  
+  /* === Containers e Cards === */
+  .container {
+    width: 80%;
+    max-width: 900px;
+    margin: 50px auto;
+    padding: 30px;
+    background-color: var(--white);
+    border-radius: 12px;
+    box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.2);
+  }
+  
+/* === Estilo para os Cards === */
+.card-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); /* Grid flexível */
+    gap: 15px; /* Espaçamento entre os cards */
+    margin-bottom: 20px; /* Margem inferior */
+}
+
+.card {
+    padding: 15px;
+    border-radius: 8px;
+    background-color: var(--white);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+    justify-content: center;
+}
+
+.card h2 {
+    font-size: 1.1em;
+    color: var(--dark);
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    gap: 10px; /* Espaço entre o ícone e o texto */
+    margin-top: 8.5px
+}
+
+.card h3 {
+    font-size: 1.1em; /* Reduz o tamanho do texto do título */
+    color: var(--dark);
+    margin-bottom: 10px; /* Margem inferior menor */
+    display: flex;
+    align-items: center;
+    gap: 6px; /* Menor espaço entre o ícone e o texto */
+    margin-top: 8.5px
+}
+
+.card p {
+    font-size: 1.1em;
+    color: var(--dark);
+}
+
+.card:hover {
+    transform: translateY(-5px); /* Efeito de levantar o card */
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2); /* Sombra mais pronunciada */
+}
+
+/* Destaque para os números */
+.card .count {
+    font-size: 1.5em; /* Destaque para os números */
+    font-weight: bold;
+    color: var(--primary);
+}
+
+/* Efeito de Fade-in */
+@keyframes fadeInCards {
+    from {
+      opacity: 0;
+      transform: translateY(20px); /* Move ligeiramente os cards para baixo ao iniciar */
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0); /* Retorna à posição original */
+    }
+  }
+  
+  /* Classe para a animação */
+  .fade-in-cards {
+    animation: fadeInCards  0.5s ease-in-out forwards; /* Animação de 0.5s com efeito de entrada suave */
+    opacity: 0; /* Inicia invisível para que o efeito de fade-in seja aplicado */
+  }
+
+  
+  /* === Formulários === */
+  form {
+    max-width: 800px;
+    margin: 0 auto 30px;
+    background-color: var(--white);
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
+  }
+  
+  form div {
+    margin-bottom: 15px;
+  }
+  
+  label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+  }
+  
+  input[type="text"],
+  input[type="password"],
+  select {
+    width: flex;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-bottom: 10px;
+    font-size: 14px;
+    display: inline-block;
+  }
+  
+/* Botões */
+button,
+.btn {
+  padding: 10px 20px;
+  border: 2px solid var(--primary); /* Borda mais visível */
+  border-radius: 25px; /* Bordas arredondadas */
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.3s ease;
+  background-color: var(--primary);
+  color: white;
+  font-weight: bold;
+  text-align: center;
+  margin-right: 10px;
+}
+  
+  button:hover,
+  .btn:hover {
+    background-color: var(--dark);
+    border-color: var(--dark); /* Mantém a borda ao passar o mouse */
+  }
+  
+  button:disabled,
+  .btn-disabled,
+  .pagination button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+  
+/* Contêiner Flex para Botões e Barra de Progresso */
+.flex-container {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px; /* Espaçamento entre itens */
+    margin-bottom: 10px; /* Espaçamento inferior */
+    justify-content: flex-start; /* Alinha os itens horizontalmente ao início */
+  }
+
+/* Barra de Progresso */
+.progress {
+    width: 100%; /* A largura da barra de progresso será ajustada conforme necessário */
+    background-color: #f0f0f0;
+    border-radius: 10px;
+    height: 20px;
+    position: relative;
+    flex-grow: 1; /* Faz a barra crescer para ocupar o espaço restante */
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .progressBar {
+    height: 100%;
+    background-color: var(--success); /* Cor verde para progresso */
+    color: white;
+    text-align: center;
+    line-height: 25px;
+    border-radius: 25px;
+    width: 0%;
+    transition: width 0.4s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+  }
+
+  /* Estilos da barra de progresso */
+.progressContainer {
+    flex: 1; /* Permite que a barra de progresso ocupe o espaço restante */
+    display: flex; /* Define o contêiner como flexível para centralizar a barra */
+    align-items: center; /* Alinha verticalmente ao centro */
+    margin-left: 10px; /* Espaçamento à esquerda da barra de progresso */
+    justify-content: flex-start; /* Alinha horizontalmente ao início */
+    margin-top: 8.5px; /* Adiciona espaçamento superior para afastar a barra do topo */
+}
+
+  
+ /* === Select de Mês e Ano === */
+.select__control {
+    border: 2px solid var(--primary); /* Borda azul padrão */
+    border-radius: 8px; /* Cantos mais arredondados */
+    padding: 5px; /* Padding mais espaçado */
+    box-shadow: none; /* Remove a sombra padrão */
+    transition: all 0.3s ease; /* Transição suave para mudanças */
+    font-size: 14px; /* Tamanho da fonte */
+    margin-bottom: 15px; /* Espaçamento inferior entre os selects */
+    background-color: white; /* Garante fundo branco */
+}
+
+.select__control--is-focused {
+    border-color: var(--primary); /* Borda azul ao focar */
+    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.2); /* Sombra suave ao focar */
+}
+
+.select__menu {
+    border-radius: 8px; /* Cantos arredondados no menu */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra suave para o menu */
+    margin-top: 4px; /* Espaço entre o menu e o select */
+    z-index: 1000; /* Garante que o menu esteja acima de outros elementos */
+}
+
+.select__option {
+    padding: 10px; /* Espaçamento interno das opções */
+    font-size: 14px; /* Tamanho da fonte das opções */
+    transition: background-color 0.3s ease; /* Transição suave de cor */
+}
+
+.select__option--is-selected {
+    background-color: var(--primary); /* Fundo azul para a opção selecionada */
+    color: white; /* Texto branco para a opção selecionada */
+}
+
+.select__option--is-focused {
+    background-color: #e6f0ff; /* Fundo azul claro ao focar */
+    color: var(--primary); /* Texto azul ao focar */
+}
+
+/* Estilo para os itens selecionados */
+.select__multi-value {
+    background-color: #e6f0ff; /* Fundo azul claro para itens selecionados */
+    color: var(--primary); /* Texto azul para itens selecionados */
+    border-radius: 4px; /* Cantos arredondados dos itens selecionados */
+    padding: 2px 5px; /* Espaçamento interno dos itens selecionados */
+    font-weight: bold; /* Negrito para itens selecionados */
+    margin: 2px; /* Espaçamento entre os itens selecionados */
+}
+
+/* Estilo para o botão de remoção de itens selecionados */
+.select__multi-value__remove {
+    color: var(--primary); /* Cor do botão de remoção */
+    cursor: pointer; /* Cursor de ponteiro para indicar clicável */
+    transition: color 0.2s ease; /* Transição suave de cor */
+}
+
+/* Efeito ao passar o mouse sobre o botão de remoção */
+.select__multi-value__remove:hover {
+    color: #0056b3; /* Cor mais escura ao passar o mouse */
+}
+
+  /* Modal */
+/* === Modal === */
+.modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 90%;
+    max-width: flex;
+    min-width: 300px;
+    max-height: 800px;
+    background-color: var(--white);
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+    padding: 20px;
+    animation: fadeInModal 0.3s ease-in-out;
+    overflow: hidden;
+    transition: transform 0.5s ease, opacity 0.5s ease, max-height 1s ease; /* Transição suave */
+    opacity: 1;
+  }
+  
+
+
+/* Quando o modal estiver carregando, definimos um cursor de espera */
+.modal.loading {
+    cursor: wait;
+}
+
+/* Transição suave para aumentar a altura quando os dados estiverem carregados */
+.modal.loading .modal-content {
+    opacity: 0.6; /* Mais transparente enquanto carrega */
+}
+
+/* Conteúdo do Modal */
+.modal-content {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    transition: opacity 0.3s ease, max-height 1s ease; /* Transição de opacidade e altura */
+    opacity: 1; /* Opacidade padrão */
+    max-height: 600px; /* Altura máxima inicial */
+  }
+
+/* Rodapé do Modal */
+.modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding-top: 10px;
+}
+
+  /* Animação de Fade-In */
+  @keyframes fadeInModal {
+    from {
+      opacity: 0;
+      transform: translate(-50%, -45%);
+    }
+    to {
+      opacity: 1;
+      transform: translate(-50%, -50%);
+    }
+  }
+
+  /* Animação de Fade-Out */
+  @keyframes fadeOutModal {
+    from {
+      opacity: 1;
+      transform: translate(-50%, -50%);
+    }
+    to {
+      opacity: 0;
+      transform: translate(-50%, -45%);
+    }
+  }
+
+  
+  /* Classe para Fade-In */
+  .fade-in {
+    opacity: 1;
+    animation: fadeInModal 0.3s ease-in-out forwards;
+  }
+
+  /* Classe para Fade-Out */
+  .fade-out {
+    opacity: 0;
+    animation: fadeOutModal 0.3s ease-in-out forwards;
+  }
+
+
+
+/* Cabeçalho do Modal */
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.modal-header h2 {
+    font-size: 1.5em;
+    color: var(--dark);
+    margin: 0;
+    flex: 1;
+}
+
+.close-button {
+    background: none;
+    border: none;
+    font-size: 18px;
+    color: var(--danger);
+    cursor: pointer;
+    padding: 0;
+    margin: 0;
+    line-height: 1;
+    transition: color 0.2s ease;
+}
+
+.close-button:hover {
+    color: #ff5b5b;
+}
+
+/* Corpo do Modal */
+.modal-body {
+    max-height: 400px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    margin-bottom: 20px;
+    transition: max-height 1s ease; /* Transição suave de altura */
+  }
+
+  /* Estilo do campo de pesquisa */
+.modal-body input[type="text"] {
+    width: 100%;
+    padding: 8px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    margin-bottom: 10px;
+    transition: box-shadow 0.3s ease, border-color 0.3s ease; /* Transições suaves para o campo de pesquisa */
+  }
+  
+  .modal-body input[type="text"]:focus {
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* Adiciona sombra ao focar */
+    border-color: var(--primary); /* Altera a cor da borda ao focar */
+  }
+/* Tabela dentro do Modal */
+.modal-body table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.modal-body th, 
+.modal-body td {
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+    font-size: 0.9em;
+}
+
+.modal-body th {
+    background-color: #f2f2f2;
+}
+
+/* Rodapé do Modal */
+.modal-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 10px;
+}
+
+.modal-footer button {
+    padding: 8px 16px;
+    border-radius: 25px;
+    border: 1px solid var(--primary);
+    background-color: var(--primary);
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-right: 10px;
+}
+
+.modal-footer button:hover {
+    background-color: var(--dark);
+}
+
+/* Estilo do campo de pesquisa */
+.modal-body input[type="text"] {
+    width: 100%;
+    padding: 8px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    margin-bottom: 10px;
+}
+
+/* Estilos para o mini modal */
+.mini-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.mini-modal-content {
+    background-color: var(--white);
+    padding: 20px;
+    border-radius: 8px;
+    width: 300px; /* Ajusta a largura */
+    position: relative;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.mini-modal-content[style*="cursor: wait"] {
+    cursor: wait;
+}
+
+/* Estilos para o cabeçalho do mini modal */
+.mini-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.mini-modal-header h3 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: bold;
+    color: var(--dark);
+}
+
+.close-button {
+    background: none;
+    border: none;
+    font-size: 18px;
+    color: var(--danger);
+    cursor: pointer;
+    padding: 0;
+    margin: 0;
+    line-height: 1;
+    transition: color 0.2s ease;
+}
+
+.close-button:hover {
+    color: #ff5b5b;
+}
+
+.mini-modal-details {
+    max-height: 300px;
+    overflow-y: auto;
+    margin-top: 10px;
+}
+.tab {
+  background-color: #f0f0f0; /* Cor normal */
+  color: #333;
+  border: 1px solid #ccc;
+  padding: 10px 20px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.tab.active {
+  background-color: #007bff; /* Cor quando ativo */
+  color: white;
+  border-color: #007bff;
+}
+
+.tab:hover {
+  background-color: #ddd;
+}
