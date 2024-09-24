@@ -83,6 +83,10 @@ function CadastrosPage() {
     }
   };
   
+  useEffect(() => {
+    console.log("Dados no modal:", modalData);
+  }, [modalData]);
+  
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -165,30 +169,39 @@ function CadastrosPage() {
     setModalIsOpen(true);
     setCurrentPage(1);
     setIsLoading(true);
-    loadModalData(tipo);  // Agora estamos utilizando a função
 
-    setModalData([]);
+    setModalData([]); // Limpa os dados antes de carregar novos
     setFilteredData([]);
 
     let url = '';
-    
+
+    // Decide qual URL usar com base no tipo de card clicado
     if (tipo === "Cadastros Domiciliares") {
-      url = `${API_BASE_URL}/api/cadastros-domiciliares?unidade_saude=${unidades.join(',')}&equipe=${equipes.join(',')}&profissional=${profissionais.join(',')}`;
+        url = `${API_BASE_URL}/api/cadastros-domiciliares?unidade_saude=${unidades.join(',')}&equipe=${equipes.join(',')}&profissional=${profissionais.join(',')}`;
     } else {
-      url = `${API_BASE_URL}/api/detalhes?tipo=${encodeURIComponent(tipo)}&unidade_saude=${encodeURIComponent(unidades.join(','))}&equipe=${encodeURIComponent(equipes.join(','))}&profissional=${encodeURIComponent(profissionais.join(','))}`;
+        url = `${API_BASE_URL}/api/detalhes?tipo=${encodeURIComponent(tipo)}&unidade_saude=${encodeURIComponent(unidades.join(','))}&equipe=${encodeURIComponent(equipes.join(','))}&profissional=${encodeURIComponent(profissionais.join(','))}`;
     }
 
     try {
         const response = await fetch(url);
         const data = await response.json();
-        setModalData(data);
-        setFilteredData(data);
+
+        // Atualiza os dados de acordo com o tipo selecionado
+        if (tipo === "Cadastros Domiciliares") {
+            setModalData(data);  // Atualiza modalData apenas com cadastros domiciliares
+            setFilteredData(data);  // Atualiza os dados filtrados corretamente
+        } else {
+            setModalData(data);  // Atualiza modalData apenas com detalhes
+            setFilteredData(data);  // Atualiza os dados filtrados corretamente
+        }
+
     } catch (error) {
         console.error('Erro ao carregar dados do modal:', error);
     }
 
-    setIsLoading(false);
+    setIsLoading(false);  // Desativa o loading quando os dados forem carregados
 };
+
 
 
   const loadModalData = useCallback(async (tipo) => {

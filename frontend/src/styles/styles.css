@@ -614,3 +614,37 @@ button,
   height: auto; /* Mantém a proporção da imagem */
   max-width: 150px; /* Limita o tamanho máximo da imagem */
 }
+
+.filters {
+  position: relative; /* ou absolute dependendo do layout */
+  z-index: 1100; /* Um valor alto para garantir que fique acima do mapa */
+}
+
+.date-picker {
+  display: flex;
+  flex-direction: column;
+}
+
+.date-inputs {
+  display: flex;
+  gap: 10px;
+  z-index: 1200; /* Um valor alto para garantir que fique acima do mapa */
+
+}
+
+.basic-multi-select {
+  width: 100%;
+}
+
+.visitas-container {
+  display: flex;
+  justify-content: space-between;
+}
+
+.visitas-summary {
+  width: 45%; /* Ajuste conforme o espaço necessário */
+  background-color: #f9f9f9;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}

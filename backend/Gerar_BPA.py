@@ -5,8 +5,6 @@ from sqlalchemy import text
 import json
 import time
 
-
-
 def load_db_config(config_path='config.json'):
     with open(config_path, 'r') as config_file:
         return json.load(config_file)
@@ -50,6 +48,9 @@ def format_field(value, length, field_type='ALFA', pad=' ', prd_org='BPI', field
             # Especificamente para PRD_FLH e PRD_SEQ, sempre preencha com zeros à esquerda
             if field_name in ['PRD_FLH', 'PRD_SEQ']:
                 value = str(value).zfill(length)
+                            # Exceção para PRD_NUM_PCNTE: sempre preencha com espaços à esquerda
+            elif field_name == 'PRD_NUM_PCNTE':
+                value = str(value).rjust(length, ' ')
             else:
                 # Verifica se o valor é numérico antes de tentar formatá-lo
                 if isinstance(value, (int, float)) or (isinstance(value, str) and value.isdigit()):
@@ -128,7 +129,7 @@ def format_bpa_row(row):
         'PRD_LOGRAD_PCNTE': format_field(row.get('PRD_LOGRAD_PCNTE'), 3, 'ALFA', prd_org=row.get('PRD_ORG')),
         'PRD_END_PCNTE': format_field(row.get('PRD_END_PCNTE'), 30, 'ALFA', prd_org=row.get('PRD_ORG')),
         'PRD_COMPL_PCNTE': format_field(row.get('PRD_COMPL_PCNTE'), 10, 'ALFA', prd_org=row.get('PRD_ORG')),
-        'PRD_NUM_PCNTE': format_field(row.get('PRD_NUM_PCNTE'), 5, 'NUM', prd_org=row.get('PRD_ORG')),
+        'PRD_NUM_PCNTE': format_field(row.get('PRD_NUM_PCNTE'), 5, 'NUM', prd_org=row.get('PRD_ORG'), field_name='PRD_NUM_PCNTE'),
         'PRD_BAIRRO_PCNTE': format_field(row.get('PRD_BAIRRO_PCNTE'), 30, 'ALFA', prd_org=row.get('PRD_ORG')),
         'PRD_DDTEL_PCNTE': format_field(row.get('PRD_DDTEL_PCNTE'), 2, 'NUM', prd_org=row.get('PRD_ORG')),
         'PRD_TEL_PCNTE': format_field(row.get('PRD_TEL_PCNTE'), 9, 'NUM', prd_org=row.get('PRD_ORG')),
@@ -396,13 +397,13 @@ WHERE prd_org = 'BPI'
     log_message(f"Primeira Procedure Concluída")
 
 def executar_procedure_segunda(connection):
-    # Defina os IDs dos PA que você deseja incluir no WHERE
+    # IDs dos PA a serem incluídos no WHERE
     pa_ids = [
         '0301010110', '0301010030', '0301010048', '0301010056',
         '0301010064', '0301010072', '0301010137'
     ]
 
-    # Primeiro, selecione e agrupe os dados
+    # 1. Seleção e agrupamento dos dados
     query = text(f"""
     SELECT s_prd.prd_uid,
            s_prd.prd_pa,
@@ -418,14 +419,15 @@ def executar_procedure_segunda(connection):
 
     results = connection.execute(query, {'pa_ids': tuple(pa_ids)})
 
+    # 2. Inserção dos dados agrupados
     for row in results:
-        # Inserir os dados agrupados
         insert_query = text("""
         INSERT INTO query_3 (PRD_UID, PRD_CMP, PRD_CNSMED, PRD_CBO, PRD_FLH, PRD_SEQ, PRD_PA, PRD_CNSPAC,
                            PRD_SEXO, PRD_IBGE, PRD_DTATEN, PRD_CID, PRD_IDADE, PRD_QT_P, PRD_CATEN,
                            PRD_NAUT, PRD_ORG)
         VALUES (:prd_uid, :prd_cmp, '', :prd_cbo, '001', '01', :prd_pa, '', '', '', '', '', :prd_idade,
-                :prd_qt_p, '', '', 'BPA')""")
+                :prd_qt_p, '', '', 'BPA')
+        """)
         connection.execute(insert_query, {
             'prd_uid': row.prd_uid,
             'prd_cmp': row.prd_cmp,
@@ -435,16 +437,24 @@ def executar_procedure_segunda(connection):
             'prd_qt_p': row.prd_qt_p
         })
 
-                # Executar o UPDATE
-        # Executar o UPDATE somente se prd_uid for '0491381'
-        update_query = text("""
-            UPDATE query_3
-            SET prd_cid = 'G804'
-            WHERE prd_uid = '0491381'
-            """)
-        connection.execute(update_query)
+        # 3. Deletar os registros que já foram processados
+        delete_query = text("""
+        DELETE FROM query_3
+        WHERE prd_org = 'BPI'
+          AND prd_pa = :prd_pa
+        """)
+        connection.execute(delete_query, {'prd_pa': row.prd_pa})
 
-    log_message(f"Segunda Procedure Concluída")
+    # 4. Executar o UPDATE para o UID específico
+    update_query = text("""
+    UPDATE query_3
+    SET prd_cid = 'G804'
+    WHERE prd_uid = '0491381'
+    """)
+    connection.execute(update_query)
+
+    # Log para confirmar a conclusão
+    log_message("Segunda Procedure Concluída")
 
 def executar_procedure_terceira(connection):
 

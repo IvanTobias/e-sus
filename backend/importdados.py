@@ -79,61 +79,29 @@ def schedule_auto_import(scheduler, time_str):
     trigger = CronTrigger(hour=hour, minute=minute)
     scheduler.add_job(auto_update_imports, trigger)
 
-# Função para calcular o mês anterior
-def get_previous_month():
-    today = datetime.today()
-    first_day_of_current_month = today.replace(day=1)
-    last_day_of_previous_month = first_day_of_current_month - timedelta(days=1)
-    return last_day_of_previous_month.year, last_day_of_previous_month.strftime('%m')
-
-# Função para carregar ano e mês da configuração
-def load_import_config():
-    if os.path.exists(IMPORT_CONFIG_FILE):
-        try:
-            with open(IMPORT_CONFIG_FILE, 'r') as config_file:
-                config_data = json.load(config_file)
-                return config_data.get('ano'), config_data.get('mes')
-        except json.JSONDecodeError:
-            print("Erro ao decodificar o arquivo import_config.json. Usando mês anterior por padrão.")
-            return None, None
-    return None, None
-
-# Função para salvar ano e mês no arquivo de configuração
-def save_import_config(ano, mes):
-    config_data = {"ano": ano, "mes": mes}
-    with open(IMPORT_CONFIG_FILE, 'w') as config_file:
-        json.dump(config_data, config_file, indent=4)
-
 # Função para agendar uma nova importação, aguardando que a anterior finalize
-def run_import_sequentially(import_type, config_data, ano=None, mes=None):
+def run_import_sequentially(import_type, config_data):
     # Enquanto outra tarefa estiver em execução, aguarda
     while is_task_running():
         print(f"Aguardando conclusão da tarefa anterior... {import_type} em espera.")
         time.sleep(1)  # Evitar loop intenso, espera 1 segundo antes de checar de novo
-    
-    # Quando não há tarefa em execução, inicia a nova
+
+    # Não será mais necessário verificar ou formatar ano e mes para o BPA
+    print(f"Parâmetros recebidos para {import_type}: {config_data}")
+
+    # Quando não há tarefa em execução, inicia a nova tarefa
     execute_long_task(config_data, import_type)
 
-# Função que realiza as importações de cadastros, domiciliofcd e BPA em cascata
+# Removido BPA da função de auto atualização
 def auto_update_imports():
     try:
-        # Carregar ano e mês da configuração de importação
-        ano, mes = load_import_config()
-
-        # Se ano ou mês não forem fornecidos, usar o mês anterior ao atual
-        if not ano or not mes:
-            ano, mes = get_previous_month()
-            print(f"Usando ano e mês anteriores: Ano={ano}, Mês={mes}")
-            save_import_config(ano, mes)  # Salvar a configuração para futuras execuções
-
         # Dados de configuração para as tarefas de importação
-        config_data = {"ano": ano, "mes": mes}
+        config_data = {}
 
-        # Executar cada importação de forma sequencial
+        # Executar cada importação de forma sequencial, sem BPA
         run_import_sequentially('cadastro', config_data)  # Primeiro, importar cadastro
         run_import_sequentially('domiciliofcd', config_data)  # Depois, importar domiciliofcd
         run_import_sequentially('visitas', config_data)  # Depois, importar visitas
-        run_import_sequentially('bpa', config_data)  # Finalmente, importar BPA
 
         print("Atualização automática de importação executada com sucesso!")
 

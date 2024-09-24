@@ -6,6 +6,7 @@ import BPAForm from './components/BPAForm';
 import CadastrosPage from './components/CadastrosPage';
 import Home from './components/Home';
 import './styles/styles.css';
+import VisitaPage from './components/VisitasPage';
 
 function App() {
   // Define 'home' como página inicial
@@ -22,11 +23,12 @@ function App() {
       <Sidebar onLoadContent={loadContent} /> {/* Passando a função para o Sidebar */}
       <div className="content">
         {/* Renderiza o componente baseado na página atual selecionada */}
-        {/*currentPage === 'home' && <Home />*/}
+        {currentPage === 'home' && <Home />}
         {currentPage === 'config' && <ConfigDatabase />}
         {currentPage === 'import' && <ImportData />}
         {currentPage === 'bpa' && <BPAForm />}
         {currentPage === 'cadastro' && <CadastrosPage />}
+        {currentPage === 'visitas' && <VisitaPage />}
         {/* Adicione outras condições conforme necessário */}
       </div>
     </div>

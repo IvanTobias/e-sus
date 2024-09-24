@@ -14,6 +14,7 @@ from sqlalchemy import create_engine, text
 import logging
 from flask_caching import Cache
 from apscheduler.schedulers.background import BackgroundScheduler
+from datetime import datetime
 
 # Configuração básica de logging
 logging.basicConfig(level=logging.DEBUG)
@@ -255,61 +256,42 @@ def fetch_contagens():
 
     engine = get_local_engine()
 
-    # Filtros e parâmetros para ambas as consultas
-    query_filters_geral = []
-    query_filters_domicilio = []
-    params_geral = {}
-    params_domicilio = {}
+    # Filtros e parâmetros
+    query_filters = []
+    params = {}
 
-    # Filtros para cadastros gerais (query_1)
     if unidade_saude:
         unidade_saude_list = unidade_saude.split(',')
-        query_filters_geral.append("initcap_2 IN :unidade_saude")  # query_1 usa initcap_2
-        params_geral["unidade_saude"] = tuple(unidade_saude_list)
+        query_filters.append("no_unidade_saude IN :unidade_saude")
+        params["unidade_saude"] = tuple(unidade_saude_list)
 
     if equipe:
         equipe_list = equipe.split(',')
-        query_filters_geral.append("initcap_4 IN :equipe")  # query_1 usa initcap_4
-        params_geral["equipe"] = tuple(equipe_list)
+        query_filters.append("no_equipe IN :equipe")
+        params["equipe"] = tuple(equipe_list)
 
     if profissional:
         profissional_list = profissional.split(',')
-        query_filters_geral.append("initcap_3 IN :profissional")  # query_1 usa initcap_3
-        params_geral["profissional"] = tuple(profissional_list)
-
-    # Filtros para cadastros domiciliares (query_2)
-    if unidade_saude:
-        query_filters_domicilio.append("initcap_1 IN :unidade_saude")  # query_2 usa initcap_1
-        params_domicilio["unidade_saude"] = tuple(unidade_saude_list)
-
-    if equipe:
-        query_filters_domicilio.append("initcap_3 IN :equipe")  # query_2 usa initcap_3
-        params_domicilio["equipe"] = tuple(equipe_list)
-
-    if profissional:
-        query_filters_domicilio.append("initcap_2 IN :profissional")  # query_2 usa initcap_2
-        params_domicilio["profissional"] = tuple(profissional_list)
+        query_filters.append("no_profissional IN :profissional")
+        params["profissional"] = tuple(profissional_list)
 
     # Consulta de cadastros gerais (query_1)
     base_query_geral = """
-    SELECT 
+        SELECT 
         COUNT(t1.co_seq_fat_cad_individual) as "Cadastros Individuais",
-        COUNT(CASE WHEN t1.st_morador_rua = '1' THEN 1 END) as "Moradores de Rua",
+        COUNT(CASE WHEN t1.co_dim_tipo_saida_cadastro = '3' AND t1.st_morador_rua = '1' THEN 1 END) as "Moradores de Rua",
         COUNT(CASE WHEN t1.co_dim_tipo_saida_cadastro = '1' THEN 1 END) as "Óbitos",
         COUNT(CASE WHEN t1.co_dim_tipo_saida_cadastro = '2' THEN 1 END) as "Mudou-se",
         COUNT(CASE WHEN t1.co_dim_tipo_saida_cadastro = '3' THEN 1 END) as "Cadastros Ativos",
-        COUNT(CASE WHEN t1.nu_micro_area_1 = 'FA' THEN 1 END) as "Fora de Área",
+        COUNT(CASE WHEN t1.co_dim_tipo_saida_cadastro = '3' AND t1.nu_micro_area = 'FA' THEN 1 END) as "Fora de Área",
         COUNT(CASE WHEN dt_atualizado < (CURRENT_DATE - INTERVAL '1 year') THEN 1 END) as "Cadastros Desatualizados",
-        COUNT(CASE WHEN LENGTH(TRIM(nu_cns_3)) = 15 AND nu_cns_3 != '0' THEN 1 END) as "Cadastros com Cns",
-        COUNT(CASE WHEN LENGTH(TRIM(nu_cns_3)) != 15 OR nu_cns_3 = '0' THEN 1 END) as "Cadastros com Cpf"
+        COUNT(CASE WHEN t1.co_dim_tipo_saida_cadastro = '3' AND LENGTH(TRIM(nu_cns)) = 15 AND nu_cns != '0' THEN 1 END) as "Cadastros com Cns",
+        COUNT(CASE WHEN t1.co_dim_tipo_saida_cadastro = '3' AND (LENGTH(TRIM(nu_cns)) != 15 OR nu_cns = '0') THEN 1 END) as "Cadastros com Cpf"
     FROM query_1 t1
     WHERE t1.st_ativo = 1 
     AND t1.co_dim_tipo_saida_cadastro IS NOT NULL 
-    AND t1.st_ficha_inativa_1 = 0
+    AND t1.st_ficha_inativa = 0
     """
-
-    if query_filters_geral:
-        base_query_geral += " AND " + " AND ".join(query_filters_geral)
 
     # Consulta de cadastros domiciliares (query_2)
     domicilio_query = """
@@ -318,17 +300,19 @@ def fetch_contagens():
     WHERE q2.st_ativo = 1
     """
 
-    if query_filters_domicilio:
-        domicilio_query += " AND " + " AND ".join(query_filters_domicilio)
+    # Aplica os filtros, se existirem, a ambas as consultas
+    if query_filters:
+        base_query_geral += " AND " + " AND ".join(query_filters)
+        domicilio_query += " AND " + " AND ".join(query_filters)
 
     # Executando as consultas
     with engine.connect() as connection:
         # Executa a consulta para cadastros gerais
-        result_geral = connection.execute(text(base_query_geral), params_geral)
+        result_geral = connection.execute(text(base_query_geral), params)
         counts_geral = result_geral.fetchone()
 
         # Executa a consulta para cadastros domiciliares
-        result_domicilio = connection.execute(text(domicilio_query), params_domicilio)
+        result_domicilio = connection.execute(text(domicilio_query), params)
         counts_domicilio = result_domicilio.fetchone()
 
     # Converte os resultados para um dicionário
@@ -348,6 +332,7 @@ def fetch_contagens():
     # Retorna os resultados em formato JSON
     return jsonify(counts_dict)
 
+
 @app.route('/api/unidades-saude', methods=['GET'])
 @cache.cached(timeout=300)  # Cache por 5 minutos (300 segundos)
 def fetchUnidadesSaude():
@@ -360,9 +345,9 @@ def fetchUnidadesSaude():
     # SQL base para a consulta
     query = """
     SELECT 
-    initcap_2, 
-    initcap_3, 
-    initcap_4
+    no_unidade_saude, 
+    no_equipe, 
+    no_profissional
     FROM query_1
     """
 
@@ -371,15 +356,15 @@ def fetchUnidadesSaude():
     params = {}
 
     if unidade_saude:
-        conditions.append("initcap_2 = :unidade_saude")
+        conditions.append("no_unidade_saude = :unidade_saude")
         params["unidade_saude"] = unidade_saude
 
     if equipe:
-        conditions.append("initcap_4 = :equipe")
+        conditions.append("no_equipe = :equipe")
         params["equipe"] = equipe
 
     if profissional:
-        conditions.append("initcap_3 = :profissional")
+        conditions.append("no_profissional = :profissional")
         params["profissional"] = profissional
 
     # Concatena todas as condições SQL na query base
@@ -387,7 +372,7 @@ def fetchUnidadesSaude():
         query += " WHERE " + " AND ".join(conditions)
 
     # Adiciona o agrupamento após as condições
-    query += " GROUP BY initcap_2, initcap_3, initcap_4"
+    query += " GROUP BY no_unidade_saude, no_equipe, no_profissional"
 
     try:
         with engine.connect() as connection:
@@ -396,9 +381,9 @@ def fetchUnidadesSaude():
         # Converte o resultado para um dicionário agrupando por unidade de saúde, equipe e profissional
         data = [
             {
-                'unidadeSaude': row._mapping['initcap_2'],
-                'equipe': row._mapping['initcap_4'],
-                'profissional': row._mapping['initcap_3']
+                'unidadeSaude': row._mapping['no_unidade_saude'],
+                'equipe': row._mapping['no_equipe'],
+                'profissional': row._mapping['no_profissional']
             }
             for row in result.fetchall()
         ]
@@ -422,7 +407,7 @@ def fetch_detalhes():
     params = {}
 
     tipo_map = {
-        'responsável familiar': 'st_responsavel_familiar_1',
+        'responsável familiar': 'st_responsavel_familiar',
         'frequenta creche': 'st_frequenta_creche',
         'frequenta cuidador': 'st_frequenta_cuidador',
         'participa de grupo comunitário': 'st_participa_grupo_comunitario',
@@ -463,6 +448,10 @@ def fetch_detalhes():
         'problema renal (não sabe)': 'st_problema_rins_nao_sabe'
     }
 
+    # Adiciona o filtro global de "Cadastros Ativos", exceto para condições que explicitam saídas específicas
+    if tipo not in ['óbitos', 'mudou-se']:
+        query_filters.append("t1.co_dim_tipo_saida_cadastro = '3'")  # Apenas cadastros ativos
+
     # Verifica se o tipo está no mapeamento
     if tipo in tipo_map:
         query_filters.append(f"t1.{tipo_map[tipo]} = '1'")
@@ -470,17 +459,17 @@ def fetch_detalhes():
     # Filtros adicionais para unidade de saúde, equipe e profissional
     if unidades:
         unidade_saude_list = [u.strip() for u in unidades.split(',')]
-        query_filters.append("initcap_2 = ANY(:unidades)")
+        query_filters.append("no_unidade_saude = ANY(:unidades)")
         params["unidades"] = unidade_saude_list
 
     if equipes:
         equipe_list = [e.strip() for e in equipes.split(',')]
-        query_filters.append("initcap_4 = ANY(:equipes)")
+        query_filters.append("no_equipe = ANY(:equipes)")
         params["equipes"] = equipe_list
 
     if profissionais:
         profissional_list = [p.strip() for p in profissionais.split(',')]
-        query_filters.append("initcap_3 = ANY(:profissionais)")
+        query_filters.append("no_profissional = ANY(:profissionais)")
         params["profissionais"] = profissional_list
     
     if tipo:
@@ -497,24 +486,24 @@ def fetch_detalhes():
         elif tipo == "cadastros desatualizados":
             query_filters.append("t1.dt_atualizado < (CURRENT_DATE - INTERVAL '1 year')")
         elif tipo == "cadastros com cns":
-            query_filters.append("LENGTH(TRIM(t1.nu_cns_3)) = 15 AND t1.nu_cns_3 != '0'")
+            query_filters.append("(LENGTH(TRIM(t1.nu_cns)) = 15 AND t1.nu_cns != '0') and co_dim_tipo_saida_cadastro = '3'")
         elif tipo == "cadastros com cpf":
-            query_filters.append("LENGTH(TRIM(t1.nu_cns_3)) != 15 OR t1.nu_cns_3 = '0'")
+            query_filters.append("(LENGTH(TRIM(t1.nu_cns)) != 15 OR t1.nu_cns = '0') and co_dim_tipo_saida_cadastro = '3'")
 
     # SQL base para cadastros gerais
     base_query = """
     SELECT 
-        initcap_1 AS no_cidadao_1,
-        t1.nu_cpf_cidadao_1,
-        t1.nu_cns_1,
-        to_char(t1.dt_nascimento_1, 'dd/mm/yyyy') AS dt_nascimento_1,
-        initcap_2 AS no_unidade_saude_1,
-        initcap_3 AS no_profissional_1,
-        initcap_4 AS no_equipe_1,
-        t1.co_cidadao,
-        to_char(t1.dt_atualizado, 'dd/mm/yyyy') AS dt_atualizado
+        no_cidadao,
+        nu_cpf_cidadao,
+        nu_cns,
+        to_char(dt_nascimento, 'dd/mm/yyyy') AS dt_nascimento,
+        no_unidade_saude,
+        no_profissional,
+        no_equipe,
+        co_cidadao,
+        to_char(dt_atualizado, 'dd/mm/yyyy') AS dt_atualizado
     FROM query_1 t1
-    WHERE t1.st_ativo = 1
+    WHERE st_ativo = 1 
     """
 
     # Adiciona os filtros à consulta
@@ -527,13 +516,13 @@ def fetch_detalhes():
         data = []
         for row in result.fetchall():
             item = {
-                'nome': row._mapping['no_cidadao_1'],
-                'cpf': row._mapping['nu_cpf_cidadao_1'],
-                'cns': row._mapping['nu_cns_1'],
-                'data_nascimento': row._mapping['dt_nascimento_1'],
-                'unidade_saude': row._mapping['no_unidade_saude_1'],
-                'profissional': row._mapping['no_profissional_1'],
-                'equipe': row._mapping['no_equipe_1'],
+                'nome': row._mapping['no_cidadao'],
+                'cpf': row._mapping['nu_cpf_cidadao'],
+                'cns': row._mapping['nu_cns'],
+                'data_nascimento': row._mapping['dt_nascimento'],
+                'unidade_saude': row._mapping['no_unidade_saude'],
+                'profissional': row._mapping['no_profissional'],
+                'equipe': row._mapping['no_equipe'],
                 'co_cidadao': row._mapping['co_cidadao'],
                 'dt_atualizado': row._mapping['dt_atualizado']
             }
@@ -554,30 +543,33 @@ def fetch_cadastros_domiciliares():
     # Filtros para cadastros domiciliares
     if unidades:
         unidade_saude_list = [u.strip() for u in unidades.split(',')]
-        query_filters.append("initcap_1 = ANY(:unidades)")
-        params["unidades"] = unidade_saude_list
+        if unidade_saude_list:
+            query_filters.append("no_unidade_saude = ANY(:unidades)")
+            params["unidades"] = unidade_saude_list
     
     if equipes:
         equipe_list = [e.strip() for e in equipes.split(',')]
-        query_filters.append("initcap_3 = ANY(:equipes)")
-        params["equipes"] = equipe_list
+        if equipe_list:
+            query_filters.append("no_equipe = ANY(:equipes)")
+            params["equipes"] = equipe_list
 
     if profissionais:
         profissional_list = [p.strip() for p in profissionais.split(',')]
-        query_filters.append("initcap_2 = ANY(:profissionais)")
-        params["profissionais"] = profissional_list
+        if profissional_list:
+            query_filters.append("no_profissional = ANY(:profissionais)")
+            params["profissionais"] = profissional_list
 
     # SQL base para cadastros domiciliares
     domicilio_query = """
     SELECT 
-        no_logradouro_2 AS rua,
+        no_logradouro AS rua,
         nu_domicilio AS numero,
-        ds_complemento_1 AS complemento,
-        no_bairro_2 AS bairro,
-        nu_cep_2 AS cep,
-        initcap_1 AS unidade_saude,
-        initcap_2 AS profissional,
-        initcap_3 AS equipe
+        ds_complemento AS complemento,
+        no_bairro AS bairro,
+        nu_cep AS cep,
+        no_unidade_saude,
+        no_profissional,
+        no_equipe
     FROM query_2 q2
     WHERE q2.st_ativo = 1
     """
@@ -591,19 +583,21 @@ def fetch_cadastros_domiciliares():
         result = connection.execute(text(domicilio_query), params)
         data = []
         for row in result.fetchall():
+            # Acessa os valores usando row._mapping para utilizar nomes das colunas
             item = {
                 'rua': row._mapping['rua'],
                 'numero': row._mapping['numero'],
                 'complemento': row._mapping['complemento'],
                 'bairro': row._mapping['bairro'],
                 'cep': row._mapping['cep'],
-                'profissional': row._mapping['profissional'],
-                'unidade_saude': row._mapping['unidade_saude'],
-                'equipe': row._mapping['equipe']
+                'profissional': row._mapping['no_profissional'],
+                'unidade_saude': row._mapping['no_unidade_saude'],
+                'equipe': row._mapping['no_equipe']
             }
             data.append(item)
 
     return jsonify(data)
+
 
 @app.route('/api/detalhes-hover', methods=['GET'])
 def fetch_detalhes_hover():
@@ -618,7 +612,7 @@ def fetch_detalhes_hover():
     query = """
     SELECT jsonb_strip_nulls(
         jsonb_build_object(
-            'Responsável Familiar', CASE WHEN st_responsavel_familiar_1 = '1' THEN 'Sim' ELSE NULL END,
+            'Responsável Familiar', CASE WHEN st_responsavel_familiar = '1' THEN 'Sim' ELSE NULL END,
             'Frequenta Creche', CASE WHEN st_frequenta_creche = '1' THEN 'Sim' ELSE NULL END,
             'Frequenta Cuidador', CASE WHEN st_frequenta_cuidador = '1' THEN 'Sim' ELSE NULL END,
             'Participa de Grupo Comunitário', CASE WHEN st_participa_grupo_comunitario = '1' THEN 'Sim' ELSE NULL END,
@@ -670,19 +664,19 @@ def fetch_detalhes_hover():
     # Filtro por unidade de saúde
     if unidades:
         unidade_saude_list = [u.strip() for u in unidades.split(',')]
-        query_filters.append("initcap_2 = ANY(:unidades)")
+        query_filters.append("no_unidade_saude = ANY(:unidades)")
         params["unidades"] = unidade_saude_list
 
     # Filtro por equipe
     if equipes:
         equipe_list = [e.strip() for e in equipes.split(',')]
-        query_filters.append("initcap_4 = ANY(:equipes)")
+        query_filters.append("no_equipe = ANY(:equipes)")
         params["equipes"] = equipe_list
 
     # Filtro por profissional
     if profissionais:
         profissional_list = [p.strip() for p in profissionais.split(',')]
-        query_filters.append("initcap_3 = ANY(:profissionais)")
+        query_filters.append("no_profissional = ANY(:profissionais)")
         params["profissionais"] = profissional_list
 
     # Adiciona os filtros à consulta base
@@ -711,7 +705,7 @@ def fetch_detalhes_count():
     # SQL base para a consulta agregada
     base_query = """
     SELECT
-        COUNT(CASE WHEN st_responsavel_familiar_1 = '1' THEN 1 END) AS responsavel_familiar,
+        COUNT(CASE WHEN st_responsavel_familiar = '1' THEN 1 END) AS responsavel_familiar,
         COUNT(CASE WHEN st_frequenta_creche = '1' THEN 1 END) AS frequenta_creche,
         COUNT(CASE WHEN st_frequenta_cuidador = '1' THEN 1 END) AS frequenta_cuidador,
         COUNT(CASE WHEN st_participa_grupo_comunitario = '1' THEN 1 END) AS participa_grupo_comunitario,
@@ -751,7 +745,7 @@ def fetch_detalhes_count():
         COUNT(CASE WHEN st_problema_rins_outro = '1' THEN 1 END) AS outro_renal,
         COUNT(CASE WHEN st_problema_rins_nao_sabe = '1' THEN 1 END) AS nao_sabe_renal
     FROM query_1
-    WHERE st_ativo = 1
+    WHERE st_ativo = 1 and co_dim_tipo_saida_cadastro = '3'
     """
 
     # Condições de filtro adicionais
@@ -761,19 +755,19 @@ def fetch_detalhes_count():
     # Filtro por unidade de saúde
     if unidades:
         unidade_saude_list = [u.strip() for u in unidades.split(',')]
-        query_filters.append("initcap_2 = ANY(:unidades)")
+        query_filters.append("no_unidade_saude = ANY(:unidades)")
         params["unidades"] = unidade_saude_list
 
     # Filtro por equipe
     if equipes:
         equipe_list = [e.strip() for e in equipes.split(',')]
-        query_filters.append("initcap_4 = ANY(:equipes)")
+        query_filters.append("no_equipe = ANY(:equipes)")
         params["equipes"] = equipe_list
 
     # Filtro por profissional
     if profissionais:
         profissional_list = [p.strip() for p in profissionais.split(',')]
-        query_filters.append("initcap_3 = ANY(:profissionais)")
+        query_filters.append("no_profissional = ANY(:profissionais)")
         params["profissionais"] = profissional_list
 
     # Adiciona os filtros à consulta base
@@ -871,7 +865,129 @@ def check_file(import_type):
         return jsonify({"available": True})
     return jsonify({"available": False})
 
+@app.route('/api/visitas-domiciliares', methods=['GET'])
+def fetch_visitas_domiciliares():
+    # Parâmetros de entrada
+    unidades = request.args.get('unidade_saude', default='', type=str)
+    equipes = request.args.get('equipe', default='', type=str)
+    profissionais = request.args.get('profissional', default='', type=str)
+    start_date = request.args.get('start_date', default='', type=str)  # Nova entrada para a data inicial
+    end_date = request.args.get('end_date', default='', type=str)      # Nova entrada para a data final
+    tipo_consulta = request.args.get('tipo_consulta', default='filtros', type=str)
 
+    print("Parâmetros recebidos:")
+    print(f"Unidades: {unidades}")
+    print(f"Equipes: {equipes}")
+    print(f"Profissionais: {profissionais}")
+    print(f"Start Date: {start_date}")
+    print(f"End Date: {end_date}")
+
+    engine = get_local_engine()
+    query_filters = []
+    params = {}
+
+    # Filtros para unidades, equipes e profissionais
+    if unidades:
+        unidade_saude_list = [u.strip() for u in unidades.split(',')]
+        if unidade_saude_list:
+            query_filters.append("no_unidade_saude = ANY(:unidades)")
+            params["unidades"] = unidade_saude_list
+    
+    if equipes:
+        equipe_list = [e.strip() for e in equipes.split(',')]
+        if equipe_list:
+            query_filters.append("no_equipe = ANY(:equipes)")
+            params["equipes"] = equipe_list
+
+    if profissionais:
+        profissional_list = [p.strip() for p in profissionais.split(',')]
+        if profissional_list:
+            query_filters.append("no_profissional = ANY(:profissionais)")
+            params["profissionais"] = profissional_list
+
+    # Adicionando filtro de data
+    if start_date and end_date:
+        try:
+            start = datetime.strptime(start_date, "%Y-%m-%d")
+            end = datetime.strptime(end_date, "%Y-%m-%d")
+            query_filters.append("dt_visita_mcaf BETWEEN :start_date AND :end_date")
+            params["start_date"] = start
+            params["end_date"] = end
+        except ValueError:
+            return jsonify({"error": "Data inválida"}), 400
+
+    # Consulta de filtros
+    if tipo_consulta == 'filtros':
+        # Primeira query: trazer apenas os filtros (unidade, equipe, profissional)
+        filtros_query = """
+        SELECT
+            initcap(no_unidade_saude) AS no_unidade_saude,    
+            initcap(no_profissional) AS no_profissional,      
+            initcap(no_equipe) AS no_equipe
+        FROM query_4
+        """
+
+        # Adiciona os filtros à consulta
+        if query_filters:
+            filtros_query += " WHERE " + " AND ".join(query_filters)
+
+        # Adiciona GROUP BY
+        filtros_query += """
+        GROUP BY no_unidade_saude, no_profissional, no_equipe
+        """
+
+        # Executa a consulta
+        with engine.connect() as connection:
+            result = connection.execute(text(filtros_query), params)
+            data = []
+            for row in result.fetchall():
+                item = {
+                    'no_unidade_saude': row._mapping['no_unidade_saude'],
+                    'no_profissional': row._mapping['no_profissional'],
+                    'no_equipe': row._mapping['no_equipe']
+                }
+                data.append(item)
+
+        return jsonify(data)
+
+    elif tipo_consulta == 'mapa':
+        # Segunda query: trazer latitude e longitude para o mapa
+        visitas_query = """
+        SELECT
+            nu_latitude,
+            nu_longitude,
+            initcap(no_unidade_saude) AS no_unidade_saude,    
+            initcap(no_profissional) AS no_profissional,      
+            initcap(no_equipe) AS no_equipe,
+            co_dim_desfecho_visita,  -- Status da visita (1: realizada, 2: recusada, 3: ausente)
+            to_char(dt_visita_mcaf, 'DD/MM/YYYY') as dt_visita
+        FROM query_4
+        """
+
+        # Adiciona os filtros à consulta
+        if query_filters:
+            visitas_query += " WHERE " + " AND ".join(query_filters)
+
+        # Executa a consulta
+        with engine.connect() as connection:
+            result = connection.execute(text(visitas_query), params)
+            data = []
+            for row in result.fetchall():
+                item = {
+                    'nu_latitude': row._mapping['nu_latitude'],
+                    'nu_longitude': row._mapping['nu_longitude'],
+                    'no_unidade_saude': row._mapping['no_unidade_saude'],
+                    'no_profissional': row._mapping['no_profissional'],
+                    'no_equipe': row._mapping['no_equipe'],
+                    'co_dim_desfecho_visita': row._mapping['co_dim_desfecho_visita'],  # Status da visita
+                    'dt_visita': row._mapping['dt_visita']
+                }
+                data.append(item)
+
+        return jsonify(data)
+
+    else:
+        return jsonify({'error': 'tipo_consulta inválido. Use "filtros" ou "mapa".'}), 400
 
 # Carregar a configuração na inicialização e agendar a importação, se necessário
 if __name__ == '__main__':

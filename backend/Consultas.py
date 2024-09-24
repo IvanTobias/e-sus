@@ -136,13 +136,63 @@ def execute_and_store_queries(config_data, tipo, update_progress):
         
     if tipo =='cadastro':
         queries = {
-        'query_1': '''        
-        SELECT 
-        INITCAP(t1.no_cidadao),
-        INITCAP(t4_fci.no_unidade_saude),
-        INITCAP(t6.no_profissional),
-        INITCAP(t5_fci.no_equipe),
-        *
+        'query_1': '''  
+        SELECT      
+        INITCAP(t1.no_cidadao) AS no_cidadao,
+        INITCAP(t4_fci.no_unidade_saude) AS no_unidade_saude,
+        INITCAP(t6.no_profissional) AS no_profissional,
+        INITCAP(t5_fci.no_equipe) AS no_equipe,
+        t3.st_responsavel_familiar,
+        t3.st_morador_rua,
+        t3.st_frequenta_creche,
+        t3.st_frequenta_cuidador,
+        t3.st_participa_grupo_comunitario,
+        t3.st_plano_saude_privado,
+        t3.st_deficiencia,
+        t3.st_defi_auditiva,
+        t3.st_defi_intelectual_cognitiva,
+        t3.st_defi_visual,
+        t3.st_defi_fisica,
+        t3.st_defi_outra,
+        t3.st_gestante,
+        t3.st_doenca_respiratoria,
+        t3.st_doenca_respira_asma,
+        t3.st_doenca_respira_dpoc_enfisem,
+        t3.st_doenca_respira_outra,
+        t3.st_doenca_respira_n_sabe,
+        t3.st_fumante ,
+        t3.st_alcool,
+        t3.st_outra_droga,
+        t3.st_hipertensao_arterial,
+        t3.st_diabete,
+        t3.st_avc,
+        t3.st_hanseniase,
+        t3.st_tuberculose,
+        t3.st_cancer,
+        t3.st_internacao_12,
+        t3.st_tratamento_psiquiatra,
+        t3.st_acamado,
+        t3.st_domiciliado,
+        t3.st_usa_planta_medicinal,
+        t3.st_doenca_cardiaca,
+        t3.st_doenca_card_insuficiencia,
+        t3.st_doenca_card_outro,
+        t3.st_doenca_card_n_sabe,
+        t3.st_problema_rins,
+        t3.st_problema_rins_insuficiencia,
+        t3.st_problema_rins_outro,
+        t3.st_problema_rins_nao_sabe,
+        t1.nu_cpf_cidadao,
+        t3.nu_cns,
+        t1.co_cidadao,
+        t2.dt_atualizado,
+        t2.dt_nascimento,
+        t3.co_seq_fat_cad_individual,
+        t3.co_dim_tipo_saida_cadastro,
+        t3.nu_micro_area,
+        t2.nu_micro_area as "nu_micro_area_cidadao",
+        t2.st_ativo,
+        t10.st_ficha_inativa
         from tb_fat_cidadao_pec t1
         inner join tb_cidadao t2 on t1.co_cidadao = t2.co_seq_cidadao
         left join tb_fat_cad_individual t3 on t2.co_unico_ultima_ficha  = t3.nu_uuid_ficha
@@ -174,10 +224,17 @@ def execute_and_store_queries(config_data, tipo, update_progress):
     
     elif tipo =='domiciliofcd':
         queries ={'query_2': '''SELECT 
-        INITCAP(t5.no_unidade_saude),
-        INITCAP(t7.no_profissional),
-        INITCAP(t6.no_equipe),
-        * FROM tb_fat_cad_domiciliar t1 
+        INITCAP(t5.no_unidade_saude) as no_unidade_saude,
+        INITCAP(t7.no_profissional) as no_profissional,
+        INITCAP(t6.no_equipe) as no_equipe,
+        INITCAP(t2.no_logradouro) as no_logradouro,
+        t2.nu_domicilio,
+        INITCAP(t2.ds_complemento) as ds_complemento,
+        INITCAP(t2.no_bairro) as no_bairro,
+        t2.nu_cep,
+        tbe.st_ativo,
+        co_seq_cds_cad_domiciliar
+        FROM tb_fat_cad_domiciliar t1 
         LEFT JOIN tb_cds_cad_domiciliar t2 ON t2.co_unico_ficha = t1.nu_uuid_ficha 
         LEFT JOIN tb_dim_tipo_imovel t3 ON t3.co_seq_dim_tipo_imovel = t1.co_dim_tipo_imovel 
         LEFT JOIN tb_dim_tempo t4 ON t4.co_seq_dim_tempo = t1.co_dim_tempo 
@@ -430,7 +487,7 @@ SELECT DISTINCT
         ELSE tb_cidadao.ds_cep 
     END AS PRD_CEP_PCNTE,
     CASE
-        WHEN tb_cidadao.ds_logradouro IS NULL THEN SUBSTRING('A',1,30)
+        WHEN tb_cidadao.ds_logradouro IS NULL THEN SUBSTRING('Avenida dos Expedicionarios',1,30)
         ELSE SUBSTRING(tb_cidadao.ds_logradouro,1,30) 
     END AS PRD_END_PCNTE,
     SUBSTRING(tb_cidadao.ds_complemento,1,10) AS PRD_COMPL_PCNTE,
@@ -1000,11 +1057,11 @@ case when ds_dia_semana ilike any (array['%s%bado%', '%domin%']) then 1 else 0 e
 t13.ds_turno,
 t7.ds_sexo,
 t7.sg_sexo,
-t3.no_equipe,
+initcap(t3.no_equipe) as no_equipe,
 t3.nu_ine,
 t14.nu_cnes,
-t14.no_unidade_saude,
-upper(t18.no_profissional) as no_prof_cns_atualizado,
+initcap(t14.no_unidade_saude) as no_unidade_saude,
+initcap(t18.no_profissional) as no_profissional,
 t6.co_seq_dim_profissional,
 CASE st_visita_compartilhada
 	when 1 THEN 'SIM'
