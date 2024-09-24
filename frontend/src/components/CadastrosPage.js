@@ -11,6 +11,8 @@ import {
 
 Modal.setAppElement('#root');
 
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://127.0.0.1:5000'; // Atualiza para centralizar as URLs
+
 function CadastrosPage() {
   const [currentPage, setCurrentPage] = useState(1);
   const [unidades, setUnidades] = useState([]);
@@ -38,10 +40,12 @@ function CadastrosPage() {
 
   // Função para carregar dados das unidades de saúde
   const loadUnidadesSaude = useCallback(async () => {
+    console.log('Carregando Unidades de Saúde');
     try {
-      const data = await fetchUnidadesSaude();
+      const data = await fetchUnidadesSaude();  // Verifique se esse fetch está correto
       if (data) {
         setUnidadesData(data);
+        console.log('Unidades de Saúde Carregadas:', data);
       } else {
         console.error('Erro ao carregar dados das unidades de saúde.');
       }
@@ -49,6 +53,7 @@ function CadastrosPage() {
       console.error('Erro ao buscar unidades de saúde:', error);
     }
   }, []);
+  
 
   // Controla o carregamento dos dados de contagens com base na aba ativa
   useEffect(() => {
@@ -136,7 +141,7 @@ function CadastrosPage() {
 
   const loadContagens = useCallback(async () => {
     try {
-      const response = await fetch(`/api/contagens?unidade_saude=${unidades.join(',')}&equipe=${equipes.join(',')}&profissional=${profissionais.join(',')}`);
+      const response = await fetch(`${API_BASE_URL}/api/contagens?unidade_saude=${unidades.join(',')}&equipe=${equipes.join(',')}&profissional=${profissionais.join(',')}`);
       const data = await response.json();
   
       setCounts(data);
@@ -147,7 +152,7 @@ function CadastrosPage() {
 
   const loadDetalhesCounts = useCallback(async () => {
     try {
-      const response = await fetch(`/api/contagem-detalhes?unidade_saude=${unidades.join(',')}&equipe=${equipes.join(',')}&profissional=${profissionais.join(',')}`);
+      const response = await fetch(`${API_BASE_URL}/api/contagem-detalhes?unidade_saude=${unidades.join(',')}&equipe=${equipes.join(',')}&profissional=${profissionais.join(',')}`);
       const data = await response.json();
       setDetalhesCounts(data);
     } catch (error) {
@@ -160,16 +165,17 @@ function CadastrosPage() {
     setModalIsOpen(true);
     setCurrentPage(1);
     setIsLoading(true);
-  
+    loadModalData(tipo);  // Agora estamos utilizando a função
+
     setModalData([]);
     setFilteredData([]);
 
     let url = '';
     
     if (tipo === "Cadastros Domiciliares") {
-        url = `/api/cadastros-domiciliares?unidade_saude=${unidades.join(',')}&equipe=${equipes.join(',')}&profissional=${profissionais.join(',')}`;
+      url = `${API_BASE_URL}/api/cadastros-domiciliares?unidade_saude=${unidades.join(',')}&equipe=${equipes.join(',')}&profissional=${profissionais.join(',')}`;
     } else {
-        url = `/api/detalhes?tipo=${encodeURIComponent(tipo)}&unidade_saude=${encodeURIComponent(unidades.join(','))}&equipe=${encodeURIComponent(equipes.join(','))}&profissional=${encodeURIComponent(profissionais.join(','))}`;
+      url = `${API_BASE_URL}/api/detalhes?tipo=${encodeURIComponent(tipo)}&unidade_saude=${encodeURIComponent(unidades.join(','))}&equipe=${encodeURIComponent(equipes.join(','))}&profissional=${encodeURIComponent(profissionais.join(','))}`;
     }
 
     try {
@@ -191,7 +197,7 @@ function CadastrosPage() {
     const profissionalParam = profissionais.join(',');
 
     try {
-      const url = `/api/detalhes?tipo=${encodeURIComponent(tipo)}&unidade_saude=${encodeURIComponent(unidadeSaudeParam)}&equipe=${encodeURIComponent(equipeParam)}&profissional=${encodeURIComponent(profissionalParam)}`;
+      const url = `${API_BASE_URL}/api/detalhes?tipo=${encodeURIComponent(tipo)}&unidade_saude=${encodeURIComponent(unidadeSaudeParam)}&equipe=${encodeURIComponent(equipeParam)}&profissional=${encodeURIComponent(profissionalParam)}`;
       
       const response = await fetch(url);
       const data = await response.json();
@@ -274,7 +280,7 @@ function CadastrosPage() {
     setSelectedCitizenName(''); 
 
     try {
-      const response = await fetch(`/api/detalhes-hover?co_cidadao=${item.co_cidadao}`);
+      const response = await fetch(`${API_BASE_URL}/api/detalhes-hover?co_cidadao=${item.co_cidadao}`);
       if (!response.ok) {
         throw new Error(`Erro ao buscar detalhes: ${response.statusText}`);
       }

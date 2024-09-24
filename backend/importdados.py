@@ -1,8 +1,8 @@
 import json
-from datetime import datetime
+from datetime import datetime, timedelta
 import os
 from apscheduler.triggers.cron import CronTrigger
-import requests
+from Consultas import execute_long_task 
 from socketio_config import socketio
 import time
 from apscheduler.schedulers.background import BackgroundScheduler
@@ -13,23 +13,37 @@ scheduler.start()
 
 # Caminho do arquivo de configuração
 AUTO_UPDATE_CONFIG_FILE = 'auto_update_config.json'
+IMPORT_CONFIG_FILE = 'import_config.json'  # Novo arquivo para armazenar ano e mês
+
+# Dicionário para armazenar o status de execução de cada tarefa
+task_status = {
+    "cadastro": "idle",
+    "domiciliofcd": "idle",
+    "visitas": "idle",
+    "bpa": "idle"
+}
+
+# Função para verificar se uma tarefa está em execução
+def is_task_running():
+    return any(status == "running" for status in task_status.values())
+
+# Atualizar o status de uma tarefa
+def update_task_status(task, status):
+    task_status[task] = status
+    print(f"Status da tarefa {task}: {status}")
 
 def update_last_import(import_type):
-    # Verifica se o arquivo existe, caso contrário, cria um novo
     if not os.path.exists('configimport.json'):
         with open('configimport.json', 'w') as f:
-            json.dump({"cadastro": None, "domiciliofcd": None, "bpa": None}, f)
+            json.dump({"cadastro": None, "domiciliofcd": None, "bpa": None, "visitas": None}, f)
         print("Arquivo configimport.json criado com valores padrão.")
 
     try:
-        # Lê o arquivo JSON atual
         with open('configimport.json', 'r') as f:
             config = json.load(f)
 
-        # Atualiza a timestamp do tipo de importação
         config[import_type] = datetime.now().strftime('%H:%M %d-%m-%Y')
 
-        # Grava o arquivo atualizado
         with open('configimport.json', 'w') as f:
             json.dump(config, f, indent=4)
             f.flush()
@@ -39,7 +53,6 @@ def update_last_import(import_type):
     except Exception as e:
         print(f"Erro ao atualizar o arquivo configimport.json: {e}")
 
-# Função para garantir que o arquivo de configuração exista e tenha valores padrão
 def ensure_auto_update_config():
     if not os.path.exists(AUTO_UPDATE_CONFIG_FILE):
         default_config = {
@@ -53,7 +66,6 @@ def ensure_auto_update_config():
         with open(AUTO_UPDATE_CONFIG_FILE, 'r') as config_file:
             return json.load(config_file)
 
-# Função para salvar a configuração de autoatualização
 def save_auto_update_config(is_auto_update_on, auto_update_time):
     config_data = {
         "isAutoUpdateOn": is_auto_update_on,
@@ -62,48 +74,66 @@ def save_auto_update_config(is_auto_update_on, auto_update_time):
     with open(AUTO_UPDATE_CONFIG_FILE, 'w') as config_file:
         json.dump(config_data, config_file, indent=4)
 
-
-# Função para agendar a importação automática no horário definido
 def schedule_auto_import(scheduler, time_str):
     hour, minute = map(int, time_str.split(':'))
     trigger = CronTrigger(hour=hour, minute=minute)
     scheduler.add_job(auto_update_imports, trigger)
 
+# Função para calcular o mês anterior
+def get_previous_month():
+    today = datetime.today()
+    first_day_of_current_month = today.replace(day=1)
+    last_day_of_previous_month = first_day_of_current_month - timedelta(days=1)
+    return last_day_of_previous_month.year, last_day_of_previous_month.strftime('%m')
 
-# Função que realiza as importações de cadastros, domiciliofcd e BPA
+# Função para carregar ano e mês da configuração
+def load_import_config():
+    if os.path.exists(IMPORT_CONFIG_FILE):
+        try:
+            with open(IMPORT_CONFIG_FILE, 'r') as config_file:
+                config_data = json.load(config_file)
+                return config_data.get('ano'), config_data.get('mes')
+        except json.JSONDecodeError:
+            print("Erro ao decodificar o arquivo import_config.json. Usando mês anterior por padrão.")
+            return None, None
+    return None, None
+
+# Função para salvar ano e mês no arquivo de configuração
+def save_import_config(ano, mes):
+    config_data = {"ano": ano, "mes": mes}
+    with open(IMPORT_CONFIG_FILE, 'w') as config_file:
+        json.dump(config_data, config_file, indent=4)
+
+# Função para agendar uma nova importação, aguardando que a anterior finalize
+def run_import_sequentially(import_type, config_data, ano=None, mes=None):
+    # Enquanto outra tarefa estiver em execução, aguarda
+    while is_task_running():
+        print(f"Aguardando conclusão da tarefa anterior... {import_type} em espera.")
+        time.sleep(1)  # Evitar loop intenso, espera 1 segundo antes de checar de novo
+    
+    # Quando não há tarefa em execução, inicia a nova
+    execute_long_task(config_data, import_type)
+
+# Função que realiza as importações de cadastros, domiciliofcd e BPA em cascata
 def auto_update_imports():
     try:
-        # Carregar a configuração existente para saber ano e mês
-        with open('config.json', 'r') as config_file:
-            config_data = json.load(config_file)
-        
-        # Dados de configuração (ano e mês) para BPA
-        ano = config_data.get('ano')
-        mes = config_data.get('mes')
+        # Carregar ano e mês da configuração de importação
+        ano, mes = load_import_config()
 
-        # Função para disparar cada importação
-        def run_import(import_type):
-            url = f"http://127.0.0.1:5000/execute-queries/{import_type}"
-            data = {}
-            if import_type == 'bpa':
-                data = {"ano": str(ano), "mes": mes}
-            
-            # Enviar o request POST para iniciar a importação
-            response = requests.post(url, json=data)
-            if response.status_code == 200:
-                print(f"Importação de {import_type} iniciada com sucesso.")
-            else:
-                print(f"Erro ao iniciar a importação de {import_type}: {response.text}")
-            return response.status_code == 200
+        # Se ano ou mês não forem fornecidos, usar o mês anterior ao atual
+        if not ano or not mes:
+            ano, mes = get_previous_month()
+            print(f"Usando ano e mês anteriores: Ano={ano}, Mês={mes}")
+            save_import_config(ano, mes)  # Salvar a configuração para futuras execuções
 
-        # Importação de cadastros individuais
-        if run_import('cadastro'):
-            time.sleep(2000)  # Adiciona um pequeno delay entre as requisições
-            # Importação de cadastros domiciliares (domiciliofcd)
-            if run_import('domiciliofcd'):
-                time.sleep(2000)
-                # Importação de BPA
-                #run_import('bpa')
+        # Dados de configuração para as tarefas de importação
+        config_data = {"ano": ano, "mes": mes}
+
+        # Executar cada importação de forma sequencial
+        run_import_sequentially('cadastro', config_data)  # Primeiro, importar cadastro
+        run_import_sequentially('domiciliofcd', config_data)  # Depois, importar domiciliofcd
+        run_import_sequentially('visitas', config_data)  # Depois, importar visitas
+        run_import_sequentially('bpa', config_data)  # Finalmente, importar BPA
 
         print("Atualização automática de importação executada com sucesso!")
 
@@ -119,7 +149,8 @@ def is_file_available(import_type):
     file_mapping = {
         'cadastro': 'cadastros_exportados.xlsx',
         'domiciliofcd': 'domiciliofcd_exportadas.xlsx',
-        'bpa': 'bpa.xlsx'
+        'bpa': 'bpa.xlsx',
+        'visitas': 'visitas.xlsx'
     }
     file_path = file_mapping.get(import_type)
     if file_path and os.path.exists(file_path):

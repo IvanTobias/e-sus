@@ -7,32 +7,36 @@ from sqlalchemy import text
 from Conexões import get_external_engine, get_local_engine, log_message
 from banco import cancel_query, clean_dataframe
 import logging
-from importdados import update_last_import  # Importando sua função de atualização
+
 progress = {}  # Variável global para rastreamento de progresso
 cancel_requests = {}  # Variável global para rastreamento de pedidos de cancelamento
 
+# Função que executa a tarefa de forma assíncrona e atualiza o status
 def execute_long_task(config_data, tipo):
     try:
+        # Importa dentro da função, evitando o ciclo de importação
+        from importdados import update_last_import, update_task_status
+
         # Define a função de callback para atualizar o progresso
         def update_progress(progress_value):
             send_progress_update(tipo, progress_value)
 
         execute_and_store_queries(config_data, tipo, update_progress)
-        logging.debug(f"Execução de queries para {tipo} concluída.")
 
         # Atualiza a última importação no arquivo JSON
-        update_last_import(tipo)  # Atualiza a última vez que o tipo foi importado
-        logging.debug(f"Última importação de {tipo} atualizada com sucesso.")
+        update_last_import(tipo)
 
-        # Atualiza o progresso para 100% quando todas as etapas forem concluídas
+        # Atualiza o progresso para 100%
         send_progress_update(tipo, 100)
-        logging.debug(f"Processo para {tipo} concluído com 100% de progresso.")
 
-        #logging.debug(f"Processo para {tipo} concluído com 100% de progresso.")
+        # Marca como "completed"
+        update_task_status(tipo, "completed")
 
     except Exception as e:
-        #logging.error(f"Erro ao executar consulta {tipo}: {str(e)}")
-        send_progress_update(tipo, 0, error=str(e))  # Reporta erro com progresso zerado
+        print(f"Erro na tarefa {tipo}: {e}")
+        # Marca como "failed"
+        update_task_status(tipo, "failed")
+
 
 def send_progress_update(tipo, progress_value, error=None):
     payload = {'type': tipo, 'progress': progress_value}

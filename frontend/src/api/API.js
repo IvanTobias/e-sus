@@ -1,4 +1,4 @@
-const API_BASE_URL = 'http://0.0.0.0:5000/api'; // Substitua pela URL do seu backend
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://127.0.0.1:5000/api';
 
 export const fetchUnidadesSaude = async () => {
   try {

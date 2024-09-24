@@ -1,10 +1,25 @@
-import React, { useReducer, useEffect, useRef, useState } from 'react';
+import React, { useReducer, useEffect, useRef, useState, useCallback } from 'react';
 import axios from 'axios';
 import { io } from 'socket.io-client';
 import Switch from 'react-switch'; // Switch para autoatualização
 
+// Pegando a URL da API do arquivo .env
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://127.0.0.1:5000';
+
 // Configuração global do axios para usar UTF-8
 axios.defaults.headers.common['Content-Type'] = 'application/json; charset=utf-8';
+
+// Função auxiliar para chamadas de API
+const apiCall = async (url, method = 'GET', data = {}) => {
+  try {
+    const response = await axios({ url: `${API_BASE_URL}${url}`, method, data });
+    return response.data;
+  } catch (error) {
+    console.error(`Erro ao fazer a requisição para ${url}: ${error.message}`);
+    throw error;
+  }
+};
+
 
 // Função para calcular o ano atual e o mês anterior
 const getInitialDateValues = () => {
@@ -49,7 +64,7 @@ const reducer = (state, action) => {
       return { ...state, isExtracting: { ...state.isExtracting, [action.payload.type]: action.payload.value } };
     case 'SET_FILE_AVAILABLE':
       return { ...state, isFileAvailable: { ...state.isFileAvailable, [action.payload.type]: action.payload.value } };
-    case 'SET_LAST_IMPORT': // Adiciona um case para definir lastImport
+    case 'SET_LAST_IMPORT':
       return { ...state, lastImport: { ...state.lastImport, [action.payload.type]: action.payload.value } };
     case 'SET_COMPETENCIA':
       return { ...state, competencia: action.payload };
@@ -60,15 +75,10 @@ const reducer = (state, action) => {
   }
 };
 
-function ImportData() {
-  const [state, dispatch] = useReducer(reducer, initialState);
-  const [isAutoUpdateOn, setIsAutoUpdateOn] = useState(false);
-  const [autoUpdateTime, setAutoUpdateTime] = useState('00:00');
-  const nonProgressCount = useRef({ cadastro: 0, domiciliofcd: 0, bpa: 0 });
-
-  // Configuração do WebSocket
+// Hook customizado para WebSocket
+const useWebSocketProgress = (dispatch) => {
   useEffect(() => {
-    const socket = io('http://127.0.0.1:5000');
+    const socket = io(API_BASE_URL);
 
     socket.on('progress_update', (data) => {
       dispatch({ type: 'SET_PROGRESS', payload: { type: data.type, value: data.progress } });
@@ -91,14 +101,65 @@ function ImportData() {
     return () => {
       socket.disconnect();
     };
-  }, []);
+  }, [dispatch]);
+};
+
+// Componente reutilizável para seções de dados
+const DataSection = ({ type, title, state, importData, extractData }) => (
+  <div>
+    <h3>{title}
+      {state.lastImport[type] && <small> (Última importação: {state.lastImport[type]})</small>}
+    </h3>
+    <div className="flex-container">
+      <button
+        className={`btn btn-primary ${state.isRunning[type] ? 'disabled' : ''}`}
+        onClick={() => !state.isRunning[type] && importData(type)}
+        disabled={state.isRunning[type]}
+      >
+        {state.isRunning[type] ? 'Processando...' : 'Importar'}
+      </button>
+      <button
+        className={`btn btn-success ${state.isExtracting[type] || state.isRunning[type] || !state.isFileAvailable[type] ? 'disabled' : ''}`}
+        onClick={() => extractData(type)}
+        disabled={state.isExtracting[type] || state.isRunning[type]}
+      >
+        Extrair
+      </button>
+      <div className="progressContainer" style={{ display: state.progress[type] > 0 ? 'flex' : 'none', flex: 1 }}>
+        <div className="progress">
+          <div
+            className="progressBar"
+            role="progressbar"
+            style={{ width: `${state.progress[type] || 0}%` }}
+            aria-valuenow={state.progress[type] || 0}
+            aria-valuemin="0"
+            aria-valuemax="100"
+            aria-live="polite"
+          >
+            <span>{state.progress[type] || 0}%</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <p className="errorMessage" style={{ display: state.errorMessage[type] ? 'block' : 'none' }}>
+      {state.errorMessage[type]}
+    </p>
+  </div>
+);
+
+function ImportData() {
+  const [state, dispatch] = useReducer(reducer, initialState);
+  const [isAutoUpdateOn, setIsAutoUpdateOn] = useState(false);
+  const [autoUpdateTime, setAutoUpdateTime] = useState('00:00');
+  const nonProgressCount = useRef({ cadastro: 0, domiciliofcd: 0, bpa: 0 });
+
+  useWebSocketProgress(dispatch); // Usando o hook customizado para WebSocket
 
   // Carregar a configuração de autoatualização
   useEffect(() => {
     const loadAutoUpdateConfig = async () => {
       try {
-        const response = await axios.get('http://127.0.0.1:5000/api/get-import-config');
-        const config = response.data;
+        const config = await apiCall('/api/get-import-config');
         setIsAutoUpdateOn(config.isAutoUpdateOn);
         setAutoUpdateTime(config.autoUpdateTime);
       } catch (error) {
@@ -107,68 +168,59 @@ function ImportData() {
     };
 
     loadAutoUpdateConfig();
-  }, []); // O array vazio [] garante que isso só rode quando o componente for montado
+  }, []);
 
   // Função para salvar a configuração de autoatualização no backend
-  const saveAutoUpdateConfig = () => {
-    axios
-      .post('http://127.0.0.1:5000/api/save-auto-update-config', {
-        isAutoUpdateOn,
-        autoUpdateTime,
-      })
-      .then((response) => alert(response.data.status))
+  const saveAutoUpdateConfig = useCallback(() => {
+    apiCall('/api/save-auto-update-config', 'POST', {
+      isAutoUpdateOn,
+      autoUpdateTime,
+    })
+      .then((response) => alert(response.status))
       .catch((error) => console.error('Erro ao salvar configuração de autoatualização:', error));
-  };
+  }, [isAutoUpdateOn, autoUpdateTime]);
 
-
+  // Verificar disponibilidade dos arquivos
   useEffect(() => {
     const checkFileAvailability = async (type) => {
       try {
-        const response = await axios.get(`http://127.0.0.1:5000/check-file/${type}`);
-        dispatch({ type: 'SET_FILE_AVAILABLE', payload: { type, value: response.data.available } });
+        const response = await apiCall(`/check-file/${type}`);
+        dispatch({ type: 'SET_FILE_AVAILABLE', payload: { type, value: response.available } });
       } catch (error) {
         console.error(`Erro ao verificar disponibilidade do arquivo para ${type}:`, error);
       }
     };
-  
+
     const syncTypes = ['cadastro', 'domiciliofcd', 'bpa', 'visitas'];
     syncTypes.forEach(type => checkFileAvailability(type));
   }, []);
-  
-  // Verifica o estado inicial dos botões e lastImport consultando o backend
+
+  // Buscar dados de última importação
   useEffect(() => {
-    const checkInitialState = async () => {
-      const syncTypes = ['cadastro', 'domiciliofcd', 'bpa', 'visitas'];
-      for (const type of syncTypes) {
-        try {
-          const response = await axios.get(`http://127.0.0.1:5000/progress/${type}`);
-          const progressValue = response.data.progress;
-
-          if (progressValue > 0 && progressValue < 100) {
-            dispatch({ type: 'SET_RUNNING', payload: { type, value: true } });
-            dispatch({ type: 'SET_BUTTON_DISABLED', payload: { type, value: true } });
-          }
-
-          // Define o lastImport com a data recebida
-          dispatch({ type: 'SET_LAST_IMPORT', payload: { type, value: response.data.lastImport || 'N/A' } });
-
-        } catch (error) {
-          console.error(`Erro ao verificar progresso e lastImport para ${type}: ${error.message}`);
-        }
+    const fetchLastImportData = async () => {
+      try {
+        const config = await apiCall('/configimport');
+        
+        dispatch({ type: 'SET_LAST_IMPORT', payload: { type: 'cadastro', value: config.cadastro || 'N/A' } });
+        dispatch({ type: 'SET_LAST_IMPORT', payload: { type: 'domiciliofcd', value: config.domiciliofcd || 'N/A' } });
+        dispatch({ type: 'SET_LAST_IMPORT', payload: { type: 'bpa', value: config.bpa || 'N/A' } });
+        dispatch({ type: 'SET_LAST_IMPORT', payload: { type: 'visitas', value: config.visitas || 'N/A' } });
+  
+        const isFileAvailable = localStorage.getItem('isFileAvailable') === 'true';
+        dispatch({ type: 'SET_FILE_AVAILABLE', payload: { type: 'bpa', value: isFileAvailable } });
+  
+      } catch (error) {
+        console.error('Erro ao buscar dados de última importação:', error.message);
       }
-
-      // Verifica se o arquivo BPA está disponível para download
-      const isFileAvailable = localStorage.getItem('isFileAvailable') === 'true';
-      dispatch({ type: 'SET_FILE_AVAILABLE', payload: { type: 'bpa', value: isFileAvailable } });
     };
-
-    checkInitialState();
+  
+    fetchLastImportData();
   }, []);
 
-  // Função para iniciar a importação de dados no frontend
-  const importData = (type) => {
+  // Função para iniciar a importação de dados
+  const importData = useCallback((type) => {
     let requestData = {};
-    let url = `http://127.0.0.1:5000/execute-queries/${type}`;
+    let url = `/execute-queries/${type}`;
 
     if (type === 'bpa') {
       requestData = { ano: String(state.ano), mes: state.competencia };
@@ -181,8 +233,7 @@ function ImportData() {
     localStorage.setItem('isFileAvailable', 'false');
     nonProgressCount.current[type] = 0;
 
-    axios
-      .post(url, requestData)
+    apiCall(url, 'POST', requestData)
       .then(() => {
         dispatch({ type: 'SET_ERROR', payload: { type, message: '' } });
         dispatch({ type: 'SET_RUNNING', payload: { type, value: true } });
@@ -199,17 +250,17 @@ function ImportData() {
         dispatch({ type: 'SET_BUTTON_DISABLED', payload: { type, value: false } });
         dispatch({ type: 'SET_RUNNING', payload: { type, value: false } });
       });
-  };
+  }, [state.ano, state.competencia]);
 
   // Função para extração de dados
-  const extractData = (type) => {
+  const extractData = useCallback((type) => {
     dispatch({ type: 'SET_EXTRACTING', payload: { type, value: true } });
 
     let endpoint = '';
-    if (type === 'cadastro') endpoint = 'http://127.0.0.1:5000/export-xls';
-    else if (type === 'domiciliofcd') endpoint = 'http://127.0.0.1:5000/export-xls2';
-    else if (type === 'bpa') endpoint = 'http://127.0.0.1:5000/export-bpa';
-    else if (type === 'visitas') endpoint = 'http://127.0.0.1:5000/export_visitas';
+    if (type === 'cadastro') endpoint = '/export-xls';
+    else if (type === 'domiciliofcd') endpoint = '/export-xls2';
+    else if (type === 'bpa') endpoint = '/export-bpa';
+    else if (type === 'visitas') endpoint = 'API_BASE_URL/export_visitas';
 
     axios({
       url: endpoint,
@@ -241,147 +292,18 @@ function ImportData() {
       .finally(() => {
         dispatch({ type: 'SET_EXTRACTING', payload: { type, value: false } });
       });
-  };
-
+  }, []);
 
   return (
     <div className="config-container">
       <h1>Importar Dados</h1>
       <form>
-  
-        {/* Seção para Cadastros Individuais */}
-        <div>
-          <h3>Cadastros Individuais (FCI) 
-            {state.lastImport.cadastro && <small> (Última importação: {state.lastImport.cadastro})</small>}
-          </h3>
-          <div className="flex-container">
-            <button
-              id="importButton"
-              className={`btn btn-primary ${state.isRunning.cadastro ? 'disabled' : ''}`}
-              onClick={() => !state.isRunning.cadastro && importData('cadastro')}
-              disabled={state.isRunning.cadastro}
-            >
-              {state.isRunning.cadastro ? 'Processando...' : 'Importar'}
-            </button>
-            <button
-              id="exportButton"
-              className={`btn btn-success ${state.isExtracting.cadastro || state.isRunning.cadastro || !state.isFileAvailable.cadastro ? 'disabled' : ''}`}
-              onClick={() => extractData('cadastro')}
-              disabled={state.isExtracting?.cadastro || state.isRunning?.cadastro}
-            >
-              Extrair
-            </button>
-            <div className="progressContainer" style={{ display: (state.progress?.cadastro || 0) > 0 ? 'flex' : 'none', flex: 1 }}>
-              <div className="progress">
-                <div
-                  className="progressBar"
-                  role="progressbar"
-                  style={{ width: `${state.progress?.cadastro || 0}%` }}
-                  aria-valuenow={state.progress?.cadastro || 0}
-                  aria-valuemin="0"
-                  aria-valuemax="100"
-                  aria-live="polite"
-                >
-                  <span>{state.progress?.cadastro || 0}%</span>
-                </div>
-              </div>
-            </div>
-          </div>
-          <p className="errorMessage" style={{ display: state.errorMessage?.cadastro ? 'block' : 'none' }}>
-            {state.errorMessage?.cadastro || ''}
-          </p>
-        </div>
-  
-        {/* Seção para Cadastros Domiciliares */}
-        <div>
-          <h3>Cadastros Domiciliares  
-            {state.lastImport.domiciliofcd && <small> (Última importação: {state.lastImport.domiciliofcd})</small>}
-          </h3>
-          <div className="flex-container">
-            <button
-              id="importdomiciliofcdButton"
-              className={`btn btn-primary ${state.isRunning.domiciliofcd ? 'disabled' : ''}`}
-              onClick={() => !state.isRunning.domiciliofcd && importData('domiciliofcd')}
-              disabled={state.isRunning.domiciliofcd}
-            >
-              {state.isRunning.domiciliofcd ? 'Processando...' : 'Importar'}
-            </button>
-            <button
-              id="exportdomiciliofcdButton"
-              className={`btn btn-success ${state.isExtracting.domiciliofcd || state.isRunning.domiciliofcd || !state.isFileAvailable.domiciliofcd ? 'disabled' : ''}`}
-              onClick={() => extractData('domiciliofcd')}
-              disabled={state.isExtracting.domiciliofcd || state.isRunning.domiciliofcd}
-            >
-              Extrair
-            </button>
-            <div className="progressContainer" style={{ display: state.progress.domiciliofcd > 0 ? 'flex' : 'none', flex: 1 }}>
-              <div className="progress">
-                <div
-                  className="progressBar"
-                  role="progressbar"
-                  style={{ width: `${state.progress.domiciliofcd || 0}%` }}
-                  aria-valuenow={state.progress.domiciliofcd || 0}
-                  aria-valuemin="0"
-                  aria-valuemax="100"
-                  aria-live="polite"
-                >
-                  <span>{state.progress.domiciliofcd || 0}%</span>
-                </div>
-              </div>
-            </div>
-          </div>
-          <p className="errorMessage" style={{ display: state.errorMessage.domiciliofcd ? 'block' : 'none' }}>
-            {state.errorMessage.domiciliofcd}
-          </p>
-        </div>
-        <div>
-          <h3>Visitas  
-            {state.lastImport.visitas && <small> (Última importação: {state.lastImport.visitas})</small>}
-          </h3>
-          <div className="flex-container">
-            <button
-              id="importvisitasButton"
-              className={`btn btn-primary ${state.isRunning.visitas ? 'disabled' : ''}`}
-              onClick={() => !state.isRunning.visitas && importData('visitas')}
-              disabled={state.isRunning.visitas}
-            >
-              {state.isRunning.visitas ? 'Processando...' : 'Importar'}
-            </button>
-            <button
-              id="exportvisitasButton"
-              className={`btn btn-success ${state.isExtracting.visitas || state.isRunning.visitas || state.isFileAvailable.visitas ? 'disabled' : ''}`}
-              onClick={() => extractData('visitas')}
-              disabled={state.isExtracting.visitas || state.isRunning.visitas}
-            >
-              Extrair
-            </button>
-            <div className="progressContainer" style={{ display: state.progress.visitas > 0 ? 'flex' : 'none', flex: 1 }}>
-              <div className="progress">
-                <div
-                  className="progressBar"
-                  role="progressbar"
-                  style={{ width: `${state.progress.visitas || 0}%` }}
-                  aria-valuenow={state.progress.visitas || 0}
-                  aria-valuemin="0"
-                  aria-valuemax="100"
-                  aria-live="polite"
-                >
-                  <span>{state.progress.visitas || 0}%</span>
-                </div>
-              </div>
-            </div>
-          </div>
-          <p className="errorMessage" style={{ display: state.errorMessage.visitas ? 'block' : 'none' }}>
-            {state.errorMessage.visitas}
-          </p>
-        </div>
-  
-        {/* Seção para BPA */}
-        <div>
-          <h3>BPA 
-            {state.lastImport.bpa && <small> (Última importação: {state.lastImport.bpa})</small>}
-          </h3>
-          <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+        {/* Seções de Dados */}
+        <DataSection type="cadastro" title="Cadastros Individuais (FCI)" state={state} importData={importData} extractData={extractData} />
+        <DataSection type="domiciliofcd" title="Cadastros Domiciliares" state={state} importData={importData} extractData={extractData} />
+        <DataSection type="visitas" title="Visitas" state={state} importData={importData} extractData={extractData} />
+        <DataSection type="bpa" title="BPA" state={state} importData={importData} extractData={extractData} />
+        <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
             <label htmlFor="competencia">Mês:</label>
             <select
               id="competencia"
@@ -404,46 +326,6 @@ function ImportData() {
               onChange={(e) => dispatch({ type: 'SET_ANO', payload: e.target.value })}
             />
           </div>
-  
-          {/* Botões e Progresso */}
-          <div className="flex-container">
-            <button
-              id="importBPAButton"
-              className={`btn btn-primary ${state.isRunning.bpa ? 'disabled' : ''}`}
-              onClick={() => !state.isRunning.bpa && importData('bpa')}
-              disabled={state.isRunning.bpa}
-            >
-              {state.isRunning.bpa ? 'Processando...' : 'Importar'}
-            </button>
-            <button
-              id="exportBPAButton"
-              className={`btn btn-success ${state.isExtracting.bpa || state.isRunning.bpa || state.isFileAvailable.bpa ? 'disabled' : ''}`}
-              onClick={() => extractData('bpa')}
-              disabled={state.isExtracting.bpa || state.isRunning.bpa}
-            >
-              Extrair
-            </button>
-            <div className="progressContainer" style={{ display: state.progress.bpa > 0 ? 'flex' : 'none', flex: 1 }}>
-              <div className="progress">
-                <div
-                  className="progressBar"
-                  role="progressbar"
-                  style={{ width: `${state.progress.bpa || 0}%` }}
-                  aria-valuenow={state.progress.bpa || 0}
-                  aria-valuemin="0"
-                  aria-valuemax="100"
-                  aria-live="polite"
-                >
-                  <span>{state.progress.bpa || 0}%</span>
-                </div>
-              </div>
-            </div>
-          </div>
-          <p className="errorMessage" style={{ display: state.errorMessage.bpa ? 'block' : 'none' }}>
-            {state.errorMessage.bpa}
-          </p>
-        </div>
-  
         {/* Seção de Atualização Automática */}
         <div>
           <h3>Atualização Automática</h3>
@@ -471,9 +353,9 @@ function ImportData() {
             </button>
           </div>
         </div>
-  
       </form>
     </div>
   );
-}  
+}
+
 export default ImportData;

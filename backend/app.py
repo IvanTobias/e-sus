@@ -350,13 +350,13 @@ def fetch_contagens():
 
 @app.route('/api/unidades-saude', methods=['GET'])
 @cache.cached(timeout=300)  # Cache por 5 minutos (300 segundos)
-def fetch_unidades_saude():
+def fetchUnidadesSaude():
     # Obtendo os parâmetros da requisição
     unidade_saude = request.args.get('unidade_saude', default='', type=str)
-    #equipe = request.args.get('equipe', default='', type=str)
-    #profissional = request.args.get('profissional', default='', type=str)
+    equipe = request.args.get('equipe', default='', type=str)
+    profissional = request.args.get('profissional', default='', type=str)
     engine = get_local_engine()
-    
+
     # SQL base para a consulta
     query = """
     SELECT 
@@ -374,13 +374,13 @@ def fetch_unidades_saude():
         conditions.append("initcap_2 = :unidade_saude")
         params["unidade_saude"] = unidade_saude
 
-    #if equipe:
-     #   conditions.append("initcap_4 = :equipe")
-      #  params["equipe"] = equipe
+    if equipe:
+        conditions.append("initcap_4 = :equipe")
+        params["equipe"] = equipe
 
-    #if profissional:
-     #   conditions.append("initcap_3 = :profissional")
-      #  params["profissional"] = profissional
+    if profissional:
+        conditions.append("initcap_3 = :profissional")
+        params["profissional"] = profissional
 
     # Concatena todas as condições SQL na query base
     if conditions:
@@ -389,8 +389,10 @@ def fetch_unidades_saude():
     # Adiciona o agrupamento após as condições
     query += " GROUP BY initcap_2, initcap_3, initcap_4"
 
-    with engine.connect() as connection:
-        result = connection.execute(text(query), params)
+    try:
+        with engine.connect() as connection:
+            result = connection.execute(text(query), params)
+        
         # Converte o resultado para um dicionário agrupando por unidade de saúde, equipe e profissional
         data = [
             {
@@ -400,9 +402,14 @@ def fetch_unidades_saude():
             }
             for row in result.fetchall()
         ]
-    
-    return jsonify(data)
 
+        # Retorna os dados no formato JSON
+        return jsonify(data)
+
+    except Exception as e:
+        # Em caso de erro, retorna a mensagem de erro com status 500
+        return jsonify({'error': str(e)}), 500
+    
 @app.route('/api/detalhes', methods=['GET'])
 def fetch_detalhes():
     tipo = request.args.get('tipo', default='', type=str).strip().lower()
@@ -863,6 +870,8 @@ def check_file(import_type):
     if importdados.is_file_available(import_type):
         return jsonify({"available": True})
     return jsonify({"available": False})
+
+
 
 # Carregar a configuração na inicialização e agendar a importação, se necessário
 if __name__ == '__main__':

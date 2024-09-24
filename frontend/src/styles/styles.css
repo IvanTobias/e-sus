@@ -609,3 +609,8 @@ button,
 .tab:hover {
   background-color: #ddd;
 }
+.qr-code {
+  width: 50%;  /* Reduz a largura para 50% do tamanho original */
+  height: auto; /* Mantém a proporção da imagem */
+  max-width: 150px; /* Limita o tamanho máximo da imagem */
+}

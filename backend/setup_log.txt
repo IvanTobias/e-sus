@@ -1963,3 +1963,322 @@ Parâmetros recebidos: ano=None, mes=None, tipo=visitas
 Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
 Sessão fechada para query_4 e visitas.
 Execução de query_4 para visitas concluída.
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados externo: postgresql://postgres:ht*qkwmJ7KMV2ly3[]KpLpc]Mv@10.2.2.161:5433/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Parâmetros recebidos: ano=None, mes=None, tipo=domiciliofcd
+Sessão fechada para query_2 e domiciliofcd.
+Execução de query_2 para domiciliofcd concluída.
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados externo: postgresql://postgres:ht*qkwmJ7KMV2ly3[]KpLpc]Mv@10.2.2.161:5433/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Parâmetros recebidos: ano=2024, mes=08, tipo=bpa
+Sessão fechada para query_3 e bpa.
+Execução de query_3 para bpa concluída.
+Conectado ao banco de dados externo: postgresql://postgres:ht*qkwmJ7KMV2ly3[]KpLpc]Mv@10.2.2.161:5433/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Parâmetros recebidos: ano=None, mes=None, tipo=domiciliofcd
+Sessão fechada para query_2 e domiciliofcd.
+Execução de query_2 para domiciliofcd concluída.
+Conectado ao banco de dados externo: postgresql://postgres:ht*qkwmJ7KMV2ly3[]KpLpc]Mv@10.2.2.161:5433/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Parâmetros recebidos: ano=2024, mes=08, tipo=bpa
+Sessão fechada para query_3 e bpa.
+Execução de query_3 para bpa concluída.
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados externo: postgresql://postgres:ht*qkwmJ7KMV2ly3[]KpLpc]Mv@10.2.2.161:5433/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Parâmetros recebidos: ano=2024, mes=07, tipo=bpa
+Sessão fechada para query_3 e bpa.
+Execução de query_3 para bpa concluída.
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados externo: postgresql://postgres:ht*qkwmJ7KMV2ly3[]KpLpc]Mv@10.2.2.161:5433/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Parâmetros recebidos: ano=None, mes=None, tipo=domiciliofcd
+Sessão fechada para query_2 e domiciliofcd.
+Execução de query_2 para domiciliofcd concluída.
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados externo: postgresql://postgres:ht*qkwmJ7KMV2ly3[]KpLpc]Mv@10.2.2.161:5433/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Parâmetros recebidos: ano=2024, mes=08, tipo=bpa
+Sessão fechada para query_3 e bpa.
+Execução de query_3 para bpa concluída.
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Executando Procedure 1
+Primeira Procedure Concluída
+Executando Procedure 2
+Segunda Procedure Concluída
+Executando Procedure 3
+Terceira Procedure Concluída
+Max Folha Terceira: 7
+Executando Procedure 4
+Quarta Procedure Concluída
+Max Folha Quarta: 172
+Max Folha Calculada: 179
+Colunas: ['PRD_UID', 'PRD_CMP', 'PRD_CNSMED', 'PRD_CBO', 'PRD_FLH', 'PRD_SEQ', 'PRD_PA', 'PRD_CNSPAC', 'PRD_CPF_PCNT', 'PRD_NMPAC', 'PRD_DTNASC', 'PRD_SEXO', 'PRD_IBGE', 'PRD_DTATEN', 'PRD_CID', 'PRD_IDADE', 'PRD_QT_P', 'PRD_CATEN', 'PRD_NAUT', 'PRD_ORG', 'PRD_MVM', 'PRD_FLPA', 'PRD_FLCBO', 'PRD_FLCA', 'PRD_FLIDA', 'PRD_FLQT', 'PRD_FLER', 'PRD_FLMUN', 'PRD_FLCID', 'PRD_RACA', 'PRD_SERVICO', 'PRD_CLASSIFICACAO', 'PRD_ETNIA', 'PRD_NAC', 'PRD_ADVQT', 'PRD_CNPJ', 'PRD_EQP_AREA', 'PRD_EQP_SEQ', 'PRD_LOGRAD_PCNTE', 'PRD_CEP_PCNTE', 'PRD_END_PCNTE', 'PRD_COMPL_PCNTE', 'PRD_NUM_PCNTE', 'PRD_BAIRRO_PCNTE', 'PRD_DDTEL_PCNTE', 'PRD_TEL_PCNTE', 'PRD_EMAIL_PCNTE', 'PRD_INE']
+Primeira linha de resultados: ('6430163', '202408', '', '251510', '001', '01', '0301010048', '', None, None, None, '', '', '', '', '040', 3, '', '', 'BPA', None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None)
+Campo de Controle Calculado: 1206
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+BPA gerado em bpa_202408.txt
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados externo: postgresql://postgres:ht*qkwmJ7KMV2ly3[]KpLpc]Mv@10.2.2.161:5433/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Parâmetros recebidos: ano=None, mes=None, tipo=domiciliofcd
+Sessão fechada para query_2 e domiciliofcd.
+Execução de query_2 para domiciliofcd concluída.
+Conectado ao banco de dados externo: postgresql://postgres:ht*qkwmJ7KMV2ly3[]KpLpc]Mv@10.2.2.161:5433/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Parâmetros recebidos: ano=None, mes=None, tipo=cadastro
+Conectado ao banco de dados externo: postgresql://postgres:ht*qkwmJ7KMV2ly3[]KpLpc]Mv@10.2.2.161:5433/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Parâmetros recebidos: ano=None, mes=None, tipo=domiciliofcd
+Sessão fechada para query_2 e domiciliofcd.
+Execução de query_2 para domiciliofcd concluída.
+Conectado ao banco de dados externo: postgresql://postgres:ht*qkwmJ7KMV2ly3[]KpLpc]Mv@10.2.2.161:5433/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+.161:5433/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Parâmetros recebidos: ano=None, mes=None, tipo=cadastro
+Parâmetros recebidos: ano=None, mes=None, tipo=domiciliofcd
+Conectado ao banco de dados externo: postgresql://postgres:ht*qkwmJ7KMV2ly3[]KpLpc]Mv@10.2.2.161:5433/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+.161:5433/esus
+Parâmetros recebidos: ano=None, mes=None, tipo=visitas
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Parâmetros recebidos: ano=2024, mes=08, tipo=bpa
+Sessão fechada para query_3 e bpa.
+Execução de query_3 para bpa concluída.
+Conectado ao banco de dados externo: postgresql://postgres:ht*qkwmJ7KMV2ly3[]KpLpc]Mv@10.2.2.161:5433/esus
+Conectado ao banco de dados externo: postgresql://postgres:ht*qkwmJ7KMV2ly3[]KpLpc]Mv@10.2.2.161:5433/esus
+Conectado ao banco de dados externo: postgresql://postgres:ht*qkwmJ7KMV2ly3[]KpLpc]Mv@10.2.2.161:5433/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Parâmetros recebidos: ano=None, mes=None, tipo=cadastro
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Parâmetros recebidos: ano=None, mes=None, tipo=visitas
+Parâmetros recebidos: ano=None, mes=None, tipo=domiciliofcd
+Conectado ao banco de dados externo: postgresql://postgres:ht*qkwmJ7KMV2ly3[]KpLpc]Mv@10.2.2.161:5433/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Parâmetros recebidos: ano=2024, mes=08, tipo=bpa
+Sessão fechada para query_3 e bpa.
+Execução de query_3 para bpa concluída.
+Sessão fechada para query_2 e domiciliofcd.
+Execução de query_2 para domiciliofcd concluída.
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Sessão fechada para query_4 e visitas.
+Execução de query_4 para visitas concluída.
+Sessão fechada para query_1 e cadastro.
+Execução de query_1 para cadastro concluída.
+Conectado ao banco de dados externo: postgresql://postgres:ht*qkwmJ7KMV2ly3[]KpLpc]Mv@10.2.2.161:5433/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Parâmetros recebidos: ano=2024, mes=08, tipo=bpa
+Sessão fechada para query_3 e bpa.
+Execução de query_3 para bpa concluída.
+Conectado ao banco de dados externo: postgresql://postgres:ht*qkwmJ7KMV2ly3[]KpLpc]Mv@10.2.2.161:5433/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Parâmetros recebidos: ano=None, mes=None, tipo=cadastro

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 
 function Sidebar({ onLoadContent }) {
   // Estado para armazenar o módulo selecionado
-  const [selectedModule, setSelectedModule] = useState('cadastro'); // Assume que "cadastro" é o padrão
+  const [selectedModule, setSelectedModule] = useState('Home');
 
   // Função para manipular o clique no módulo
   const handleModuleClick = (module) => {
@@ -13,6 +13,12 @@ function Sidebar({ onLoadContent }) {
   return (
     <div className="sidebar">
       <h3>Módulos</h3>
+      {/*<a 
+        className={selectedModule === 'Home' ? 'active' : ''}
+        onClick={() => handleModuleClick('Home')}
+      >
+        Home
+      </a>*/}
       <a 
         className={selectedModule === 'config' ? 'active' : ''}
         onClick={() => handleModuleClick('config')}
