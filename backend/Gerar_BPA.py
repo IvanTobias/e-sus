@@ -10,7 +10,7 @@ def load_db_config(config_path='config.json'):
         return json.load(config_file)
 
 def consultar_bpa_dados():
-    query = text("""Select * FROM query_3""")
+    query = text("""Select * FROM tb_bpa""")
     engine = get_local_engine()
     with engine.connect() as connection:
         result = connection.execute(query)
@@ -25,7 +25,7 @@ def consultar_bpa_dados():
     return []
 
 def consultar_bpa_dados_ano_mes():
-    query = text("""SELECT prd_cmp FROM query_3 LIMIT 1""")
+    query = text("""SELECT prd_cmp FROM tb_bpa LIMIT 1""")
     engine = get_local_engine()
     with engine.connect() as connection:
         result = connection.execute(query)
@@ -255,7 +255,7 @@ def criar_arquivo_bpa():
                 raise
 
         # Consulta final ao banco de dados após as procedures
-        query = text("""SELECT * FROM query_3 order by prd_org, prd_uid, prd_pa, prd_cbo, prd_cmp, prd_flh, prd_seq, prd_qt_p""")
+        query = text("""SELECT * FROM tb_bpa order by prd_org, prd_uid, prd_pa, prd_cbo, prd_cmp, prd_flh, prd_seq, prd_qt_p""")
         with engine.connect() as connection:
             result = connection.execute(query)
             results = result.fetchall()
@@ -339,7 +339,7 @@ def executar_procedure(connection):
            s_prd.prd_cbo,
            s_prd.prd_cmp,
            SUM(s_prd.prd_qt_p) as prd_qt_p
-    FROM query_3 as s_prd
+    FROM tb_bpa as s_prd
     WHERE s_prd.prd_org = 'BPI'
       AND s_prd.prd_pa IN :pa_ids
     GROUP BY s_prd.prd_uid, s_prd.prd_pa, s_prd.prd_cbo, s_prd.prd_cmp
@@ -350,7 +350,7 @@ def executar_procedure(connection):
     for row in results:
         # Inserir os dados agrupados
         insert_query = text("""
-        INSERT INTO query_3 (PRD_UID, PRD_CMP, PRD_CNSMED, PRD_CBO, PRD_FLH, PRD_SEQ, PRD_PA, PRD_CNSPAC,
+        INSERT INTO tb_bpa (PRD_UID, PRD_CMP, PRD_CNSMED, PRD_CBO, PRD_FLH, PRD_SEQ, PRD_PA, PRD_CNSPAC,
                            PRD_SEXO, PRD_IBGE, PRD_DTATEN, PRD_CID, PRD_IDADE, PRD_QT_P, PRD_CATEN,
                            PRD_NAUT, PRD_ORG)
         VALUES (:prd_uid, :prd_cmp, '', :prd_cbo, '001', '01', :prd_pa, '', '', '', '', '', '000',
@@ -365,7 +365,7 @@ def executar_procedure(connection):
 
         # Executar o DELETE
         delete_query = text("""
-        DELETE FROM query_3
+        DELETE FROM tb_bpa
 WHERE prd_org = 'BPI' 
   AND (
     (prd_pa LIKE '%ABPG%' OR prd_pa LIKE '%ABEX%' OR prd_pa LIKE '0301010030' OR prd_pa LIKE '0301010064')
@@ -411,7 +411,7 @@ def executar_procedure_segunda(connection):
            s_prd.prd_cmp,
            s_prd.prd_idade,
            SUM(s_prd.prd_qt_p) as prd_qt_p
-    FROM query_3 as s_prd
+    FROM tb_bpa as s_prd
     WHERE s_prd.prd_org = 'BPI'
       AND s_prd.prd_pa IN :pa_ids
     GROUP BY s_prd.prd_uid, s_prd.prd_pa, s_prd.prd_cbo, s_prd.prd_cmp, s_prd.prd_idade
@@ -422,7 +422,7 @@ def executar_procedure_segunda(connection):
     # 2. Inserção dos dados agrupados
     for row in results:
         insert_query = text("""
-        INSERT INTO query_3 (PRD_UID, PRD_CMP, PRD_CNSMED, PRD_CBO, PRD_FLH, PRD_SEQ, PRD_PA, PRD_CNSPAC,
+        INSERT INTO tb_bpa (PRD_UID, PRD_CMP, PRD_CNSMED, PRD_CBO, PRD_FLH, PRD_SEQ, PRD_PA, PRD_CNSPAC,
                            PRD_SEXO, PRD_IBGE, PRD_DTATEN, PRD_CID, PRD_IDADE, PRD_QT_P, PRD_CATEN,
                            PRD_NAUT, PRD_ORG)
         VALUES (:prd_uid, :prd_cmp, '', :prd_cbo, '001', '01', :prd_pa, '', '', '', '', '', :prd_idade,
@@ -439,7 +439,7 @@ def executar_procedure_segunda(connection):
 
         # 3. Deletar os registros que já foram processados
         delete_query = text("""
-        DELETE FROM query_3
+        DELETE FROM tb_bpa
         WHERE prd_org = 'BPI'
           AND prd_pa = :prd_pa
         """)
@@ -447,7 +447,7 @@ def executar_procedure_segunda(connection):
 
     # 4. Executar o UPDATE para o UID específico
     update_query = text("""
-    UPDATE query_3
+    UPDATE tb_bpa
     SET prd_cid = 'G804'
     WHERE prd_uid = '0491381'
     """)
@@ -473,7 +473,7 @@ def executar_procedure_terceira(connection):
            s_prd.prd_idade,
            s_prd.prd_qt_p,
            s_prd.prd_org
-    FROM query_3 as s_prd
+    FROM tb_bpa as s_prd
     WHERE s_prd.prd_org = 'BPA'
     ORDER BY s_prd.prd_uid, s_prd.prd_pa, s_prd.prd_cbo
     """)
@@ -510,7 +510,7 @@ def executar_procedure_terceira(connection):
 
         # Atualizar o registro na tabela
         update_query = text("""
-        UPDATE query_3
+        UPDATE tb_bpa
         SET prd_flh = :prd_flh_novo, prd_seq = :prd_seq_novo
         WHERE prd_uid = :prd_uid
           AND prd_pa = :prd_pa
@@ -564,7 +564,7 @@ def executar_procedure_quarta(connection):
          s_prd.prd_dtnasc,
          s_prd.prd_dtaten,
          s_prd.prd_cnspac
-    FROM query_3 as s_prd
+    FROM tb_bpa as s_prd
     WHERE s_prd.prd_org = 'BPI'
     ORDER BY s_prd.prd_uid, s_prd.prd_pa, s_prd.prd_cnsmed, s_prd.prd_nmpac, s_prd.prd_dtaten
     """)
@@ -605,7 +605,7 @@ def executar_procedure_quarta(connection):
 
         # Atualizar o registro na tabela
         update_query = text("""
-        UPDATE query_3
+        UPDATE tb_bpa
         SET prd_flh = :prd_flh_novo,
             prd_seq = :prd_seq_novo
         WHERE prd_uid = :prd_uid

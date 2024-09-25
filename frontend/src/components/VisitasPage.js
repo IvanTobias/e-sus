@@ -81,6 +81,9 @@ function VisitaPage() {
   const [countAusentesWithoutGeo, setCountAusentesWithoutGeo] = useState(0);
   const [countRecusadas, setCountRecusadas] = useState(0);
   const [countRecusadasWithoutGeo, setCountRecusadasWithoutGeo] = useState(0);
+  const [totalcomgeo, setCounttotalcomgeo] = useState(0);
+  const [totalsemgeo, setCounttotalsemgeo] = useState(0);
+  const [totalVisitas, setCounttotalvisitas] = useState(0);
   const [selectedTab, setSelectedTab] = useState('visitas');  // Define a aba inicial
 
   const handleTabChange = (tab) => {
@@ -101,7 +104,7 @@ function VisitaPage() {
   useEffect(() => {
     loadUnidadesSaude();  // Carrega as unidades de saúde quando o componente é montado
   }, [loadUnidadesSaude]);
-
+  
   const loadVisitasMapa = useCallback(async () => {
     try {
       const queryParams = new URLSearchParams({
@@ -116,6 +119,8 @@ function VisitaPage() {
       const response = await fetch(`${API_BASE_URL}/api/visitas-domiciliares?${queryParams}`);
       const data = await response.json();
   
+      console.log("Dados da API:", data); 
+
       // Separar as visitas em duas categorias: com e sem geolocalização
       const visitsWithGeo = data.filter(item => item.nu_latitude && item.nu_longitude);
       const visitsWithoutGeo = data.filter(item => !item.nu_latitude || !item.nu_longitude);
@@ -128,29 +133,41 @@ function VisitaPage() {
         equipe: item.no_equipe,
         dt_visita: item.dt_visita,
         status: item.co_dim_desfecho_visita,
+        sg_sexo: item.sg_sexo,        // Adiciona sexo
+        ds_turno: item.ds_turno,      // Adiciona turno
       }));
-  
-      setCountRealizadas(markers.filter(marker => marker.status === 1).length);
-      setCountAusentes(markers.filter(marker => marker.status === 3).length);
-      setCountRecusadas(markers.filter(marker => marker.status === 2).length);
+
+      const countRealizadasWithGeo = markers.filter(marker => marker.status === 1).length;
+      const countAusentesWithGeo = markers.filter(marker => marker.status === 3).length;
+      const countRecusadasWithGeo = markers.filter(marker => marker.status === 2).length;
   
       // Calcular contagens para as visitas sem geolocalização
       const countRealizadasWithoutGeo = visitsWithoutGeo.filter(item => item.co_dim_desfecho_visita === 1).length;
       const countAusentesWithoutGeo = visitsWithoutGeo.filter(item => item.co_dim_desfecho_visita === 3).length;
       const countRecusadasWithoutGeo = visitsWithoutGeo.filter(item => item.co_dim_desfecho_visita === 2).length;
   
-      setMapMarkers(markers);
-  
-      // Armazenar as contagens das visitas sem geolocalização
+      // Calcular os totais de cada categoria (com e sem geolocalização)
+      const totalcomgeo = countRealizadasWithGeo + countAusentesWithGeo + countRecusadasWithGeo;
+      const totalsemgeo = countRealizadasWithoutGeo + countAusentesWithoutGeo + countRecusadasWithoutGeo;
+      const totalVisitas = totalcomgeo + totalsemgeo;
+
+      // Atualizar os estados com os valores corretos
+      setCountRealizadas(countRealizadasWithGeo);
+      setCountAusentes(countAusentesWithGeo);
+      setCountRecusadas(countRecusadasWithGeo);
       setCountRealizadasWithoutGeo(countRealizadasWithoutGeo);
       setCountAusentesWithoutGeo(countAusentesWithoutGeo);
       setCountRecusadasWithoutGeo(countRecusadasWithoutGeo);
-  
+      setCounttotalcomgeo(totalcomgeo)
+      setCounttotalsemgeo(totalsemgeo)
+      setCounttotalvisitas(totalVisitas);
+
+      setMapMarkers(markers);
+
     } catch (error) {
       console.error('Erro ao carregar visitas para o mapa:', error);
     }
   }, [unidades, equipes, profissionais, startDate, endDate]);
-  
   
   // Define o ícone pelo status
   const getIconByStatus = (status) => {
@@ -258,27 +275,72 @@ function VisitaPage() {
           <br />
           <MapContainer center={[-23.3945, -46.3144]} zoom={13} style={{ height: "500px", width: "100%" }}>
             <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-            {filteredMarkers}
+            {mapMarkers.map((marker, index) => (
+              <Marker key={index} position={marker.position} icon={getIconByStatus(marker.status)}>
+                <Popup>
+                  <strong>Unidade de Saúde:</strong> {marker.unidade_saude}<br />
+                  <strong>Profissional:</strong> {marker.profissional}<br />
+                  <strong>Equipe:</strong> {marker.equipe}<br />
+                  <strong>Data da Visita:</strong> {marker.dt_visita}<br />
+                  <strong>Status:</strong> {marker.status === 1 ? 'Realizada' : marker.status === 2 ? 'Recusada' : 'Ausente'}
+                </Popup>
+              </Marker>
+            ))}
           </MapContainer>
           <br />
 
           {/* Resumo das Visitas */}
           <div className="visitas-container">
-        {/* Resumo das Visitas com geolocalização */}
+            {/* Resumo das Visitas com geolocalização */}
             <div className="visitas-summary">
-                <h4>Visitas com Geolocalização</h4>
-                <p><strong>Visitas Realizadas:</strong> {countRealizadas}</p>
-                <p><strong>Visitas Ausentes:</strong> {countAusentes}</p>
-                <p><strong>Visitas Recusadas:</strong> {countRecusadas}</p>
+              <h4>Visitas com Geolocalização</h4>
+              <p><strong>Visitas Realizadas:</strong> {countRealizadas}</p>
+              <p><strong>Visitas Ausentes:</strong> {countAusentes}</p>
+              <p><strong>Visitas Recusadas:</strong> {countRecusadas}</p>
+              <p><strong>Total:</strong> {totalcomgeo}</p>
+              <p><strong>Total de Visitas:</strong> {totalVisitas}</p>
             </div>
             {/* Resumo das Visitas sem geolocalização */}
             <div className="visitas-summary">
-                <h4>Visitas sem Geolocalização</h4>
-                <p><strong>Visitas Realizadas:</strong> {countRealizadasWithoutGeo}</p>
-                <p><strong>Visitas Ausentes:</strong> {countAusentesWithoutGeo}</p>
-                <p><strong>Visitas Recusadas:</strong> {countRecusadasWithoutGeo}</p>
+              <h4>Visitas sem Geolocalização</h4>
+              <p><strong>Visitas Realizadas:</strong> {countRealizadasWithoutGeo}</p>
+              <p><strong>Visitas Ausentes:</strong> {countAusentesWithoutGeo}</p>
+              <p><strong>Visitas Recusadas:</strong> {countRecusadasWithoutGeo}</p>
+              <p><strong>Total:</strong> {totalsemgeo}</p>
+              <p><strong>Total de Visitas:</strong> {totalVisitas}</p>
             </div>
-            </div>
+          </div>
+
+          {/* Tabela de Resultados */}
+          <div className="tabela-visitas">
+            <h4>Lista de Cidadãos Visitados</h4>
+            <table>
+              <thead>
+                <tr>
+                  <th>Tipo Visita</th>
+                  <th>Data Visita</th>
+                  <th>Turno</th>
+                  <th>Sexo</th>
+                  <th>Profissional</th>
+                  <th>Equipe</th>
+                  <th>Unidade</th>
+                </tr>
+              </thead>
+              <tbody>
+                {mapMarkers.map((marker, index) => (
+                  <tr key={index}>
+                    <td>{marker.status === 1 ? 'Realizada' : marker.status === 2 ? 'Recusada' : 'Ausente'}</td>
+                    <td>{marker.dt_visita}</td>
+                    <td>{marker.ds_turno}</td>
+                    <td>{marker.sg_sexo}</td>
+                    <td>{marker.profissional}</td>
+                    <td>{marker.equipe}</td>
+                    <td>{marker.unidade_saude}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       )}
 

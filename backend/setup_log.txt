@@ -9651,3 +9651,766 @@ Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost
 Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
 Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
 Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados externo: postgresql://postgres:ht*qkwmJ7KMV2ly3[]KpLpc]Mv@10.2.2.161:5433/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Parâmetros recebidos: ano=None, mes=None, tipo=cadastro
+Sessão fechada para query_1 e cadastro.
+Execução de query_1 para cadastro concluída.
+Conectado ao banco de dados externo: postgresql://postgres:ht*qkwmJ7KMV2ly3[]KpLpc]Mv@10.2.2.161:5433/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Parâmetros recebidos: ano=None, mes=None, tipo=cadastro
+Sessão fechada para tb_cadastro e cadastro.
+Execução de tb_cadastro para cadastro concluída.
+Conectado ao banco de dados externo: postgresql://postgres:ht*qkwmJ7KMV2ly3[]KpLpc]Mv@10.2.2.161:5433/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Parâmetros recebidos: ano=None, mes=None, tipo=domiciliofcd
+Sessão fechada para tb_domicilio e domiciliofcd.
+Execução de tb_domicilio para domiciliofcd concluída.
+Conectado ao banco de dados externo: postgresql://postgres:ht*qkwmJ7KMV2ly3[]KpLpc]Mv@10.2.2.161:5433/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Parâmetros recebidos: ano=None, mes=None, tipo=domiciliofcd
+Sessão fechada para tb_domicilio e domiciliofcd.
+Execução de tb_domicilio para domiciliofcd concluída.
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados externo: postgresql://postgres:ht*qkwmJ7KMV2ly3[]KpLpc]Mv@10.2.2.161:5433/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Parâmetros recebidos: ano=2024, mes=08, tipo=bpa
+Sessão fechada para tb_bpa e bpa.
+Execução de tb_bpa para bpa concluída.
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Executando Procedure 1
+Primeira Procedure Concluída
+Executando Procedure 2
+Segunda Procedure Concluída
+Executando Procedure 3
+Terceira Procedure Concluída
+Max Folha Terceira: 7
+Executando Procedure 4
+Quarta Procedure Concluída
+Max Folha Quarta: 172
+Max Folha Calculada: 179
+Colunas: ['PRD_UID', 'PRD_CMP', 'PRD_CNSMED', 'PRD_CBO', 'PRD_FLH', 'PRD_SEQ', 'PRD_PA', 'PRD_CNSPAC', 'PRD_CPF_PCNT', 'PRD_NMPAC', 'PRD_DTNASC', 'PRD_SEXO', 'PRD_IBGE', 'PRD_DTATEN', 'PRD_CID', 'PRD_IDADE', 'PRD_QT_P', 'PRD_CATEN', 'PRD_NAUT', 'PRD_ORG', 'PRD_MVM', 'PRD_FLPA', 'PRD_FLCBO', 'PRD_FLCA', 'PRD_FLIDA', 'PRD_FLQT', 'PRD_FLER', 'PRD_FLMUN', 'PRD_FLCID', 'PRD_RACA', 'PRD_SERVICO', 'PRD_CLASSIFICACAO', 'PRD_ETNIA', 'PRD_NAC', 'PRD_ADVQT', 'PRD_CNPJ', 'PRD_EQP_AREA', 'PRD_EQP_SEQ', 'PRD_LOGRAD_PCNTE', 'PRD_CEP_PCNTE', 'PRD_END_PCNTE', 'PRD_COMPL_PCNTE', 'PRD_NUM_PCNTE', 'PRD_BAIRRO_PCNTE', 'PRD_DDTEL_PCNTE', 'PRD_TEL_PCNTE', 'PRD_EMAIL_PCNTE', 'PRD_INE']
+Primeira linha de resultados: ('6430163', '202408', '', '251510', '001', '01', '0301010048', '', None, None, None, '', '', '', '', '034', 1, '', '', 'BPA', None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None)
+Campo de Controle Calculado: 1360
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+BPA gerado em bpa_202408.txt
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados externo: postgresql://postgres:ht*qkwmJ7KMV2ly3[]KpLpc]Mv@10.2.2.161:5433/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Parâmetros recebidos: ano=None, mes=None, tipo=visitas
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados externo: postgresql://postgres:ht*qkwmJ7KMV2ly3[]KpLpc]Mv@10.2.2.161:5433/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Parâmetros recebidos: ano=None, mes=None, tipo=visitas
+Sessão fechada para tb_visitas e visitas.
+Execução de tb_visitas para visitas concluída.
+Sessão fechada para tb_visitas e visitas.
+Execução de tb_visitas para visitas concluída.
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados externo: postgresql://postgres:ht*qkwmJ7KMV2ly3[]KpLpc]Mv@10.2.2.161:5433/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados externo: postgresql://postgres:ht*qkwmJ7KMV2ly3[]KpLpc]Mv@10.2.2.161:5433/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados externo: postgresql://postgres:ht*qkwmJ7KMV2ly3[]KpLpc]Mv@10.2.2.161:5433/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados externo: postgresql://postgres:ht*qkwmJ7KMV2ly3[]KpLpc]Mv@10.2.2.161:5433/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados externo: postgresql://postgres:ht*qkwmJ7KMV2ly3[]KpLpc]Mv@10.2.2.161:5433/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados externo: postgresql://postgres:ht*qkwmJ7KMV2ly3[]KpLpc]Mv@10.2.2.161:5433/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados externo: postgresql://postgres:ht*qkwmJ7KMV2ly3[]KpLpc]Mv@10.2.2.161:5433/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados externo: postgresql://postgres:ht*qkwmJ7KMV2ly3[]KpLpc]Mv@10.2.2.161:5433/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados externo: postgresql://postgres:ht*qkwmJ7KMV2ly3[]KpLpc]Mv@10.2.2.161:5433/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados externo: postgresql://postgres:ht*qkwmJ7KMV2ly3[]KpLpc]Mv@10.2.2.161:5433/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados externo: postgresql://postgres:ht*qkwmJ7KMV2ly3[]KpLpc]Mv@10.2.2.161:5433/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados externo: postgresql://postgres:ht*qkwmJ7KMV2ly3[]KpLpc]Mv@10.2.2.161:5433/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados externo: postgresql://postgres:ht*qkwmJ7KMV2ly3[]KpLpc]Mv@10.2.2.161:5433/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados externo: postgresql://postgres:ht*qkwmJ7KMV2ly3[]KpLpc]Mv@10.2.2.161:5433/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados externo: postgresql://postgres:ht*qkwmJ7KMV2ly3[]KpLpc]Mv@10.2.2.161:5433/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Parâmetros recebidos: ano=2024, mes=08, tipo=bpa
+Sessão fechada para tb_bpa e bpa.
+Execução de tb_bpa para bpa concluída.
+Conectado ao banco de dados externo: postgresql://postgres:ht*qkwmJ7KMV2ly3[]KpLpc]Mv@10.2.2.161:5433/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Parâmetros recebidos: ano=None, mes=None, tipo=iaf
+Erro ao executar tb_iaf para iaf: (psycopg2.errors.SyntaxError) syntax error at or near ","
+LINE 1: SELECT COUNT(*) FROM (t2.nu_cnes AS cnes,     
+                                                ^
+
+[SQL: SELECT COUNT(*) FROM (t2.nu_cnes AS cnes,     
+t2.no_unidade_saude AS nome_unidade,     
+t6.no_profissional,     t7.no_cbo,     
+SUM(t1.nu_participantes) AS total_participantes,     
+SUM(t1.nu_participantes_registrados) AS total_participantes_registrados,     
+COUNT(*) AS total_atividades FROM tb_fat_atividade_coletiva t1 
+LEFT JOIN tb_dim_unidade_saude t2 ON t1.co_dim_unidade_saude = t2.co_seq_dim_unidade_saude 
+LEFT JOIN tb_dim_tempo t3 ON t1.co_dim_tempo = t3.co_seq_dim_tempo 
+LEFT JOIN tb_unidade_saude t4 ON t2.nu_cnes = t4.nu_cnes 
+LEFT JOIN tb_dim_profissional t6 ON t1.co_dim_profissional = t6.co_seq_dim_profissional 
+LEFT JOIN tb_dim_cbo t7 ON t1.co_dim_cbo = t7.co_seq_dim_cbo WHERE t1.ds_filtro_pratica_em_saude ILIKE '%%|11|%%' AND     t2.nu_cnes IN (SELECT nu_cnes FROM tb_unidade_saude         
+LEFT JOIN tb_tipo_unidade_saude ON tp_unidade_saude = co_seq_tipo_unidade_saude         
+WHERE st_ativo = 1 AND co_tipo_unidade_cnes IN (1,2,32)) GROUP BY 1,2,3,4) as total_count]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+Sessão fechada para tb_iaf e iaf.
+Conectado ao banco de dados externo: postgresql://postgres:ht*qkwmJ7KMV2ly3[]KpLpc]Mv@10.2.2.161:5433/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Parâmetros recebidos: ano=None, mes=None, tipo=iaf
+Sessão fechada para tb_iaf e iaf.
+Execução de tb_iaf para iaf concluída.
+Conectado ao banco de dados externo: postgresql://postgres:ht*qkwmJ7KMV2ly3[]KpLpc]Mv@10.2.2.161:5433/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Parâmetros recebidos: ano=None, mes=None, tipo=iaf
+Erro ao executar tb_iaf para iaf: (psycopg2.errors.GroupingError) column "t7.no_cbo" must appear in the GROUP BY clause or be used in an aggregate function
+LINE 4: t6.no_profissional,     t7.no_cbo,     
+                                ^
+
+[SQL: SELECT COUNT(*) FROM (select dt_registro,
+t2.nu_cnes AS cnes,     
+t2.no_unidade_saude AS nome_unidade,     
+t6.no_profissional,     t7.no_cbo,     
+SUM(t1.nu_participantes) AS total_participantes,     
+SUM(t1.nu_participantes_registrados) AS total_participantes_registrados,     
+COUNT(*) AS total_atividades FROM tb_fat_atividade_coletiva t1 
+LEFT JOIN tb_dim_unidade_saude t2 ON t1.co_dim_unidade_saude = t2.co_seq_dim_unidade_saude 
+LEFT JOIN tb_dim_tempo t3 ON t1.co_dim_tempo = t3.co_seq_dim_tempo 
+LEFT JOIN tb_unidade_saude t4 ON t2.nu_cnes = t4.nu_cnes 
+LEFT JOIN tb_dim_profissional t6 ON t1.co_dim_profissional = t6.co_seq_dim_profissional 
+LEFT JOIN tb_dim_cbo t7 ON t1.co_dim_cbo = t7.co_seq_dim_cbo WHERE t1.ds_filtro_pratica_em_saude ILIKE '%%|11|%%' AND     t2.nu_cnes IN (SELECT nu_cnes FROM tb_unidade_saude         
+LEFT JOIN tb_tipo_unidade_saude ON tp_unidade_saude = co_seq_tipo_unidade_saude         
+WHERE st_ativo = 1 AND co_tipo_unidade_cnes IN (1,2,32)) GROUP BY 1,2,3,4) as total_count]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+Sessão fechada para tb_iaf e iaf.
+Conectado ao banco de dados externo: postgresql://postgres:ht*qkwmJ7KMV2ly3[]KpLpc]Mv@10.2.2.161:5433/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Parâmetros recebidos: ano=None, mes=None, tipo=iaf
+Sessão fechada para tb_iaf e iaf.
+Execução de tb_iaf para iaf concluída.
+Conectado ao banco de dados externo: postgresql://postgres:ht*qkwmJ7KMV2ly3[]KpLpc]Mv@10.2.2.161:5433/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Parâmetros recebidos: ano=None, mes=None, tipo=pse
+Sessão fechada para tb_pse e pse.
+Execução de tb_pse para pse concluída.
+Conectado ao banco de dados externo: postgresql://postgres:ht*qkwmJ7KMV2ly3[]KpLpc]Mv@10.2.2.161:5433/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Parâmetros recebidos: ano=None, mes=None, tipo=pse
+Sessão fechada para tb_pse e pse.
+Execução de tb_pse para pse concluída.
+Conectado ao banco de dados externo: postgresql://postgres:ht*qkwmJ7KMV2ly3[]KpLpc]Mv@10.2.2.161:5433/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Parâmetros recebidos: ano=None, mes=None, tipo=pse
+Sessão fechada para tb_pse e pse.
+Execução de tb_pse para pse concluída.
+Conectado ao banco de dados externo: postgresql://postgres:ht*qkwmJ7KMV2ly3[]KpLpc]Mv@10.2.2.161:5433/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Parâmetros recebidos: ano=None, mes=None, tipo=iaf
+Erro ao executar tb_iaf para iaf: (psycopg2.errors.SyntaxError) syntax error at or near "."
+LINE 3: t2.nu_cnes AS cnes,     
+          ^
+
+[SQL: SELECT COUNT(*) FROM (select 
+t3.ano,t3.mes
+t2.nu_cnes AS cnes,     
+t2.no_unidade_saude AS nome_unidade,     
+t6.no_profissional,     t7.no_cbo,     
+SUM(t1.nu_participantes) AS total_participantes,     
+SUM(t1.nu_participantes_registrados) AS total_participantes_registrados,     
+COUNT(*) AS total_atividades FROM tb_fat_atividade_coletiva t1 
+LEFT JOIN tb_dim_unidade_saude t2 ON t1.co_dim_unidade_saude = t2.co_seq_dim_unidade_saude 
+LEFT JOIN tb_dim_tempo t3 ON t1.co_dim_tempo = t3.co_seq_dim_tempo 
+LEFT JOIN tb_unidade_saude t4 ON t2.nu_cnes = t4.nu_cnes 
+LEFT JOIN tb_dim_profissional t6 ON t1.co_dim_profissional = t6.co_seq_dim_profissional 
+LEFT JOIN tb_dim_cbo t7 ON t1.co_dim_cbo = t7.co_seq_dim_cbo WHERE t1.ds_filtro_pratica_em_saude ILIKE '%%|11|%%' AND     t2.nu_cnes IN (SELECT nu_cnes FROM tb_unidade_saude         
+LEFT JOIN tb_tipo_unidade_saude ON tp_unidade_saude = co_seq_tipo_unidade_saude         
+WHERE st_ativo = 1 AND co_tipo_unidade_cnes IN (1,2,32)) GROUP BY 1,2,3,4,5,6) as total_count]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+Sessão fechada para tb_iaf e iaf.
+Conectado ao banco de dados externo: postgresql://postgres:ht*qkwmJ7KMV2ly3[]KpLpc]Mv@10.2.2.161:5433/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Parâmetros recebidos: ano=None, mes=None, tipo=iaf
+Sessão fechada para tb_iaf e iaf.
+Execução de tb_iaf para iaf concluída.
+Conectado ao banco de dados externo: postgresql://postgres:ht*qkwmJ7KMV2ly3[]KpLpc]Mv@10.2.2.161:5433/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Parâmetros recebidos: ano=None, mes=None, tipo=pse
+Sessão fechada para tb_pse e pse.
+Execução de tb_pse para pse concluída.
+Conectado ao banco de dados externo: postgresql://postgres:ht*qkwmJ7KMV2ly3[]KpLpc]Mv@10.2.2.161:5433/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Parâmetros recebidos: ano=None, mes=None, tipo=pse_prof
+Sessão fechada para tb_pse_prof e pse_prof.
+Execução de tb_pse_prof para pse_prof concluída.
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados externo: postgresql://postgres:ht*qkwmJ7KMV2ly3[]KpLpc]Mv@10.2.2.161:5433/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Parâmetros recebidos: ano=None, mes=None, tipo=pse
+Sessão fechada para tb_pse e pse.
+Execução de tb_pse para pse concluída.
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados externo: postgresql://postgres:ht*qkwmJ7KMV2ly3[]KpLpc]Mv@10.2.2.161:5433/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Parâmetros recebidos: ano=None, mes=None, tipo=iaf
+Erro ao executar tb_iaf para iaf: (psycopg2.errors.SyntaxError) syntax error at or near "Profissional"
+LINE 6: initcap(t6.no_profissional) AS "Profissional"     
+                                        ^
+
+[SQL: SELECT COUNT(*) FROM (select 
+t3.nu_ano, 
+t3.nu_mes,
+t2.nu_cnes AS Cnes,     
+t2.no_unidade_saude AS "Nome da Unidade,     
+initcap(t6.no_profissional) AS "Profissional"     
+initcap(t7.no_cbo) AS "Cbo",     
+SUM(t1.nu_participantes) AS "Total de Participantes",     
+SUM(t1.nu_participantes_registrados) AS "Total Participantes Registrados",     
+COUNT(*) AS "Total de Atividades" FROM tb_fat_atividade_coletiva t1 
+LEFT JOIN tb_dim_unidade_saude t2 ON t1.co_dim_unidade_saude = t2.co_seq_dim_unidade_saude 
+LEFT JOIN tb_dim_tempo t3 ON t1.co_dim_tempo = t3.co_seq_dim_tempo 
+LEFT JOIN tb_unidade_saude t4 ON t2.nu_cnes = t4.nu_cnes 
+LEFT JOIN tb_dim_profissional t6 ON t1.co_dim_profissional = t6.co_seq_dim_profissional 
+LEFT JOIN tb_dim_cbo t7 ON t1.co_dim_cbo = t7.co_seq_dim_cbo WHERE t1.ds_filtro_pratica_em_saude ILIKE '%%|11|%%' AND     t2.nu_cnes IN (SELECT nu_cnes FROM tb_unidade_saude         
+LEFT JOIN tb_tipo_unidade_saude ON tp_unidade_saude = co_seq_tipo_unidade_saude         
+WHERE st_ativo = 1 AND co_tipo_unidade_cnes IN (1,2,32)) GROUP BY 1,2,3,4,5,6) as total_count]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+Sessão fechada para tb_iaf e iaf.
+Conectado ao banco de dados externo: postgresql://postgres:ht*qkwmJ7KMV2ly3[]KpLpc]Mv@10.2.2.161:5433/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Parâmetros recebidos: ano=None, mes=None, tipo=iaf
+Erro ao executar tb_iaf para iaf: (psycopg2.errors.SyntaxError) syntax error at or near "Profissional"
+LINE 6: initcap(t6.no_profissional) AS "Profissional",     
+                                        ^
+
+[SQL: SELECT COUNT(*) FROM (select 
+t3.nu_ano, 
+t3.nu_mes,
+t2.nu_cnes AS Cnes,     
+t2.no_unidade_saude AS "Nome da Unidade,     
+initcap(t6.no_profissional) AS "Profissional",     
+initcap(t7.no_cbo) AS "Cbo",     
+SUM(t1.nu_participantes) AS "Total de Participantes",     
+SUM(t1.nu_participantes_registrados) AS "Total Participantes Registrados",     
+COUNT(*) AS "Total de Atividades" FROM tb_fat_atividade_coletiva t1 
+LEFT JOIN tb_dim_unidade_saude t2 ON t1.co_dim_unidade_saude = t2.co_seq_dim_unidade_saude 
+LEFT JOIN tb_dim_tempo t3 ON t1.co_dim_tempo = t3.co_seq_dim_tempo 
+LEFT JOIN tb_unidade_saude t4 ON t2.nu_cnes = t4.nu_cnes 
+LEFT JOIN tb_dim_profissional t6 ON t1.co_dim_profissional = t6.co_seq_dim_profissional 
+LEFT JOIN tb_dim_cbo t7 ON t1.co_dim_cbo = t7.co_seq_dim_cbo WHERE t1.ds_filtro_pratica_em_saude ILIKE '%%|11|%%' AND     t2.nu_cnes IN (SELECT nu_cnes FROM tb_unidade_saude         
+LEFT JOIN tb_tipo_unidade_saude ON tp_unidade_saude = co_seq_tipo_unidade_saude         
+WHERE st_ativo = 1 AND co_tipo_unidade_cnes IN (1,2,32)) GROUP BY 1,2,3,4,5,6) as total_count]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+Sessão fechada para tb_iaf e iaf.
+Conectado ao banco de dados externo: postgresql://postgres:ht*qkwmJ7KMV2ly3[]KpLpc]Mv@10.2.2.161:5433/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Parâmetros recebidos: ano=None, mes=None, tipo=iaf
+Erro ao executar tb_iaf para iaf: (psycopg2.errors.SyntaxError) syntax error at or near "Profissional"
+LINE 6: initcap(t6.no_profissional) AS "Profissional",     
+                                        ^
+
+[SQL: SELECT COUNT(*) FROM (select 
+t3.nu_ano, 
+t3.nu_mes,
+t2.nu_cnes AS Cnes,     
+t2.no_unidade_saude AS "Nome da Unidade,     
+initcap(t6.no_profissional) AS "Profissional",     
+initcap(t7.no_cbo) AS "Cbo",     
+SUM(t1.nu_participantes) AS "Total de Participantes",     
+SUM(t1.nu_participantes_registrados) AS "Total Participantes Registrados",     
+COUNT(*) AS "Total de Atividades" FROM tb_fat_atividade_coletiva t1 
+LEFT JOIN tb_dim_unidade_saude t2 ON t1.co_dim_unidade_saude = t2.co_seq_dim_unidade_saude 
+LEFT JOIN tb_dim_tempo t3 ON t1.co_dim_tempo = t3.co_seq_dim_tempo 
+LEFT JOIN tb_unidade_saude t4 ON t2.nu_cnes = t4.nu_cnes 
+LEFT JOIN tb_dim_profissional t6 ON t1.co_dim_profissional = t6.co_seq_dim_profissional 
+LEFT JOIN tb_dim_cbo t7 ON t1.co_dim_cbo = t7.co_seq_dim_cbo WHERE t1.ds_filtro_pratica_em_saude ILIKE '%%|11|%%' AND     t2.nu_cnes IN (SELECT nu_cnes FROM tb_unidade_saude         
+LEFT JOIN tb_tipo_unidade_saude ON tp_unidade_saude = co_seq_tipo_unidade_saude         
+WHERE st_ativo = 1 AND co_tipo_unidade_cnes IN (1,2,32)) GROUP BY 1,2,3,4,5,6) as total_count]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+Sessão fechada para tb_iaf e iaf.
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados externo: postgresql://postgres:ht*qkwmJ7KMV2ly3[]KpLpc]Mv@10.2.2.161:5433/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Parâmetros recebidos: ano=None, mes=None, tipo=iaf
+Erro ao executar tb_iaf para iaf: (psycopg2.errors.SyntaxError) syntax error at or near "Profissional"
+LINE 6: initcap(t6.no_profissional) AS "Profissional",     
+                                        ^
+
+[SQL: SELECT COUNT(*) FROM (select 
+t3.nu_ano, 
+t3.nu_mes,
+t2.nu_cnes AS Cnes,     
+t2.no_unidade_saude AS "Nome da Unidade,     
+initcap(t6.no_profissional) AS "Profissional",     
+initcap(t7.no_cbo) AS "Cbo",     
+SUM(t1.nu_participantes) AS "Total de Participantes",     
+SUM(t1.nu_participantes_registrados) AS "Total Participantes Registrados",     
+COUNT(*) AS "Total de Atividades" FROM tb_fat_atividade_coletiva t1 
+LEFT JOIN tb_dim_unidade_saude t2 ON t1.co_dim_unidade_saude = t2.co_seq_dim_unidade_saude 
+LEFT JOIN tb_dim_tempo t3 ON t1.co_dim_tempo = t3.co_seq_dim_tempo 
+LEFT JOIN tb_unidade_saude t4 ON t2.nu_cnes = t4.nu_cnes 
+LEFT JOIN tb_dim_profissional t6 ON t1.co_dim_profissional = t6.co_seq_dim_profissional 
+LEFT JOIN tb_dim_cbo t7 ON t1.co_dim_cbo = t7.co_seq_dim_cbo WHERE t1.ds_filtro_pratica_em_saude ILIKE '%%|11|%%' AND     t2.nu_cnes IN (SELECT nu_cnes FROM tb_unidade_saude         
+LEFT JOIN tb_tipo_unidade_saude ON tp_unidade_saude = co_seq_tipo_unidade_saude         
+WHERE st_ativo = 1 AND co_tipo_unidade_cnes IN (1,2,32)) GROUP BY 1,2,3,4,5,6) as total_count]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+Sessão fechada para tb_iaf e iaf.
+Conectado ao banco de dados externo: postgresql://postgres:ht*qkwmJ7KMV2ly3[]KpLpc]Mv@10.2.2.161:5433/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Parâmetros recebidos: ano=None, mes=None, tipo=iaf
+Sessão fechada para tb_iaf e iaf.
+Execução de tb_iaf para iaf concluída.
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados externo: postgresql://postgres:ht*qkwmJ7KMV2ly3[]KpLpc]Mv@10.2.2.161:5433/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Parâmetros recebidos: ano=None, mes=None, tipo=iaf
+Sessão fechada para tb_iaf e iaf.
+Execução de tb_iaf para iaf concluída.
+Conectado ao banco de dados externo: postgresql://postgres:ht*qkwmJ7KMV2ly3[]KpLpc]Mv@10.2.2.161:5433/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Parâmetros recebidos: ano=None, mes=None, tipo=pse
+Sessão fechada para tb_pse e pse.
+Execução de tb_pse para pse concluída.
+Conectado ao banco de dados externo: postgresql://postgres:ht*qkwmJ7KMV2ly3[]KpLpc]Mv@10.2.2.161:5433/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Parâmetros recebidos: ano=None, mes=None, tipo=pse_prof
+Erro ao executar tb_pse_prof para pse_prof: (psycopg2.errors.GroupingError) aggregate functions are not allowed in GROUP BY
+LINE 7: SUM(t1.nu_participantes) AS "Total de Participantes",   SUM(...
+        ^
+
+[SQL: SELECT COUNT(*) FROM (SELECT 
+t3.nu_ano as Ano ,t3.nu_mes as Mes,                  
+t4.nu_identificador AS Inep,   
+t4.no_estabelecimento AS "Nome da Escola",   
+CASE WHEN t1.st_pse_educacao = 1 THEN 'PSE EDUCAÇÃO' WHEN t1.st_pse_saude = 1 THEN 'PSE SAÚDE' ELSE NULL END AS PSE,   
+t6.nu_cns as Cns,   t6.no_profissional AS "Profissional" ,   t7.nu_cbo as Cbo,   t7.no_cbo as "Nome Cbo",   t8.nu_ine as Ine,   t8.no_equipe as "Nome da Equipe",   t9.nu_cnes as Cnes,   t9.no_unidade_saude AS "Nome da Unidade",   
+SUM(t1.nu_participantes) AS "Total de Participantes",   SUM(t1.nu_participantes_registrados) AS "Total de Participantes Registrados",   
+COUNT(*) AS "Total de Atividades"
+FROM   tb_fat_atividade_coletiva t1   
+LEFT JOIN tb_dim_unidade_saude t2 ON t1.co_dim_unidade_saude = t2.co_seq_dim_unidade_saude   
+LEFT JOIN tb_dim_tempo t3 ON t1.co_dim_tempo = t3.co_seq_dim_tempo   
+LEFT JOIN tb_dim_inep t4 ON t1.co_dim_inep = t4.co_seq_dim_inep   
+LEFT JOIN tb_dim_procedimento t5 ON t1.co_dim_procedimento = t5.co_seq_dim_procedimento   
+LEFT JOIN tb_dim_profissional t6 ON t1.co_dim_profissional = t6.co_seq_dim_profissional   
+LEFT JOIN tb_dim_cbo t7 ON t1.co_dim_cbo = t7.co_seq_dim_cbo   
+LEFT JOIN tb_dim_equipe t8 ON t1.co_dim_equipe = t8.co_seq_dim_equipe   
+LEFT JOIN tb_dim_unidade_saude t9 ON t1.co_dim_unidade_saude = t9.co_seq_dim_unidade_saude   
+LEFT JOIN tb_dim_procedimento t10 ON t1.co_dim_procedimento = t10.co_seq_dim_procedimento   
+LEFT JOIN tb_fat_atvdd_coletiva_ext t11 ON t11.co_fat_atividade_coletiva = t1.co_seq_fat_atividade_coletiva 
+WHERE  (t1.st_pse_educacao = 1 OR t1.st_pse_saude = 1) AND   (t1.ds_filtro_pratica_em_saude 
+LIKE ANY (ARRAY['%%|24|%%','%%|2|%%','%%|22|%%','%%|3|%%','%%|11|%%','%%|20|%%'])     OR     t1.ds_filtro_tema_para_saude 
+LIKE ANY (ARRAY['%%|16|%%','%%|17|%%','%%|15|%%','%%|5|%%','%%|19|%%','%%|13|%%','%%|7|%%','%%|29|%%','%%|14|%%','%%|1|%%'])     OR     t5.co_proced = '0101010095') AND   t4.st_registro_valido = 1  
+AND t4.nu_identificador IN ('35004124','35075279','35122877','35167538','35229337','35233031','35281414','35281426','35286023','35349550','35357522','35437372','35448000','35457619','35472682','35480770','35480782')
+GROUP BY 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12,13,14) as total_count]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+Sessão fechada para tb_pse_prof e pse_prof.
+Conectado ao banco de dados externo: postgresql://postgres:ht*qkwmJ7KMV2ly3[]KpLpc]Mv@10.2.2.161:5433/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Parâmetros recebidos: ano=None, mes=None, tipo=pse_prof
+Erro ao executar tb_pse_prof para pse_prof: (psycopg2.errors.GroupingError) aggregate functions are not allowed in GROUP BY
+LINE 7: SUM(t1.nu_participantes) AS "Total de Participantes",   SUM(...
+        ^
+
+[SQL: SELECT COUNT(*) FROM (SELECT 
+t3.nu_ano as Ano ,t3.nu_mes as Mes,                  
+t4.nu_identificador AS Inep,   
+t4.no_estabelecimento AS "Nome da Escola",   
+CASE WHEN t1.st_pse_educacao = 1 THEN 'PSE EDUCAÇÃO' WHEN t1.st_pse_saude = 1 THEN 'PSE SAÚDE' ELSE NULL END AS PSE,   
+t6.nu_cns as Cns,   t6.no_profissional AS "Profissional" ,   t7.nu_cbo as Cbo,   t7.no_cbo as "Nome Cbo",   t8.nu_ine as Ine,   t8.no_equipe as "Nome da Equipe",   t9.nu_cnes as Cnes,   t9.no_unidade_saude AS "Nome da Unidade",   
+SUM(t1.nu_participantes) AS "Total de Participantes",   SUM(t1.nu_participantes_registrados) AS "Total de Participantes Registrados",   
+COUNT(*) AS total_atividades
+FROM   tb_fat_atividade_coletiva t1   
+LEFT JOIN tb_dim_unidade_saude t2 ON t1.co_dim_unidade_saude = t2.co_seq_dim_unidade_saude   
+LEFT JOIN tb_dim_tempo t3 ON t1.co_dim_tempo = t3.co_seq_dim_tempo   
+LEFT JOIN tb_dim_inep t4 ON t1.co_dim_inep = t4.co_seq_dim_inep   
+LEFT JOIN tb_dim_procedimento t5 ON t1.co_dim_procedimento = t5.co_seq_dim_procedimento   
+LEFT JOIN tb_dim_profissional t6 ON t1.co_dim_profissional = t6.co_seq_dim_profissional   
+LEFT JOIN tb_dim_cbo t7 ON t1.co_dim_cbo = t7.co_seq_dim_cbo   
+LEFT JOIN tb_dim_equipe t8 ON t1.co_dim_equipe = t8.co_seq_dim_equipe   
+LEFT JOIN tb_dim_unidade_saude t9 ON t1.co_dim_unidade_saude = t9.co_seq_dim_unidade_saude   
+LEFT JOIN tb_dim_procedimento t10 ON t1.co_dim_procedimento = t10.co_seq_dim_procedimento   
+LEFT JOIN tb_fat_atvdd_coletiva_ext t11 ON t11.co_fat_atividade_coletiva = t1.co_seq_fat_atividade_coletiva 
+WHERE  (t1.st_pse_educacao = 1 OR t1.st_pse_saude = 1) AND   (t1.ds_filtro_pratica_em_saude 
+LIKE ANY (ARRAY['%%|24|%%','%%|2|%%','%%|22|%%','%%|3|%%','%%|11|%%','%%|20|%%'])     OR     t1.ds_filtro_tema_para_saude 
+LIKE ANY (ARRAY['%%|16|%%','%%|17|%%','%%|15|%%','%%|5|%%','%%|19|%%','%%|13|%%','%%|7|%%','%%|29|%%','%%|14|%%','%%|1|%%'])     OR     t5.co_proced = '0101010095') AND   t4.st_registro_valido = 1  
+AND t4.nu_identificador IN ('35004124','35075279','35122877','35167538','35229337','35233031','35281414','35281426','35286023','35349550','35357522','35437372','35448000','35457619','35472682','35480770','35480782')
+GROUP BY 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12,13,14) as total_count]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+Sessão fechada para tb_pse_prof e pse_prof.
+Conectado ao banco de dados externo: postgresql://postgres:ht*qkwmJ7KMV2ly3[]KpLpc]Mv@10.2.2.161:5433/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Parâmetros recebidos: ano=None, mes=None, tipo=pse_prof
+Sessão fechada para tb_pse_prof e pse_prof.
+Execução de tb_pse_prof para pse_prof concluída.
+Conectado ao banco de dados externo: postgresql://postgres:ht*qkwmJ7KMV2ly3[]KpLpc]Mv@10.2.2.161:5433/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Parâmetros recebidos: ano=None, mes=None, tipo=pse
+Sessão fechada para tb_pse e pse.
+Execução de tb_pse para pse concluída.
+Conectado ao banco de dados externo: postgresql://postgres:ht*qkwmJ7KMV2ly3[]KpLpc]Mv@10.2.2.161:5433/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Parâmetros recebidos: ano=None, mes=None, tipo=pse
+Sessão fechada para tb_pse e pse.
+Execução de tb_pse para pse concluída.
+Conectado ao banco de dados externo: postgresql://postgres:ht*qkwmJ7KMV2ly3[]KpLpc]Mv@10.2.2.161:5433/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Parâmetros recebidos: ano=None, mes=None, tipo=pse_prof
+Sessão fechada para tb_pse_prof e pse_prof.
+Execução de tb_pse_prof para pse_prof concluída.
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados externo: postgresql://postgres:ht*qkwmJ7KMV2ly3[]KpLpc]Mv@10.2.2.161:5433/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Parâmetros recebidos: ano=None, mes=None, tipo=visitas
+Sessão fechada para tb_visitas e visitas.
+Execução de tb_visitas para visitas concluída.
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados externo: postgresql://postgres:ht*qkwmJ7KMV2ly3[]KpLpc]Mv@10.2.2.161:5433/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Parâmetros recebidos: ano=None, mes=None, tipo=visitas
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Sessão fechada para tb_visitas e visitas.
+Execução de tb_visitas para visitas concluída.
+Conectado ao banco de dados externo: postgresql://postgres:ht*qkwmJ7KMV2ly3[]KpLpc]Mv@10.2.2.161:5433/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Parâmetros recebidos: ano=None, mes=None, tipo=iaf
+Sessão fechada para tb_iaf e iaf.
+Execução de tb_iaf para iaf concluída.
+Conectado ao banco de dados externo: postgresql://postgres:ht*qkwmJ7KMV2ly3[]KpLpc]Mv@10.2.2.161:5433/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Parâmetros recebidos: ano=None, mes=None, tipo=pse
+Conectado ao banco de dados externo: postgresql://postgres:ht*qkwmJ7KMV2ly3[]KpLpc]Mv@10.2.2.161:5433/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Parâmetros recebidos: ano=None, mes=None, tipo=pse_prof
+Sessão fechada para tb_pse e pse.
+Execução de tb_pse para pse concluída.
+Sessão fechada para tb_pse_prof e pse_prof.
+Execução de tb_pse_prof para pse_prof concluída.
+Conectado ao banco de dados externo: postgresql://postgres:ht*qkwmJ7KMV2ly3[]KpLpc]Mv@10.2.2.161:5433/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Parâmetros recebidos: ano=None, mes=None, tipo=domiciliofcd
+Conectado ao banco de dados externo: postgresql://postgres:ht*qkwmJ7KMV2ly3[]KpLpc]Mv@10.2.2.161:5433/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Parâmetros recebidos: ano=None, mes=None, tipo=domiciliofcd
+Sessão fechada para tb_domicilio e domiciliofcd.
+Execução de tb_domicilio para domiciliofcd concluída.
+Sessão fechada para tb_domicilio e domiciliofcd.
+Execução de tb_domicilio para domiciliofcd concluída.
+Conectado ao banco de dados externo: postgresql://postgres:ht*qkwmJ7KMV2ly3[]KpLpc]Mv@10.2.2.161:5433/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Parâmetros recebidos: ano=None, mes=None, tipo=visitas
+Conectado ao banco de dados externo: postgresql://postgres:ht*qkwmJ7KMV2ly3[]KpLpc]Mv@10.2.2.161:5433/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Parâmetros recebidos: ano=None, mes=None, tipo=domiciliofcd
+Sessão fechada para tb_domicilio e domiciliofcd.
+Execução de tb_domicilio para domiciliofcd concluída.
+Conectado ao banco de dados externo: postgresql://postgres:ht*qkwmJ7KMV2ly3[]KpLpc]Mv@10.2.2.161:5433/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Parâmetros recebidos: ano=None, mes=None, tipo=pse
+Sessão fechada para tb_pse e pse.
+Execução de tb_pse para pse concluída.
+Conectado ao banco de dados externo: postgresql://postgres:ht*qkwmJ7KMV2ly3[]KpLpc]Mv@10.2.2.161:5433/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Parâmetros recebidos: ano=None, mes=None, tipo=pse_prof
+Sessão fechada para tb_pse_prof e pse_prof.
+Execução de tb_pse_prof para pse_prof concluída.
+Conectado ao banco de dados externo: postgresql://postgres:ht*qkwmJ7KMV2ly3[]KpLpc]Mv@10.2.2.161:5433/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Parâmetros recebidos: ano=None, mes=None, tipo=visitas
+Conectado ao banco de dados externo: postgresql://postgres:ht*qkwmJ7KMV2ly3[]KpLpc]Mv@10.2.2.161:5433/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Parâmetros recebidos: ano=None, mes=None, tipo=pse
+Sessão fechada para tb_pse e pse.
+Execução de tb_pse para pse concluída.
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados externo: postgresql://postgres:ht*qkwmJ7KMV2ly3[]KpLpc]Mv@10.2.2.161:5433/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Parâmetros recebidos: ano=None, mes=None, tipo=pse_prof
+Conectado ao banco de dados externo: postgresql://postgres:ht*qkwmJ7KMV2ly3[]KpLpc]Mv@10.2.2.161:5433/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Parâmetros recebidos: ano=None, mes=None, tipo=pse
+Conectado ao banco de dados externo: postgresql://postgres:ht*qkwmJ7KMV2ly3[]KpLpc]Mv@10.2.2.161:5433/esus
+Sessão fechada para tb_pse e pse.
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Parâmetros recebidos: ano=None, mes=None, tipo=iaf
+Execução de tb_pse para pse concluída.
+Sessão fechada para tb_pse_prof e pse_prof.
+Execução de tb_pse_prof para pse_prof concluída.
+Sessão fechada para tb_iaf e iaf.
+Execução de tb_iaf para iaf concluída.
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Conectado ao banco de dados externo: postgresql://postgres:ht*qkwmJ7KMV2ly3[]KpLpc]Mv@10.2.2.161:5433/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Parâmetros recebidos: ano=None, mes=None, tipo=pse
+Sessão fechada para tb_pse e pse.
+Execução de tb_pse para pse concluída.
+Conectado ao banco de dados externo: postgresql://postgres:ht*qkwmJ7KMV2ly3[]KpLpc]Mv@10.2.2.161:5433/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Parâmetros recebidos: ano=None, mes=None, tipo=pse_prof
+Sessão fechada para tb_pse_prof e pse_prof.
+Execução de tb_pse_prof para pse_prof concluída.
+Conectado ao banco de dados externo: postgresql://postgres:ht*qkwmJ7KMV2ly3[]KpLpc]Mv@10.2.2.161:5433/esus
+Conectado ao banco de dados local: postgresql+psycopg2://postgres:esus@localhost:5432/esus
+Parâmetros recebidos: ano=None, mes=None, tipo=iaf
+Sessão fechada para tb_iaf e iaf.
+Execução de tb_iaf para iaf concluída.

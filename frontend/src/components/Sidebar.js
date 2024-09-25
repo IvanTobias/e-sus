@@ -42,6 +42,12 @@ function Sidebar({ onLoadContent }) {
         onClick={() => handleModuleClick('visitas')}
       >
         Visitas
+      </a>      
+      <a 
+        className={selectedModule === 'iaf_pse' ? 'active' : ''}
+        onClick={() => handleModuleClick('iaf_pse')}
+      >
+        IAF PSE
       </a>
       <a 
         className={selectedModule === 'bpa' ? 'active' : ''}

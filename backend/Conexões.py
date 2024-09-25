@@ -1,3 +1,4 @@
+#Conexões.py
 from sqlalchemy import create_engine
 import json
 
@@ -23,3 +24,4 @@ def log_message(message):
     with open("setup_log.txt", "a") as log_file:
         log_file.write(message + "\n")
     print(message)  # Também imprime a mensagem no console, se necessário
+

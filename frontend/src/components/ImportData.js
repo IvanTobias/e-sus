@@ -40,14 +40,15 @@ const initialDateValues = getInitialDateValues();
 const initialState = {
   ano: initialDateValues.ano,
   competencia: initialDateValues.competencia,
-  progress: { cadastro: 0, domiciliofcd: 0, bpa: 0, visitas: 0 },
-  errorMessage: { cadastro: '', domiciliofcd: '', bpa: '', visitas: '' },
-  isButtonDisabled: { cadastro: false, domiciliofcd: false, bpa: false, visitas: false },
-  isExtracting: { cadastro: false, domiciliofcd: false, bpa: false, visitas: false },
-  isRunning: { cadastro: false, domiciliofcd: false, bpa: false, visitas: false },
-  isFileAvailable: { cadastro: false, domiciliofcd: false, bpa: false, visitas: false },
-  lastImport: { cadastro: '', domiciliofcd: '', bpa: '', visitas: '' }, // Adiciona lastImport ao estado inicial
+  progress: { cadastro: 0, domiciliofcd: 0, bpa: 0, visitas: 0, iaf: 0, pse: 0, pse_prof: 0 },
+  errorMessage: { cadastro: '', domiciliofcd: '', bpa: '', visitas: '', iaf: '', pse: '', pse_prof: '' },
+  isButtonDisabled: { cadastro: false, domiciliofcd: false, bpa: false, visitas: false, iaf: false, pse: false, pse_prof: false },
+  isExtracting: { cadastro: false, domiciliofcd: false, bpa: false, visitas: false, iaf: false, pse: false, pse_prof: false },
+  isRunning: { cadastro: false, domiciliofcd: false, bpa: false, visitas: false, iaf: false, pse: false, pse_prof: false },
+  isFileAvailable: { cadastro: false, domiciliofcd: false, bpa: false, visitas: false, iaf: false, pse: false, pse_prof: false },
+  lastImport: { cadastro: '', domiciliofcd: '', bpa: '', visitas: '', iaf: '', pse: '', pse_prof: '' }, // Adiciona lastImport para os novos tipos
 };
+
 
 // Funções de ação para o reducer
 const reducer = (state, action) => {
@@ -151,7 +152,7 @@ function ImportData() {
   const [state, dispatch] = useReducer(reducer, initialState);
   const [isAutoUpdateOn, setIsAutoUpdateOn] = useState(false);
   const [autoUpdateTime, setAutoUpdateTime] = useState('00:00');
-  const nonProgressCount = useRef({ cadastro: 0, domiciliofcd: 0, bpa: 0 });
+  const nonProgressCount = useRef({ cadastro: 0, domiciliofcd: 0, bpa: 0, visitas: 0, iaf: 0, pse: 0, pse_prof: 0 });
 
   useWebSocketProgress(dispatch); // Usando o hook customizado para WebSocket
 
@@ -191,7 +192,7 @@ function ImportData() {
       }
     };
 
-    const syncTypes = ['cadastro', 'domiciliofcd', 'bpa', 'visitas'];
+    const syncTypes = ['cadastro', 'domiciliofcd', 'bpa', 'visitas', 'iaf', 'pse', 'pse_prof'];
     syncTypes.forEach(type => checkFileAvailability(type));
   }, []);
 
@@ -205,6 +206,9 @@ function ImportData() {
         dispatch({ type: 'SET_LAST_IMPORT', payload: { type: 'domiciliofcd', value: config.domiciliofcd || 'N/A' } });
         dispatch({ type: 'SET_LAST_IMPORT', payload: { type: 'bpa', value: config.bpa || 'N/A' } });
         dispatch({ type: 'SET_LAST_IMPORT', payload: { type: 'visitas', value: config.visitas || 'N/A' } });
+        dispatch({ type: 'SET_LAST_IMPORT', payload: { type: 'iaf', value: config.iaf || 'N/A' } });
+        dispatch({ type: 'SET_LAST_IMPORT', payload: { type: 'pse', value: config.pse || 'N/A' } });
+        dispatch({ type: 'SET_LAST_IMPORT', payload: { type: 'pse_prof', value: config.pse_prof || 'N/A' } });
   
         const isFileAvailable = localStorage.getItem('isFileAvailable') === 'true';
         dispatch({ type: 'SET_FILE_AVAILABLE', payload: { type: 'bpa', value: isFileAvailable } });
@@ -260,8 +264,11 @@ function ImportData() {
     if (type === 'cadastro') endpoint = '/export-xls';
     else if (type === 'domiciliofcd') endpoint = '/export-xls2';
     else if (type === 'bpa') endpoint = '/export-bpa';
-    else if (type === 'visitas') endpoint = 'API_BASE_URL/export_visitas';
-
+    else if (type === 'visitas') endpoint = '/export_visitas';
+    else if (type === 'iaf') endpoint = '/export_iaf';  // Endpoint para IAF
+    else if (type === 'pse') endpoint = '/export_pse';  // Endpoint para PSE
+    else if (type === 'pse_prof') endpoint = '/export_pse_prof';  // Endpoint para PSE Prof
+  
     axios({
       url: endpoint,
       method: 'GET',
@@ -302,7 +309,10 @@ function ImportData() {
         <DataSection type="cadastro" title="Cadastros Individuais (FCI)" state={state} importData={importData} extractData={extractData} />
         <DataSection type="domiciliofcd" title="Cadastros Domiciliares" state={state} importData={importData} extractData={extractData} />
         <DataSection type="visitas" title="Visitas" state={state} importData={importData} extractData={extractData} />
-        <DataSection type="bpa" title="BPA" state={state} importData={importData} extractData={extractData} />
+        <DataSection type="iaf" title="IAF" state={state} importData={importData} extractData={extractData} />
+        <DataSection type="pse" title="PSE" state={state} importData={importData} extractData={extractData} />
+        <DataSection type="pse_prof" title="PSE Profissionais" state={state} importData={importData} extractData={extractData} />
+        <DataSection type="bpa" title="BPA" state={state} importData={importData} extractData={extractData} />        
         <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
             <label htmlFor="competencia">Mês:</label>
             <select

@@ -632,6 +632,20 @@ button,
 
 }
 
+.date-selectors {
+  display: flex;
+  gap: 10px;
+  margin: 10px 0;
+}
+
+.date-selectors label {
+  display: flex;
+  flex-direction: column;
+}
+
+
+
+
 .basic-multi-select {
   width: 100%;
 }

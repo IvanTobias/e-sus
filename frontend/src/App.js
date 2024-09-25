@@ -1,3 +1,4 @@
+//App.js
 import React, { useState } from 'react';
 import Sidebar from './components/Sidebar';
 import ImportData from './components/ImportData';
@@ -7,6 +8,7 @@ import CadastrosPage from './components/CadastrosPage';
 import Home from './components/Home';
 import './styles/styles.css';
 import VisitaPage from './components/VisitasPage';
+import IAFPSEPage from './components/IAFPSEPage';
 
 function App() {
   // Define 'home' como página inicial
@@ -29,6 +31,7 @@ function App() {
         {currentPage === 'bpa' && <BPAForm />}
         {currentPage === 'cadastro' && <CadastrosPage />}
         {currentPage === 'visitas' && <VisitaPage />}
+        {currentPage === 'iaf_pse' && <IAFPSEPage />}
         {/* Adicione outras condições conforme necessário */}
       </div>
     </div>

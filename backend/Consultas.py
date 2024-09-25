@@ -7,6 +7,7 @@ from sqlalchemy import text
 from Conexões import get_external_engine, get_local_engine, log_message
 from banco import cancel_query, clean_dataframe
 import logging
+from Common import task_event, update_task_status, update_last_import
 
 progress = {}  # Variável global para rastreamento de progresso
 cancel_requests = {}  # Variável global para rastreamento de pedidos de cancelamento
@@ -14,8 +15,7 @@ cancel_requests = {}  # Variável global para rastreamento de pedidos de cancela
 # Função que executa a tarefa de forma assíncrona e atualiza o status
 def execute_long_task(config_data, tipo):
     try:
-        # Importa dentro da função, evitando o ciclo de importação
-        from importdados import update_last_import, update_task_status
+        update_task_status(tipo, "running")  # Atualiza o status para "running"
 
         # Define a função de callback para atualizar o progresso
         def update_progress(progress_value):
@@ -37,6 +37,8 @@ def execute_long_task(config_data, tipo):
         # Marca como "failed"
         update_task_status(tipo, "failed")
 
+    finally:
+        task_event.set()  # Libera o evento, mesmo se a tarefa falhar
 
 def send_progress_update(tipo, progress_value, error=None):
     payload = {'type': tipo, 'progress': progress_value}
@@ -73,6 +75,7 @@ def execute_query(query_name, query, external_engine, local_engine, step_size, t
             if cancel_requests.get(tipo, False):
                 cancel_query(conn, tipo, db_type)
                 return "cancelled"
+            
             count_query = f"SELECT COUNT(*) FROM ({query}) as total_count"
             total_rows = conn.execute(text(count_query), params).scalar()
 
@@ -88,12 +91,18 @@ def execute_query(query_name, query, external_engine, local_engine, step_size, t
                     log_message(f"Cancelamento detectado durante a execução para {tipo}.")
                     cancel_query(conn, tipo, db_type)
                     return "cancelled"
+                
                 rows = result.fetchmany(chunksize)
                 if not rows:
                     break
+
                 df = pd.DataFrame(rows, columns=result.keys())
+
+                # Limpar o dataframe para garantir acentuações corretas
                 df = clean_dataframe(df)
+
                 try:
+                    # Certificar-se de que o banco de dados suporta utf8 ao salvar
                     df.to_sql(query_name, con=session.bind, if_exists='replace' if rows_processed == 0 else 'append', index=False)
                     session.commit()
                 except Exception as e:
@@ -102,6 +111,7 @@ def execute_query(query_name, query, external_engine, local_engine, step_size, t
                     session.close()
                     session = Session()
                     raise
+
                 rows_processed += len(rows)
 
                 # Atualiza o progresso com base nas linhas processadas
@@ -130,13 +140,13 @@ def execute_and_store_queries(config_data, tipo, update_progress):
     external_engine = get_external_engine()
     local_engine = get_local_engine()
     
-    ano = config_data.get('ano') if tipo == 'bpa' else None
-    mes = config_data.get('mes') if tipo == 'bpa' else None
+    ano = config_data.get('ano') if tipo in ['bpa'] else None
+    mes = config_data.get('mes') if tipo in ['bpa'] else None
     log_message(f"Parâmetros recebidos: ano={ano}, mes={mes}, tipo={tipo}")
         
     if tipo =='cadastro':
         queries = {
-        'query_1': '''  
+        'tb_cadastro': '''  
         SELECT      
         INITCAP(t1.no_cidadao) AS no_cidadao,
         INITCAP(t4_fci.no_unidade_saude) AS no_unidade_saude,
@@ -223,7 +233,7 @@ def execute_and_store_queries(config_data, tipo, update_progress):
         order by 1''',}
     
     elif tipo =='domiciliofcd':
-        queries ={'query_2': '''SELECT 
+        queries ={'tb_domicilio': '''SELECT 
         INITCAP(t5.no_unidade_saude) as no_unidade_saude,
         INITCAP(t7.no_profissional) as no_profissional,
         INITCAP(t6.no_equipe) as no_equipe,
@@ -264,7 +274,7 @@ def execute_and_store_queries(config_data, tipo, update_progress):
         ORDER BY co_dim_tempo DESC LIMIT 1)''',}  
     
     elif tipo == 'bpa':
-        queries ={'query_3': '''SELECT DISTINCT  
+        queries ={'tb_bpa': '''SELECT DISTINCT  
     tb_unidade_saude.nu_cnes as PRD_UID,
     CAST(EXTRACT(YEAR FROM tb_atend.dt_inicio) || 
         CAST(LPAD(CAST(EXTRACT(MONTH FROM tb_atend.dt_inicio) AS varchar(2)), 2, '0') AS VARCHAR(2)) AS varchar(6)) AS PRD_CMP,
@@ -1038,7 +1048,7 @@ unidade.nu_cnes = '9001808' and cbo.nu_cbo like '225310'and
     ORDER BY 9,13'''}
         
     elif tipo =='visitas':
-        queries ={'query_4': '''select 
+        queries ={'tb_visitas': '''select 
 case when t0.nu_cpf_cidadao is null then null else 'X' end as nu_cpf_cidadao,
 case when t0.nu_cns is null then null else 'X' end as nu_cns,
 co_dim_tipo_ficha, co_dim_municipio, co_dim_profissional, co_dim_tipo_imovel, nu_micro_area, nu_peso, nu_altura, t0.dt_nascimento, co_dim_faixa_etaria, st_visita_compartilhada, st_mot_vis_cad_att, st_mot_vis_visita_periodica, st_mot_vis_busca_ativa, st_mot_vis_acompanhamento, st_mot_vis_egresso_internacao, st_mot_vis_ctrl_ambnte_vetor, st_mot_vis_convte_atvidd_cltva, st_mot_vis_orintacao_prevncao, st_mot_vis_outros, st_busca_ativa_consulta, st_busca_ativa_exame, st_busca_ativa_vacina, st_busca_ativa_bolsa_familia, st_acomp_gestante, st_acomp_puerpera, st_acomp_recem_nascido, st_acomp_crianca, st_acomp_pessoa_desnutricao, st_acomp_pessoa_reabil_deficie, st_acomp_pessoa_hipertensao, st_acomp_pessoa_diabetes, st_acomp_pessoa_asma, st_acomp_pessoa_dpoc_enfisema, st_acomp_pessoa_cancer, st_acomp_pessoa_doenca_cronica, st_acomp_pessoa_hanseniase, st_acomp_pessoa_tuberculose, st_acomp_sintomaticos_respirat, st_acomp_tabagista, st_acomp_domiciliados_acamados, st_acomp_condi_vulnerab_social, st_acomp_condi_bolsa_familia, st_acomp_saude_mental, st_acomp_usuario_alcool, st_acomp_usuario_outras_drogra, st_ctrl_amb_vet_acao_educativa, st_ctrl_amb_vet_imovel_foco, st_ctrl_amb_vet_acao_mecanica, st_ctrl_amb_vet_tratamnt_focal, co_dim_desfecho_visita, co_dim_tipo_origem_dado_transp, co_dim_cds_tipo_origem, co_fat_cidadao_pec, co_dim_tipo_glicemia, nu_medicao_pressao_arterial, nu_medicao_temperatura, nu_medicao_glicemia,
@@ -1122,15 +1132,116 @@ t1.nu_cbo like any (array['515105', '515140', '5151F1'])
 --OPÇÃO 2 - EXTRAIR VISITAS DOS ÚLTIMOS 12 MESES
 --and dt_registro date_trunc('month', current_date) - interval '47 months'
 --OPÇÃO 3 - EXTRAIR VISITAS APENAS DO ANO ATUAL
-and date_part('year', dt_registro) = date_part('year', current_date)'''}  
+and date_part('year', dt_registro) = date_part('year', current_date)'''} 
     
+    elif tipo =='iaf':
+        queries ={'tb_iaf': '''select 
+t3.nu_ano, 
+t3.nu_mes,
+t2.nu_cnes AS "Cnes",     
+t2.no_unidade_saude AS "Nome da Unidade",     
+initcap(t6.no_profissional) AS "Profissional",     
+initcap(t7.no_cbo) AS "Cbo",     
+SUM(t1.nu_participantes) AS "Total de Participantes",     
+SUM(t1.nu_participantes_registrados) AS "Total Participantes Registrados",     
+COUNT(*) AS "Total de Atividades" FROM tb_fat_atividade_coletiva t1 
+LEFT JOIN tb_dim_unidade_saude t2 ON t1.co_dim_unidade_saude = t2.co_seq_dim_unidade_saude 
+LEFT JOIN tb_dim_tempo t3 ON t1.co_dim_tempo = t3.co_seq_dim_tempo 
+LEFT JOIN tb_unidade_saude t4 ON t2.nu_cnes = t4.nu_cnes 
+LEFT JOIN tb_dim_profissional t6 ON t1.co_dim_profissional = t6.co_seq_dim_profissional 
+LEFT JOIN tb_dim_cbo t7 ON t1.co_dim_cbo = t7.co_seq_dim_cbo WHERE t1.ds_filtro_pratica_em_saude ILIKE '%|11|%' AND     t2.nu_cnes IN (SELECT nu_cnes FROM tb_unidade_saude         
+LEFT JOIN tb_tipo_unidade_saude ON tp_unidade_saude = co_seq_tipo_unidade_saude         
+WHERE st_ativo = 1 AND co_tipo_unidade_cnes IN (1,2,32)) GROUP BY 1,2,3,4,5,6'''}
+    
+    elif tipo =='pse':
+        queries ={'tb_pse': '''SELECT    
+inep_sql.nu_ano as "Ano",
+inep_sql.nu_mes as "Mes",
+tinep.nu_identificador AS Inep,     
+tinep.no_estabelecimento AS "Nome da Escola",     
+SUM(CASE WHEN '|' || inep_sql.filter_pratica_em_saude || '|' LIKE '%|24|%' THEN inep_sql.total_activites ELSE 0 END) AS "Verificação da Situação Vacinal",     
+SUM(CASE WHEN '|' || inep_sql.filter_pratica_em_saude || '|' LIKE '%|2|%' THEN inep_sql.total_activites ELSE 0 END) AS "Aplicação de Fluor",     
+SUM(CASE WHEN '|' || inep_sql.filter_pratica_em_saude || '|' LIKE '%|22|%' THEN inep_sql.total_activites ELSE 0 END) AS "Saude Auditiva",     
+SUM(CASE WHEN '|' || inep_sql.filter_pratica_em_saude || '|' LIKE '%|3|%' THEN inep_sql.total_activites ELSE 0 END) AS "Saude Ocular",     
+SUM(CASE WHEN '|' || inep_sql.filter_pratica_em_saude || '|' LIKE '%|11|%' THEN inep_sql.total_activites ELSE 0 END) AS "Praticas Corporais Atividade Fisica",     
+SUM(CASE WHEN '|' || inep_sql.filter_pratica_em_saude || '|' LIKE '%|20|%' THEN inep_sql.total_activites ELSE 0 END) AS "Antropometria",     
+SUM(CASE WHEN '|' || inep_sql.filter_tema_para_saude || '|' LIKE '%|16|%' THEN inep_sql.total_activites ELSE 0 END) AS "Saude Mental",     
+SUM(CASE WHEN '|' || inep_sql.filter_tema_para_saude || '|' LIKE '%|17|%' THEN inep_sql.total_activites ELSE 0 END) AS "Saude Sexual e Reprodutiva",     
+SUM(CASE WHEN '|' || inep_sql.filter_tema_para_saude || '|' LIKE '%|15|%' THEN inep_sql.total_activites ELSE 0 END) AS "Saude Bucal",     
+SUM(CASE WHEN '|' || inep_sql.filter_tema_para_saude || '|' LIKE '%|5|%' THEN inep_sql.total_activites ELSE 0 END) AS "Cidadania e Direitos Humanos",     
+SUM(CASE WHEN '|' || inep_sql.filter_tema_para_saude || '|' LIKE '%|19|%' THEN inep_sql.total_activites ELSE 0 END) AS "Agravos e Doenças Negligenciadas",     
+SUM(CASE WHEN '|' || inep_sql.filter_tema_para_saude || '|' LIKE '%|13|%' THEN inep_sql.total_activites ELSE 0 END) AS "Prevenção da Violencia",     
+SUM(CASE WHEN '|' || inep_sql.filter_tema_para_saude || '|' LIKE '%|7|%' THEN inep_sql.total_activites ELSE 0 END) AS "Prevenção ao Uso de Alcool",     
+SUM(CASE WHEN '|' || inep_sql.filter_tema_para_saude || '|' LIKE '%|29|%' THEN inep_sql.total_activites ELSE 0 END) AS "Ações de Combate a Dengue",     
+SUM(CASE WHEN '|' || inep_sql.filter_tema_para_saude || '|' LIKE '%|14|%' THEN inep_sql.total_activites ELSE 0 END) AS "Saude Ambiental",     
+SUM(CASE WHEN '|' || inep_sql.filter_tema_para_saude || '|' LIKE '%|1|%' THEN inep_sql.total_activites ELSE 0 END) AS "Alimentação Saudavel",     
+SUM(inep_sql.total_activites) AS "Total de Atividades", 
+CASE WHEN SUM(total_activites) >= 1 THEN 'SIM' ELSE 'NÃO' END AS "Indicador 1",
+CASE WHEN         (SUM(CASE WHEN '|' || inep_sql.filter_tema_para_saude || '|' LIKE '%|1|%' THEN 1 ELSE 0 END) >= 1 OR          
+SUM(CASE WHEN '|' || inep_sql.filter_tema_para_saude || '|' LIKE '%|13|%' THEN 1 ELSE 0 END) >= 1 OR          
+SUM(CASE WHEN '|' || inep_sql.filter_tema_para_saude || '|' LIKE '%|16|%' THEN 1 ELSE 0 END) >= 1 OR          
+SUM(CASE WHEN '|' || inep_sql.filter_tema_para_saude || '|' LIKE '%|17|%' THEN 1 ELSE 0 END) >= 1) OR         
+(SUM(CASE WHEN '|' || inep_sql.filter_pratica_em_saude || '|' LIKE '%|11|%' THEN 1 ELSE 0 END) >= 1)     
+THEN 'SIM' ELSE 'NÃO' END AS "Indicador 2"
+FROM     tb_dim_inep AS tinep LEFT JOIN      (SELECT  t3.nu_ano,t3.nu_mes,t4.nu_identificador AS inep,         
+t4.no_estabelecimento AS "Nome da Escola",         t1.ds_filtro_pratica_em_saude AS "filter_pratica_em_saude",         
+t1.ds_filtro_tema_para_saude AS filter_tema_para_saude,         COUNT(*) AS total_activites     
+FROM         tb_fat_atividade_coletiva t1     
+LEFT JOIN tb_dim_unidade_saude t2 ON t1.co_dim_unidade_saude = t2.co_seq_dim_unidade_saude     
+LEFT JOIN tb_dim_tempo t3 ON t1.co_dim_tempo = t3.co_seq_dim_tempo     
+LEFT JOIN tb_dim_inep t4 ON t1.co_dim_inep = t4.co_seq_dim_inep     
+LEFT JOIN tb_dim_procedimento t5 ON t1.co_dim_procedimento = t5.co_seq_dim_procedimento     
+WHERE  (t1.st_pse_educacao = 1 OR t1.st_pse_saude = 1) 
+AND         (t1.ds_filtro_pratica_em_saude LIKE ANY (ARRAY['%|24|%','%|2|%','%|22|%','%|3|%','%|11|%','%|20|%']) 
+OR           t1.ds_filtro_tema_para_saude LIKE ANY (ARRAY['%|16|%','%|17|%','%|15|%','%|5|%','%|19|%','%|13|%','%|7|%','%|29|%','%|14|%','%|1|%'])
+OR          t5.co_proced = '0101010095')         AND t4.st_registro_valido = 1 
+GROUP BY      t3.nu_ano,t3.nu_mes,t4.nu_identificador,     t4.no_estabelecimento,     t1.ds_filtro_pratica_em_saude,     t1.ds_filtro_tema_para_saude ) AS inep_sql 
+ON inep_sql.inep = tinep.nu_identificador WHERE     tinep.st_registro_valido = 1 AND tinep.nu_identificador <> '-'   
+AND tinep.nu_identificador IN ('35004124','35075279','35122877','35167538','35229337','35233031','35281414','35281426','35286023','35349550','35357522','35437372','35448000','35457619','35472682','35480770','35480782')
+GROUP BY   inep_sql.nu_ano, inep_sql.nu_mes,  tinep.nu_identificador,     tinep.no_estabelecimento'''}
+
+    elif tipo =='pse_prof':
+        queries ={'tb_pse_prof': '''SELECT 
+        t3.nu_ano as "Ano" ,
+        t3.nu_mes as "Mes",                  
+        t4.nu_identificador AS "Inep",   
+        initcap(t4.no_estabelecimento) AS "Nome da Escola",   
+        CASE WHEN t1.st_pse_educacao = 1 THEN 'PSE EDUCAÇÃO' WHEN t1.st_pse_saude = 1 THEN 'PSE SAÚDE' ELSE NULL END AS "PSE",   
+        t6.nu_cns as "Cns",   
+        t6.no_profissional AS "Profissional",
+        t7.nu_cbo as "Cbo", 
+        initcap(t7.no_cbo) as "Nome Cbo",
+        t8.nu_ine as "Ine",   
+        initcap(t8.no_equipe) as "Nome da Equipe",   
+        t9.nu_cnes as "Cnes",   
+        t9.no_unidade_saude AS "Nome da Unidade",   
+        SUM(t1.nu_participantes) AS "Total de Participantes", 
+        SUM(t1.nu_participantes_registrados) AS "Total de Participantes Registrados",   
+        COUNT(*) AS "Total de Atividades"
+        FROM   tb_fat_atividade_coletiva t1   
+        LEFT JOIN tb_dim_unidade_saude t2 ON t1.co_dim_unidade_saude = t2.co_seq_dim_unidade_saude   
+        LEFT JOIN tb_dim_tempo t3 ON t1.co_dim_tempo = t3.co_seq_dim_tempo   
+        LEFT JOIN tb_dim_inep t4 ON t1.co_dim_inep = t4.co_seq_dim_inep   
+        LEFT JOIN tb_dim_procedimento t5 ON t1.co_dim_procedimento = t5.co_seq_dim_procedimento   
+        LEFT JOIN tb_dim_profissional t6 ON t1.co_dim_profissional = t6.co_seq_dim_profissional   
+        LEFT JOIN tb_dim_cbo t7 ON t1.co_dim_cbo = t7.co_seq_dim_cbo   
+        LEFT JOIN tb_dim_equipe t8 ON t1.co_dim_equipe = t8.co_seq_dim_equipe   
+        LEFT JOIN tb_dim_unidade_saude t9 ON t1.co_dim_unidade_saude = t9.co_seq_dim_unidade_saude   
+        LEFT JOIN tb_dim_procedimento t10 ON t1.co_dim_procedimento = t10.co_seq_dim_procedimento   
+        LEFT JOIN tb_fat_atvdd_coletiva_ext t11 ON t11.co_fat_atividade_coletiva = t1.co_seq_fat_atividade_coletiva 
+        WHERE  (t1.st_pse_educacao = 1 OR t1.st_pse_saude = 1) AND   (t1.ds_filtro_pratica_em_saude 
+        LIKE ANY (ARRAY['%|24|%','%|2|%','%|22|%','%|3|%','%|11|%','%|20|%'])     OR     t1.ds_filtro_tema_para_saude 
+        LIKE ANY (ARRAY['%|16|%','%|17|%','%|15|%','%|5|%','%|19|%','%|13|%','%|7|%','%|29|%','%|14|%','%|1|%'])     OR     t5.co_proced = '0101010095') AND   t4.st_registro_valido = 1  
+        AND t4.nu_identificador IN ('35004124','35075279','35122877','35167538','35229337','35233031','35281414','35281426','35286023','35349550','35357522','35437372','35448000','35457619','35472682','35480770','35480782')
+        GROUP BY 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12,13'''}
+
     if queries is None:
         raise ValueError(f"Tipo de consulta desconhecido: {tipo}")
 
     step_size = 100 / len(queries)
     for query_name, query in queries.items():
         execute_query(query_name, text(query), external_engine, local_engine, step_size, tipo, 
-                      params={'ano': ano, 'mes': mes} if tipo == 'bpa' else None, 
+                      params = {'ano': ano, 'mes': mes} if tipo in ['bpa'] else None,
                       update_progress=update_progress)
 
     progress[tipo] = 100

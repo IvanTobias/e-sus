@@ -6,11 +6,12 @@ import pandas as pd
 import threading
 import os
 import importdados
-from Conexões import get_local_engine
+from Conexões import get_local_engine, get_external_engine
 from Consultas import send_progress_update, execute_long_task, get_progress, execute_and_store_queries
 import json
 from flask import make_response, request, jsonify, send_file, send_from_directory
 from sqlalchemy import create_engine, text
+from sqlalchemy.exc import ProgrammingError, SQLAlchemyError
 import logging
 from flask_caching import Cache
 from apscheduler.schedulers.background import BackgroundScheduler
@@ -94,7 +95,7 @@ def execute_queries(tipo):
         if 'mes' in incoming_data:
             config_data['mes'] = incoming_data['mes']
 
-    if tipo in ['cadastro', 'domiciliofcd', 'bpa', 'visitas']:
+    if tipo in ['cadastro', 'domiciliofcd', 'bpa', 'visitas', 'iaf', 'pse', 'pse_prof']:
         #logging.debug(f"Iniciando a thread para o tipo {tipo}")
         thread = threading.Thread(target=execute_long_task, args=(config_data, tipo))
         thread.start()
@@ -119,7 +120,7 @@ def add_header(response):
 @app.route('/export-xls', methods=['GET'])
 def export_xls():
     engine = get_local_engine()
-    query = "SELECT * FROM query_1"
+    query = "SELECT * FROM tb_cadastro"
     df = pd.read_sql(query, engine)
     filename = "cadastros_exportados.xlsx"
     filepath = os.path.join(os.getcwd(), filename)
@@ -133,7 +134,7 @@ def export_xls():
 @app.route('/export-xls2', methods=['GET'])
 def export_xls2():
     engine = get_local_engine()
-    query = "SELECT * FROM query_2"
+    query = "SELECT * FROM tb_domicilio"
     df = pd.read_sql(query, engine)
     filename = "domiciliofcd_exportadas.xlsx"
     filepath = os.path.join(os.getcwd(), filename)
@@ -147,7 +148,7 @@ def export_xls2():
 @app.route('/export-visitas', methods=['GET'])
 def export_visitas():
     engine = get_local_engine()
-    query = "SELECT * FROM query_4"
+    query = "SELECT * FROM tb_visitas"
     df = pd.read_sql(query, engine)
     filename = "visitas_exportadas.xlsx"
     filepath = os.path.join(os.getcwd(), filename)
@@ -161,9 +162,51 @@ def export_visitas():
 @app.route('/export-bpa', methods=['GET'])
 def export_xls3():
     engine = get_local_engine()
-    query = "SELECT * FROM query_3"
+    query = "SELECT * FROM tb_bpa"
     df = pd.read_sql(query, engine)
     filename = "bpa.xlsx"
+    filepath = os.path.join(os.getcwd(), filename)
+    df.to_excel(filepath, index=False)
+    
+    response = make_response(send_file(filepath, as_attachment=True))
+    response.headers["Content-Disposition"] = f"attachment; filename={filename}"
+    response.headers['Content-Type'] = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    return response
+
+@app.route('/export_iaf', methods=['GET'])
+def export_iaf():
+    engine = get_local_engine()
+    query = "SELECT * FROM tb_iaf"
+    df = pd.read_sql(query, engine)
+    filename = "iaf.xlsx"
+    filepath = os.path.join(os.getcwd(), filename)
+    df.to_excel(filepath, index=False)
+    
+    response = make_response(send_file(filepath, as_attachment=True))
+    response.headers["Content-Disposition"] = f"attachment; filename={filename}"
+    response.headers['Content-Type'] = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    return response
+
+@app.route('/export_pse', methods=['GET'])
+def export_pse():
+    engine = get_local_engine()
+    query = "SELECT * FROM tb_pse"
+    df = pd.read_sql(query, engine)
+    filename = "pse.xlsx"
+    filepath = os.path.join(os.getcwd(), filename)
+    df.to_excel(filepath, index=False)
+    
+    response = make_response(send_file(filepath, as_attachment=True))
+    response.headers["Content-Disposition"] = f"attachment; filename={filename}"
+    response.headers['Content-Type'] = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    return response
+
+@app.route('/export_pse_prof', methods=['GET'])
+def export_pse_prof():
+    engine = get_local_engine()
+    query = "SELECT * FROM tb_pse_prof"
+    df = pd.read_sql(query, engine)
+    filename = "pse_prof.xlsx"
     filepath = os.path.join(os.getcwd(), filename)
     df.to_excel(filepath, index=False)
     
@@ -275,7 +318,7 @@ def fetch_contagens():
         query_filters.append("no_profissional IN :profissional")
         params["profissional"] = tuple(profissional_list)
 
-    # Consulta de cadastros gerais (query_1)
+    # Consulta de cadastros gerais (tb_cadastro)
     base_query_geral = """
         SELECT 
         COUNT(t1.co_seq_fat_cad_individual) as "Cadastros Individuais",
@@ -287,16 +330,16 @@ def fetch_contagens():
         COUNT(CASE WHEN dt_atualizado < (CURRENT_DATE - INTERVAL '1 year') THEN 1 END) as "Cadastros Desatualizados",
         COUNT(CASE WHEN t1.co_dim_tipo_saida_cadastro = '3' AND LENGTH(TRIM(nu_cns)) = 15 AND nu_cns != '0' THEN 1 END) as "Cadastros com Cns",
         COUNT(CASE WHEN t1.co_dim_tipo_saida_cadastro = '3' AND (LENGTH(TRIM(nu_cns)) != 15 OR nu_cns = '0') THEN 1 END) as "Cadastros com Cpf"
-    FROM query_1 t1
+    FROM tb_cadastro t1
     WHERE t1.st_ativo = 1 
     AND t1.co_dim_tipo_saida_cadastro IS NOT NULL 
     AND t1.st_ficha_inativa = 0
     """
 
-    # Consulta de cadastros domiciliares (query_2)
+    # Consulta de cadastros domiciliares (tb_domicilio)
     domicilio_query = """
     SELECT COUNT(q2.co_seq_cds_cad_domiciliar) as "Cadastros Domiciliares"
-    FROM query_2 q2
+    FROM tb_domicilio q2
     WHERE q2.st_ativo = 1
     """
 
@@ -332,7 +375,6 @@ def fetch_contagens():
     # Retorna os resultados em formato JSON
     return jsonify(counts_dict)
 
-
 @app.route('/api/unidades-saude', methods=['GET'])
 @cache.cached(timeout=300)  # Cache por 5 minutos (300 segundos)
 def fetchUnidadesSaude():
@@ -348,7 +390,7 @@ def fetchUnidadesSaude():
     no_unidade_saude, 
     no_equipe, 
     no_profissional
-    FROM query_1
+    FROM tb_cadastro
     """
 
     # Adiciona a condição de filtro pela unidade de saúde, se fornecida
@@ -502,7 +544,7 @@ def fetch_detalhes():
         no_equipe,
         co_cidadao,
         to_char(dt_atualizado, 'dd/mm/yyyy') AS dt_atualizado
-    FROM query_1 t1
+    FROM tb_cadastro t1
     WHERE st_ativo = 1 
     """
 
@@ -570,7 +612,7 @@ def fetch_cadastros_domiciliares():
         no_unidade_saude,
         no_profissional,
         no_equipe
-    FROM query_2 q2
+    FROM tb_domicilio q2
     WHERE q2.st_ativo = 1
     """
 
@@ -597,7 +639,6 @@ def fetch_cadastros_domiciliares():
             data.append(item)
 
     return jsonify(data)
-
 
 @app.route('/api/detalhes-hover', methods=['GET'])
 def fetch_detalhes_hover():
@@ -653,7 +694,7 @@ def fetch_detalhes_hover():
             'Problema Renal (Não Sabe)', CASE WHEN st_problema_rins_nao_sabe = '1' THEN 'Sim' ELSE NULL END
         )
     ) AS details
-    FROM query_1
+    FROM tb_cadastro
     WHERE co_cidadao = :co_cidadao
     """
 
@@ -744,7 +785,7 @@ def fetch_detalhes_count():
         COUNT(CASE WHEN st_problema_rins_insuficiencia = '1' THEN 1 END) AS insuficiencia_renal,
         COUNT(CASE WHEN st_problema_rins_outro = '1' THEN 1 END) AS outro_renal,
         COUNT(CASE WHEN st_problema_rins_nao_sabe = '1' THEN 1 END) AS nao_sabe_renal
-    FROM query_1
+    FROM tb_cadastro
     WHERE st_ativo = 1 and co_dim_tipo_saida_cadastro = '3'
     """
 
@@ -875,12 +916,6 @@ def fetch_visitas_domiciliares():
     end_date = request.args.get('end_date', default='', type=str)      # Nova entrada para a data final
     tipo_consulta = request.args.get('tipo_consulta', default='filtros', type=str)
 
-    print("Parâmetros recebidos:")
-    print(f"Unidades: {unidades}")
-    print(f"Equipes: {equipes}")
-    print(f"Profissionais: {profissionais}")
-    print(f"Start Date: {start_date}")
-    print(f"End Date: {end_date}")
 
     engine = get_local_engine()
     query_filters = []
@@ -924,7 +959,7 @@ def fetch_visitas_domiciliares():
             initcap(no_unidade_saude) AS no_unidade_saude,    
             initcap(no_profissional) AS no_profissional,      
             initcap(no_equipe) AS no_equipe
-        FROM query_4
+        FROM tb_visitas
         """
 
         # Adiciona os filtros à consulta
@@ -960,8 +995,10 @@ def fetch_visitas_domiciliares():
             initcap(no_profissional) AS no_profissional,      
             initcap(no_equipe) AS no_equipe,
             co_dim_desfecho_visita,  -- Status da visita (1: realizada, 2: recusada, 3: ausente)
-            to_char(dt_visita_mcaf, 'DD/MM/YYYY') as dt_visita
-        FROM query_4
+            to_char(dt_visita_mcaf, 'DD/MM/YYYY') as dt_visita,
+            sg_sexo,
+            ds_turno
+        FROM tb_visitas
         """
 
         # Adiciona os filtros à consulta
@@ -980,7 +1017,9 @@ def fetch_visitas_domiciliares():
                     'no_profissional': row._mapping['no_profissional'],
                     'no_equipe': row._mapping['no_equipe'],
                     'co_dim_desfecho_visita': row._mapping['co_dim_desfecho_visita'],  # Status da visita
-                    'dt_visita': row._mapping['dt_visita']
+                    'dt_visita': row._mapping['dt_visita'],
+                    'sg_sexo': row._mapping['sg_sexo'],
+                    'ds_turno': row._mapping['ds_turno']
                 }
                 data.append(item)
 
@@ -988,6 +1027,53 @@ def fetch_visitas_domiciliares():
 
     else:
         return jsonify({'error': 'tipo_consulta inválido. Use "filtros" ou "mapa".'}), 400
+
+@app.route('/api/data', methods=['POST'])
+def get_data():
+    """
+    Retorna dados das tabelas tb_iaf, tb_pse ou tb_pse_prof com base no tipo enviado no payload JSON.
+    O endpoint espera um payload JSON com os parâmetros 'tipo', 'ano' e 'mes'.
+    """
+    try:
+        # Captura o tipo (IAF, PSE, PSE Prof), ano e mês do corpo da requisição
+        data = request.get_json()
+        tipo = data.get('tipo')  # Pode ser 'iaf', 'pse', 'pse_prof'
+        ano = data.get('ano')
+        mes = data.get('mes')
+
+        # Verifica se o tipo, ano e mês foram fornecidos
+        if not tipo or not ano or not mes:
+            return jsonify({'error': 'Tipo, ano e mês são obrigatórios!'}), 400
+
+        # Dicionário de consultas simplificadas para cada tabela
+        queries = {
+            'iaf': 'SELECT * FROM tb_iaf WHERE nu_ano = :ano AND nu_mes = :mes',
+            'pse': 'SELECT * FROM tb_pse WHERE nu_ano = :ano AND nu_mes = :mes',
+            'pse_prof': 'SELECT * FROM tb_pse_prof WHERE nu_ano = :ano AND nu_mes = :mes'
+        }
+
+        # Pega a consulta com base no tipo
+        query = queries.get(tipo)
+
+        if not query:
+            return jsonify({'error': 'Tipo inválido!'}), 400
+
+        # Executa a consulta selecionada
+        with get_local_engine().connect() as conn:
+            result = conn.execute(text(query), {'ano': ano, 'mes': mes})
+            rows = result.fetchall()  # Pega todos os resultados
+
+            # Converte os resultados para uma lista de dicionários, usando o método _mapping
+            data_list = [dict(row._mapping) for row in rows]
+
+
+       
+        # Retorna os dados em formato JSON
+        return jsonify(data_list)
+
+    except Exception as e:
+        logging.error(f"Erro ao buscar os dados: {str(e)}")
+        return jsonify({'error': 'Erro ao buscar os dados!'}), 500
 
 # Carregar a configuração na inicialização e agendar a importação, se necessário
 if __name__ == '__main__':
