@@ -623,7 +623,7 @@ def fetch_detalhes():
         elif tipo == "cadastros ativos":
             query_filters.append("t1.co_dim_tipo_saida_cadastro = '3'")
         elif tipo == "fora de área":
-            query_filters.append("t1.nu_micro_area_1 = 'FA'")
+            query_filters.append("t1.nu_micro_area = 'FA'")
         elif tipo == "cadastros desatualizados":
             query_filters.append("t1.dt_atualizado < (CURRENT_DATE - INTERVAL '1 year')")
         elif tipo == "cadastros com cns":
@@ -1144,12 +1144,12 @@ def get_data():
         queries = {
             'iaf': '''
                 SELECT 
-                    total_de_participantes, 
-                    total_participantes_registrados, 
-                    total_de_atividades, 
-                    cbo, 
-                    nome_da_unidade, 
-                    profissional
+                profissional,
+                cbo, 
+                nome_da_unidade, 
+                total_de_participantes, 
+                total_participantes_registrados, 
+                total_de_atividades   
                 FROM tb_iaf
                 WHERE nu_ano = :ano AND nu_mes = :mes
             ''',
@@ -1165,15 +1165,14 @@ def get_data():
             ''',
             'pse_prof': '''
                 SELECT 
-                    total_de_participantes,
-                    total_de_participantes_registrados,
-                    total_de_atividades,
                     profissional,
                     nome_cbo,
                     nome_da_unidade,
                     inep,
                     nome_da_escola,
-                    pse
+                    total_de_participantes,
+                    total_de_participantes_registrados,
+                    total_de_atividades
                 FROM tb_pse_prof
                 WHERE ano = :ano AND mes = :mes
             '''

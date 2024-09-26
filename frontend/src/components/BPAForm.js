@@ -59,13 +59,35 @@ function BPAForm() {
     }
   };
 
+  useEffect(() => {
+    const verificarDisponibilidadeArquivo = async () => {
+      try {
+        // Chama a API para verificar se o arquivo já existe
+        const response = await axios.get('http://127.0.0.1:5000/api/list-bpa-files');
+        const arquivos = response.data.files;
+  
+  
+        // Verifica se existe qualquer arquivo que comece com "bpa_"
+        const arquivoDisponivel = arquivos.some(arquivo => arquivo.startsWith('bpa_'));
+        
+  
+        // Atualiza o estado baseado na disponibilidade de qualquer arquivo "bpa_"
+        setIsFileAvailable(arquivoDisponivel);
+        localStorage.setItem('isFileAvailable', arquivoDisponivel.toString());
+      } catch (error) {
+        console.error('Erro ao verificar disponibilidade do arquivo BPA:', error);
+      }
+    };
+  
+    verificarDisponibilidadeArquivo();
+  }, []);
+  
+  
   const gerarBPA = async () => {
     setProgress(0);
     setIsGenerating(true);
-    setIsFileAvailable(false);
     setIsButtonLocked(true); // Bloqueia o botão após o clique
     localStorage.setItem('isGeneratingBPA', 'true');
-    localStorage.setItem('isFileAvailable', 'false');
     localStorage.setItem('isButtonLocked', 'true'); // Armazena o estado do botão bloqueado
 
     const today = new Date();
@@ -122,8 +144,9 @@ function BPAForm() {
 
   return (
     <div className={`config-container ${isGenerating ? 'loading' : ''}`}> {/* Aplica a classe "loading" dinamicamente */}
-      <h1>Gerador de BPA</h1>
       <form id="bpaForm">
+      <h1>Gerador de BPA</h1>
+
         {/* Inputs para a configuração do BPA */}
         <div>
           <label htmlFor="seq7">Nome do Responsável:</label>
@@ -162,7 +185,7 @@ function BPAForm() {
           <button
             type="button"
             onClick={abrirModal}
-            className={`btn btn-primary ${!isFileAvailable ? 'btn-disabled' : ''}`}
+            className={`btn btn-primary ${!isFileAvailable ? 'btn-disable' : ''}`}
             disabled={!isFileAvailable}
           >
             Download
@@ -190,7 +213,7 @@ function BPAForm() {
 
       {/* Modal para exibir arquivos BPA */}
       {showModal && (
-        <div className={`modal ${isGenerating ? 'loading' : ''}`}>
+        <div className={`modal modal-bpa ${isGenerating ? 'loading' : ''}`}>
           <div className="modal-content">
             <div className="modal-header">
               <h2>Arquivos BPA Disponíveis</h2>

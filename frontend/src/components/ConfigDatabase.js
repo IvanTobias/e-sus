@@ -42,8 +42,9 @@ function ConfigDatabase() {
 
   return (
     <div className="config-container">
-      <h1>Configuração do Banco de Dados</h1>
       <form>
+      <h1>Configuração do Banco de Dados</h1>
+
         <div>
           <label>IP do Servidor:</label>
           <input type="text" id="ip" value={config.ip} onChange={handleChange} placeholder="IP do Servidor" />

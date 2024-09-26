@@ -72,8 +72,7 @@
   
   /* === Containers e Cards === */
   .container {
-    width: 80%;
-    max-width: 900px;
+    max-width: flex;
     margin: 50px auto;
     padding: 30px;
     background-color: var(--white);
@@ -161,7 +160,7 @@
   
   /* === Formulários === */
   form {
-    max-width: 800px;
+    max-width: flex;
     margin: 0 auto 30px;
     background-color: var(--white);
     padding: 20px;
@@ -336,7 +335,7 @@ button,
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 90%;
+    width: flex;
     max-width: flex;
     min-width: 300px;
     max-height: 800px;
@@ -351,6 +350,17 @@ button,
     opacity: 1;
   }
   
+/* Aplica position: relative apenas para este modal */
+.modal-bpa  {
+  position: fixed; /* Somente o conteúdo desse modal terá position: relative */
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  width: 80%;
+  max-width: 500px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  z-index: 1001; /* Garanta que esteja acima do fundo modal */
+}
 
 
 /* Quando o modal estiver carregando, definimos um cursor de espera */
@@ -367,10 +377,10 @@ button,
 .modal-content {
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    gap: 10px;
     transition: opacity 0.3s ease, max-height 1s ease; /* Transição de opacidade e altura */
     opacity: 1; /* Opacidade padrão */
-    max-height: 600px; /* Altura máxima inicial */
+    max-height: 800px; /* Altura máxima inicial */
   }
 
 /* Rodapé do Modal */

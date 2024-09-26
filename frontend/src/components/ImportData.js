@@ -303,8 +303,9 @@ function ImportData() {
 
   return (
     <div className="config-container">
-      <h1>Importar Dados</h1>
       <form>
+      <h1>Importar Dados</h1>
+
         {/* Seções de Dados */}
         <DataSection type="cadastro" title="Cadastros Individuais (FCI)" state={state} importData={importData} extractData={extractData} />
         <DataSection type="domiciliofcd" title="Cadastros Domiciliares" state={state} importData={importData} extractData={extractData} />
