@@ -288,8 +288,9 @@ button,
     border-radius: 8px; /* Cantos arredondados no menu */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra suave para o menu */
     margin-top: 4px; /* Espaço entre o menu e o select */
-    z-index: 1000; /* Garante que o menu esteja acima de outros elementos */
-}
+    z-index: 1350; /* Garante que o menu esteja acima de outros elementos */
+    position: relative; /* Certifique-se de que os menus também possam ser posicionados acima */
+  }
 
 .select__option {
     padding: 10px; /* Espaçamento interno das opções */
@@ -330,9 +331,8 @@ button,
 }
 
   /* Modal */
-/* === Modal === */
 .modal {
-    position: fixed;
+    position: relative;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
@@ -343,7 +343,7 @@ button,
     background-color: var(--white);
     border-radius: 12px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-    z-index: 1000;
+    z-index: 1400;
     padding: 20px;
     animation: fadeInModal 0.3s ease-in-out;
     overflow: hidden;
@@ -536,7 +536,7 @@ button,
     display: flex;
     align-items: center;
     justify-content: center;
-    z-index: 1000;
+    z-index: 1300;
 }
 
 .mini-modal-content {
@@ -600,6 +600,12 @@ button,
   transition: background-color 0.3s ease;
 }
 
+.tabs {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
 .tab.active {
   background-color: #007bff; /* Cor quando ativo */
   color: white;
@@ -619,6 +625,7 @@ button,
   position: relative; /* ou absolute dependendo do layout */
   z-index: 1100; /* Um valor alto para garantir que fique acima do mapa */
 }
+
 
 .date-picker {
   display: flex;
@@ -641,6 +648,7 @@ button,
 .date-selectors label {
   display: flex;
   flex-direction: column;
+  width: 80px;
 }
 
 

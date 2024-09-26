@@ -427,7 +427,7 @@ function CadastrosPage() {
         message={selectedCard ? `Detalhes de ${selectedCard}` : ''}
         className={modalClassName}
         contentLabel="Detalhes do Cadastro"
-        style={{ overlay: { cursor: isLoading ? 'wait' : 'default' } }}
+        style={{ overlay: {zIndex: 1200, cursor: isLoading ? 'wait' : 'default' } }}
       >
         <div className="modal-content">
           <div className="modal-header">

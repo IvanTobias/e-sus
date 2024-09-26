@@ -134,7 +134,7 @@ function VisitaPage() {
         dt_visita: item.dt_visita,
         status: item.co_dim_desfecho_visita,
         sg_sexo: item.sg_sexo,        // Adiciona sexo
-        ds_turno: item.ds_turno,      // Adiciona turno
+        com_localizacao: item.com_localizacao,      // Adiciona turno
       }));
 
       const countRealizadasWithGeo = markers.filter(marker => marker.status === 1).length;
@@ -317,9 +317,9 @@ function VisitaPage() {
             <table>
               <thead>
                 <tr>
-                  <th>Tipo Visita</th>
-                  <th>Data Visita</th>
-                  <th>Turno</th>
+                  <th>Tipo</th>
+                  <th>Data</th>
+                  <th>Geo</th>
                   <th>Sexo</th>
                   <th>Profissional</th>
                   <th>Equipe</th>
@@ -331,7 +331,7 @@ function VisitaPage() {
                   <tr key={index}>
                     <td>{marker.status === 1 ? 'Realizada' : marker.status === 2 ? 'Recusada' : 'Ausente'}</td>
                     <td>{marker.dt_visita}</td>
-                    <td>{marker.ds_turno}</td>
+                    <td>{marker.com_localizacao}</td>
                     <td>{marker.sg_sexo}</td>
                     <td>{marker.profissional}</td>
                     <td>{marker.equipe}</td>

@@ -6,12 +6,13 @@ import pandas as pd
 import threading
 import os
 import importdados
-from Conexões import get_local_engine, get_external_engine
+from Common import task_status, update_task_status
+from Conexões import get_local_engine
 from Consultas import send_progress_update, execute_long_task, get_progress, execute_and_store_queries
 import json
 from flask import make_response, request, jsonify, send_file, send_from_directory
 from sqlalchemy import create_engine, text
-from sqlalchemy.exc import ProgrammingError, SQLAlchemyError
+from sqlalchemy.exc import SQLAlchemyError
 import logging
 from flask_caching import Cache
 from apscheduler.schedulers.background import BackgroundScheduler
@@ -81,28 +82,34 @@ def query_progress():
 
 @app.route('/execute-queries/<tipo>', methods=['GET', 'POST'])
 def execute_queries(tipo):
-    progress = 0
-    send_progress_update(tipo, progress)
+    # Verifica se o tipo é válido
+    if tipo not in ['cadastro', 'domiciliofcd', 'bpa', 'visitas', 'iaf', 'pse', 'pse_prof']:
+        return jsonify({"status": "error", "message": "Tipo desconhecido."})
 
+    # Verifica se já existe uma tarefa em execução
+    if task_status.get(tipo) == "running":
+        return jsonify({"status": "error", "message": f"Consultas {tipo} já estão em execução."})
+
+    # Se não estiver em execução, atualiza o progresso para 0% e inicia a tarefa
+    send_progress_update(tipo, 0)
+
+    # Lê a configuração atual do arquivo
     with open('config.json', 'r') as config_file:
         config_data = json.load(config_file)
 
+    # Atualiza o ano e o mês, se fornecidos na requisição POST
     if request.method == 'POST':
         incoming_data = request.json
-        #logging.debug(f"Dados recebidos na requisição POST: {incoming_data}")
         if 'ano' in incoming_data:
             config_data['ano'] = incoming_data['ano']
         if 'mes' in incoming_data:
             config_data['mes'] = incoming_data['mes']
 
-    if tipo in ['cadastro', 'domiciliofcd', 'bpa', 'visitas', 'iaf', 'pse', 'pse_prof']:
-        #logging.debug(f"Iniciando a thread para o tipo {tipo}")
-        thread = threading.Thread(target=execute_long_task, args=(config_data, tipo))
-        thread.start()
-        return jsonify({"status": "success", "message": f"Consultas {tipo} em execução."})
-    else:
-        #logging.error(f"Tipo desconhecido recebido: {tipo}")
-        return jsonify({"status": "error", "message": "Tipo desconhecido."})
+    # Inicia a thread para executar a tarefa de importação
+    thread = threading.Thread(target=execute_long_task, args=(config_data, tipo))
+    thread.start()
+
+    return jsonify({"status": "success", "message": f"Consultas {tipo} em execução."})
 
 @app.route('/progress/<tipo>', methods=['GET'])
 def get_progress_endpoint(tipo):
@@ -119,101 +126,193 @@ def add_header(response):
 
 @app.route('/export-xls', methods=['GET'])
 def export_xls():
-    engine = get_local_engine()
-    query = "SELECT * FROM tb_cadastro"
-    df = pd.read_sql(query, engine)
-    filename = "cadastros_exportados.xlsx"
-    filepath = os.path.join(os.getcwd(), filename)
-    df.to_excel(filepath, index=False)
+    tipo = 'cadastro'
     
-    response = make_response(send_file(filepath, as_attachment=True))
-    response.headers["Content-Disposition"] = f"attachment; filename={filename}"
-    response.headers['Content-Type'] = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-    return response
+    # Verifica se a exportação já está em execução
+    if task_status.get(tipo) == "running":
+        return jsonify({"status": "error", "message": f"Exportação {tipo} já está em execução."})
+
+    try:
+        update_task_status(tipo, "running")  # Atualiza o status para "running"
+        engine = get_local_engine()
+        query = "SELECT * FROM tb_cadastro"
+        df = pd.read_sql(query, engine)
+        filename = "cadastros_exportados.xlsx"
+        filepath = os.path.join(os.getcwd(), filename)
+        df.to_excel(filepath, index=False)
+
+        response = make_response(send_file(filepath, as_attachment=True))
+        response.headers["Content-Disposition"] = f"attachment; filename={filename}"
+        response.headers['Content-Type'] = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+
+        update_task_status(tipo, "completed")  # Marca como "completed"
+        return response
+
+    except Exception as e:
+        update_task_status(tipo, "failed")  # Marca como "failed"
+        return jsonify({"status": "error", "message": f"Erro na exportação {tipo}: {str(e)}"})
 
 @app.route('/export-xls2', methods=['GET'])
 def export_xls2():
-    engine = get_local_engine()
-    query = "SELECT * FROM tb_domicilio"
-    df = pd.read_sql(query, engine)
-    filename = "domiciliofcd_exportadas.xlsx"
-    filepath = os.path.join(os.getcwd(), filename)
-    df.to_excel(filepath, index=False)
-    
-    response = make_response(send_file(filepath, as_attachment=True))
-    response.headers["Content-Disposition"] = f"attachment; filename={filename}"
-    response.headers['Content-Type'] = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-    return response
+    tipo = 'domiciliofcd'
+
+    if task_status.get(tipo) == "running":
+        return jsonify({"status": "error", "message": f"Exportação {tipo} já está em execução."})
+
+    try:
+        update_task_status(tipo, "running")
+        engine = get_local_engine()
+        query = "SELECT * FROM tb_domicilio"
+        df = pd.read_sql(query, engine)
+        filename = "domiciliofcd_exportadas.xlsx"
+        filepath = os.path.join(os.getcwd(), filename)
+        df.to_excel(filepath, index=False)
+
+        response = make_response(send_file(filepath, as_attachment=True))
+        response.headers["Content-Disposition"] = f"attachment; filename={filename}"
+        response.headers['Content-Type'] = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+
+        update_task_status(tipo, "completed")
+        return response
+
+    except Exception as e:
+        update_task_status(tipo, "failed")
+        return jsonify({"status": "error", "message": f"Erro na exportação {tipo}: {str(e)}"})
 
 @app.route('/export-visitas', methods=['GET'])
 def export_visitas():
-    engine = get_local_engine()
-    query = "SELECT * FROM tb_visitas"
-    df = pd.read_sql(query, engine)
-    filename = "visitas_exportadas.xlsx"
-    filepath = os.path.join(os.getcwd(), filename)
-    df.to_excel(filepath, index=False)
-    
-    response = make_response(send_file(filepath, as_attachment=True))
-    response.headers["Content-Disposition"] = f"attachment; filename={filename}"
-    response.headers['Content-Type'] = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-    return response
+    tipo = 'visitas'
+
+    if task_status.get(tipo) == "running":
+        return jsonify({"status": "error", "message": f"Exportação {tipo} já está em execução."})
+
+    try:
+        update_task_status(tipo, "running")
+        engine = get_local_engine()
+        query = "SELECT * FROM tb_visitas"
+        df = pd.read_sql(query, engine)
+        filename = "visitas_exportadas.xlsx"
+        filepath = os.path.join(os.getcwd(), filename)
+        df.to_excel(filepath, index=False)
+
+        response = make_response(send_file(filepath, as_attachment=True))
+        response.headers["Content-Disposition"] = f"attachment; filename={filename}"
+        response.headers['Content-Type'] = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+
+        update_task_status(tipo, "completed")
+        return response
+
+    except Exception as e:
+        update_task_status(tipo, "failed")
+        return jsonify({"status": "error", "message": f"Erro na exportação {tipo}: {str(e)}"})
 
 @app.route('/export-bpa', methods=['GET'])
 def export_xls3():
-    engine = get_local_engine()
-    query = "SELECT * FROM tb_bpa"
-    df = pd.read_sql(query, engine)
-    filename = "bpa.xlsx"
-    filepath = os.path.join(os.getcwd(), filename)
-    df.to_excel(filepath, index=False)
-    
-    response = make_response(send_file(filepath, as_attachment=True))
-    response.headers["Content-Disposition"] = f"attachment; filename={filename}"
-    response.headers['Content-Type'] = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-    return response
+    tipo = 'bpa'
+
+    if task_status.get(tipo) == "running":
+        return jsonify({"status": "error", "message": f"Exportação {tipo} já está em execução."})
+
+    try:
+        update_task_status(tipo, "running")
+        engine = get_local_engine()
+        query = "SELECT * FROM tb_bpa"
+        df = pd.read_sql(query, engine)
+        filename = "bpa.xlsx"
+        filepath = os.path.join(os.getcwd(), filename)
+        df.to_excel(filepath, index=False)
+
+        response = make_response(send_file(filepath, as_attachment=True))
+        response.headers["Content-Disposition"] = f"attachment; filename={filename}"
+        response.headers['Content-Type'] = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+
+        update_task_status(tipo, "completed")
+        return response
+
+    except Exception as e:
+        update_task_status(tipo, "failed")
+        return jsonify({"status": "error", "message": f"Erro na exportação {tipo}: {str(e)}"})
 
 @app.route('/export_iaf', methods=['GET'])
 def export_iaf():
-    engine = get_local_engine()
-    query = "SELECT * FROM tb_iaf"
-    df = pd.read_sql(query, engine)
-    filename = "iaf.xlsx"
-    filepath = os.path.join(os.getcwd(), filename)
-    df.to_excel(filepath, index=False)
-    
-    response = make_response(send_file(filepath, as_attachment=True))
-    response.headers["Content-Disposition"] = f"attachment; filename={filename}"
-    response.headers['Content-Type'] = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-    return response
+    tipo = 'iaf'
+
+    if task_status.get(tipo) == "running":
+        return jsonify({"status": "error", "message": f"Exportação {tipo} já está em execução."})
+
+    try:
+        update_task_status(tipo, "running")
+        engine = get_local_engine()
+        query = "SELECT * FROM tb_iaf"
+        df = pd.read_sql(query, engine)
+        filename = "iaf.xlsx"
+        filepath = os.path.join(os.getcwd(), filename)
+        df.to_excel(filepath, index=False)
+
+        response = make_response(send_file(filepath, as_attachment=True))
+        response.headers["Content-Disposition"] = f"attachment; filename={filename}"
+        response.headers['Content-Type'] = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+
+        update_task_status(tipo, "completed")
+        return response
+
+    except Exception as e:
+        update_task_status(tipo, "failed")
+        return jsonify({"status": "error", "message": f"Erro na exportação {tipo}: {str(e)}"})
 
 @app.route('/export_pse', methods=['GET'])
 def export_pse():
-    engine = get_local_engine()
-    query = "SELECT * FROM tb_pse"
-    df = pd.read_sql(query, engine)
-    filename = "pse.xlsx"
-    filepath = os.path.join(os.getcwd(), filename)
-    df.to_excel(filepath, index=False)
-    
-    response = make_response(send_file(filepath, as_attachment=True))
-    response.headers["Content-Disposition"] = f"attachment; filename={filename}"
-    response.headers['Content-Type'] = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-    return response
+    tipo = 'pse'
+
+    if task_status.get(tipo) == "running":
+        return jsonify({"status": "error", "message": f"Exportação {tipo} já está em execução."})
+
+    try:
+        update_task_status(tipo, "running")
+        engine = get_local_engine()
+        query = "SELECT * FROM tb_pse"
+        df = pd.read_sql(query, engine)
+        filename = "pse.xlsx"
+        filepath = os.path.join(os.getcwd(), filename)
+        df.to_excel(filepath, index=False)
+
+        response = make_response(send_file(filepath, as_attachment=True))
+        response.headers["Content-Disposition"] = f"attachment; filename={filename}"
+        response.headers['Content-Type'] = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+
+        update_task_status(tipo, "completed")
+        return response
+
+    except Exception as e:
+        update_task_status(tipo, "failed")
+        return jsonify({"status": "error", "message": f"Erro na exportação {tipo}: {str(e)}"})
 
 @app.route('/export_pse_prof', methods=['GET'])
 def export_pse_prof():
-    engine = get_local_engine()
-    query = "SELECT * FROM tb_pse_prof"
-    df = pd.read_sql(query, engine)
-    filename = "pse_prof.xlsx"
-    filepath = os.path.join(os.getcwd(), filename)
-    df.to_excel(filepath, index=False)
-    
-    response = make_response(send_file(filepath, as_attachment=True))
-    response.headers["Content-Disposition"] = f"attachment; filename={filename}"
-    response.headers['Content-Type'] = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-    return response
+    tipo = 'pse_prof'
+
+    if task_status.get(tipo) == "running":
+        return jsonify({"status": "error", "message": f"Exportação {tipo} já está em execução."})
+
+    try:
+        update_task_status(tipo, "running")
+        engine = get_local_engine()
+        query = "SELECT * FROM tb_pse_prof"
+        df = pd.read_sql(query, engine)
+        filename = "pse_prof.xlsx"
+        filepath = os.path.join(os.getcwd(), filename)
+        df.to_excel(filepath, index=False)
+
+        response = make_response(send_file(filepath, as_attachment=True))
+        response.headers["Content-Disposition"] = f"attachment; filename={filename}"
+        response.headers['Content-Type'] = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+
+        update_task_status(tipo, "completed")
+        return response
+
+    except Exception as e:
+        update_task_status(tipo, "failed")
+        return jsonify({"status": "error", "message": f"Erro na exportação {tipo}: {str(e)}"})
 
 @app.route('/api/gerar-bpa', methods=['POST'])
 def gerar_bpa_route():
@@ -997,7 +1096,7 @@ def fetch_visitas_domiciliares():
             co_dim_desfecho_visita,  -- Status da visita (1: realizada, 2: recusada, 3: ausente)
             to_char(dt_visita_mcaf, 'DD/MM/YYYY') as dt_visita,
             sg_sexo,
-            ds_turno
+            case when com_localizacao = '0' then 'Não' else 'Sim'end as com_localizacao
         FROM tb_visitas
         """
 
@@ -1019,7 +1118,7 @@ def fetch_visitas_domiciliares():
                     'co_dim_desfecho_visita': row._mapping['co_dim_desfecho_visita'],  # Status da visita
                     'dt_visita': row._mapping['dt_visita'],
                     'sg_sexo': row._mapping['sg_sexo'],
-                    'ds_turno': row._mapping['ds_turno']
+                    'com_localizacao': row._mapping['com_localizacao']
                 }
                 data.append(item)
 
@@ -1030,52 +1129,89 @@ def fetch_visitas_domiciliares():
 
 @app.route('/api/data', methods=['POST'])
 def get_data():
-    """
-    Retorna dados das tabelas tb_iaf, tb_pse ou tb_pse_prof com base no tipo enviado no payload JSON.
-    O endpoint espera um payload JSON com os parâmetros 'tipo', 'ano' e 'mes'.
-    """
     try:
-        # Captura o tipo (IAF, PSE, PSE Prof), ano e mês do corpo da requisição
+        # Captura o payload da requisição
         data = request.get_json()
-        tipo = data.get('tipo')  # Pode ser 'iaf', 'pse', 'pse_prof'
+        tipo = data.get('tipo')  # 'iaf', 'pse', 'pse_prof'
         ano = data.get('ano')
         mes = data.get('mes')
 
-        # Verifica se o tipo, ano e mês foram fornecidos
+        # Verificação dos parâmetros
         if not tipo or not ano or not mes:
             return jsonify({'error': 'Tipo, ano e mês são obrigatórios!'}), 400
 
-        # Dicionário de consultas simplificadas para cada tabela
+        # Dicionário de queries para cada tipo de dado
         queries = {
-            'iaf': 'SELECT * FROM tb_iaf WHERE nu_ano = :ano AND nu_mes = :mes',
-            'pse': 'SELECT * FROM tb_pse WHERE nu_ano = :ano AND nu_mes = :mes',
-            'pse_prof': 'SELECT * FROM tb_pse_prof WHERE nu_ano = :ano AND nu_mes = :mes'
+            'iaf': '''
+                SELECT 
+                    total_de_participantes, 
+                    total_participantes_registrados, 
+                    total_de_atividades, 
+                    cbo, 
+                    nome_da_unidade, 
+                    profissional
+                FROM tb_iaf
+                WHERE nu_ano = :ano AND nu_mes = :mes
+            ''',
+            'pse': '''
+                SELECT 
+                    inep,
+                    nome_da_escola,
+                    total_de_atividades,
+                    indicador_1,
+                    indicador_2
+                FROM tb_pse
+                WHERE ano = :ano AND mes = :mes
+            ''',
+            'pse_prof': '''
+                SELECT 
+                    total_de_participantes,
+                    total_de_participantes_registrados,
+                    total_de_atividades,
+                    profissional,
+                    nome_cbo,
+                    nome_da_unidade,
+                    inep,
+                    nome_da_escola,
+                    pse
+                FROM tb_pse_prof
+                WHERE ano = :ano AND mes = :mes
+            '''
         }
 
-        # Pega a consulta com base no tipo
+        # Escolha a query correta com base no tipo
         query = queries.get(tipo)
-
         if not query:
             return jsonify({'error': 'Tipo inválido!'}), 400
 
-        # Executa a consulta selecionada
+        # Executar a consulta no banco de dados
         with get_local_engine().connect() as conn:
             result = conn.execute(text(query), {'ano': ano, 'mes': mes})
-            rows = result.fetchall()  # Pega todos os resultados
+            rows = result.fetchall()
 
-            # Converte os resultados para uma lista de dicionários, usando o método _mapping
-            data_list = [dict(row._mapping) for row in rows]
+            # Convertendo os dados em uma lista de dicionários serializáveis
+            data_list = []
+            columns = result.keys()  # Pega os nomes das colunas
 
+            for row in rows:
+                row_dict = {}
+                for col, value in zip(columns, row):
+                    row_dict[col] = str(value) if not isinstance(value, (str, int, float, bool, type(None))) else value
+                data_list.append(row_dict)
 
-       
-        # Retorna os dados em formato JSON
-        return jsonify(data_list)
+        # Retornar os dados e as colunas
+        return jsonify({
+            'columns': list(columns),
+            'data': data_list
+        })
 
-    except Exception as e:
-        logging.error(f"Erro ao buscar os dados: {str(e)}")
+    except SQLAlchemyError as e:
+        logging.error(f"Erro ao buscar os dados do banco de dados: {str(e)}")
         return jsonify({'error': 'Erro ao buscar os dados!'}), 500
+    except Exception as e:
+        logging.error(f"Erro inesperado: {str(e)}")
+        return jsonify({'error': 'Erro inesperado!'}), 500
 
-# Carregar a configuração na inicialização e agendar a importação, se necessário
 if __name__ == '__main__':
     config = importdados.ensure_auto_update_config()
     if config['isAutoUpdateOn']:

@@ -1,25 +1,27 @@
-#Consultas.py
 import threading
 import pandas as pd
-from socketio_config import socketio  # Importe o socketio do novo módulo de configuração
+from socketio_config import socketio
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import text
 from Conexões import get_external_engine, get_local_engine, log_message
 from banco import cancel_query, clean_dataframe
 import logging
+import traceback
 from Common import task_event, update_task_status, update_last_import
+from contextlib import contextmanager
 
 progress = {}  # Variável global para rastreamento de progresso
 cancel_requests = {}  # Variável global para rastreamento de pedidos de cancelamento
+progress_lock = threading.Lock()  # Lock para proteger acesso concorrente ao progresso
 
-# Função que executa a tarefa de forma assíncrona e atualiza o status
+# Função que executa a tarefa e atualiza o status
 def execute_long_task(config_data, tipo):
     try:
-        update_task_status(tipo, "running")  # Atualiza o status para "running"
+        update_task_status(tipo, "running")
 
         # Define a função de callback para atualizar o progresso
         def update_progress(progress_value):
-            send_progress_update(tipo, progress_value)
+            update_progress_safely(tipo, progress_value)
 
         execute_and_store_queries(config_data, tipo, update_progress)
 
@@ -27,51 +29,67 @@ def execute_long_task(config_data, tipo):
         update_last_import(tipo)
 
         # Atualiza o progresso para 100%
-        send_progress_update(tipo, 100)
+        update_progress_safely(tipo, 100)
 
         # Marca como "completed"
         update_task_status(tipo, "completed")
 
     except Exception as e:
-        print(f"Erro na tarefa {tipo}: {e}")
-        # Marca como "failed"
+        error_message = traceback.format_exc()
+        log_message(f"Erro na tarefa {tipo}: {error_message}")
         update_task_status(tipo, "failed")
 
     finally:
         task_event.set()  # Libera o evento, mesmo se a tarefa falhar
 
+def update_progress_safely(tipo, progress_value):
+    with progress_lock:
+        progress[tipo] = progress_value
+        send_progress_update(tipo, progress_value)
+
 def send_progress_update(tipo, progress_value, error=None):
     payload = {'type': tipo, 'progress': progress_value}
     if error:
         payload['error'] = error
-    socketio.emit('progress_update', payload, namespace='/', to=None)  # Emissão com o argumento correto
+    socketio.emit('progress_update', payload, namespace='/', to=None)
     logging.debug(f"Progresso emitido para {tipo}: {progress_value}%")
 
 def get_progress(tipo):
-    global progress
-    #logging.debug(f"Obtendo progresso para {tipo}: {progress.get(tipo, 0)}")
-    return progress.get(tipo, 0)
+    with progress_lock:
+        return progress.get(tipo, 0)
 
 def get_db_type(engine):
-    """Detecta o tipo de banco de dados da engine."""
     return engine.dialect.name
 
 def execute_query_thread(query_name, query, external_engine, local_engine, step_size, tipo):
-    global progress, cancel_requests
     cancel_requests[tipo] = False  # Reseta o estado de cancelamento
     thread = threading.Thread(target=execute_query, args=(query_name, query, external_engine, local_engine, step_size, tipo))
     thread.start()
     return thread
 
+@contextmanager
+def session_scope(Session):
+    session = Session()
+    try:
+        yield session
+        session.commit()
+    except Exception:
+        session.rollback()
+        raise
+    finally:
+        session.close()
+
 def execute_query(query_name, query, external_engine, local_engine, step_size, tipo, params=None, update_progress=None):
     global progress, cancel_requests
     Session = sessionmaker(bind=local_engine)
-    session = Session()
+
     try:
         rows_processed = 0
         chunksize = int(step_size if step_size > 0 else 1000)
         db_type = get_db_type(external_engine)
+
         with external_engine.connect() as conn:
+            conn.execution_options(timeout=600)  # Timeout de 10 minutos
             if cancel_requests.get(tipo, False):
                 cancel_query(conn, tipo, db_type)
                 return "cancelled"
@@ -83,8 +101,6 @@ def execute_query(query_name, query, external_engine, local_engine, step_size, t
                 raise ValueError("Nenhuma linha encontrada na consulta.")
 
             result = conn.execute(query, params)
-            if result is None:
-                raise ValueError("A consulta retornou None.")
 
             while True:
                 if cancel_requests.get(tipo, False):
@@ -97,39 +113,28 @@ def execute_query(query_name, query, external_engine, local_engine, step_size, t
                     break
 
                 df = pd.DataFrame(rows, columns=result.keys())
-
-                # Limpar o dataframe para garantir acentuações corretas
                 df = clean_dataframe(df)
 
-                try:
-                    # Certificar-se de que o banco de dados suporta utf8 ao salvar
-                    df.to_sql(query_name, con=session.bind, if_exists='replace' if rows_processed == 0 else 'append', index=False)
-                    session.commit()
-                except Exception as e:
-                    session.rollback()
-                    log_message(f"Erro ao salvar chunk no banco de dados: {str(e)}")
-                    session.close()
-                    session = Session()
-                    raise
+                with session_scope(Session) as session:
+                    try:
+                        df.to_sql(query_name, con=session.bind, if_exists='replace' if rows_processed == 0 else 'append', index=False)
+                    except Exception as e:
+                        log_message(f"Erro ao salvar chunk no banco de dados: {str(e)}")
+                        raise
 
                 rows_processed += len(rows)
 
-                # Atualiza o progresso com base nas linhas processadas
                 if total_rows > 0:
-                    progress[tipo] = round((rows_processed / total_rows) * 100, 2)
-                    if update_progress:
-                        update_progress(progress[tipo])
+                    progress_value = round((rows_processed / total_rows) * 100, 2)
+                    update_progress_safely(tipo, progress_value)
 
                 if rows_processed >= total_rows:
-                    progress[tipo] = 100
-                    if update_progress:
-                        update_progress(100)
+                    update_progress_safely(tipo, 100)
 
     except Exception as e:
         log_message(f"Erro ao executar {query_name} para {tipo}: {str(e)}")
         raise
     finally:
-        session.close()
         log_message(f"Sessão fechada para {query_name} e {tipo}.")
         cancel_requests[tipo] = False
     log_message(f"Execução de {query_name} para {tipo} concluída.")

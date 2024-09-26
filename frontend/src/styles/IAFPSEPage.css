@@ -1,0 +1,83 @@
+.container {
+  margin: 20px;
+  padding: 20px; /* Adiciona espaço interno */
+  background-color: #f8f9fa; /* Exemplo de fundo mais claro */
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra suave */
+  overflow-x: auto; /* Habilita rolagem horizontal se necessário */
+}
+
+.tabs {
+  display: 100;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 15px; /* Adiciona espaçamento abaixo das tabs */
+}
+
+.tab {
+  padding: 10px 20px;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+  background-color: #f0f0f0;
+}
+
+.tab.active {
+  background-color: #007bff;
+  color: white;
+}
+
+.date-selectors {
+  display: flex;
+  gap: 10px;
+  margin: 10px 0; 
+}
+
+.date-selectors label {
+  margin-right: 20px;
+  width: 80px;
+
+}
+
+.update-button {
+  background-color: #007bff;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.styled-table {
+  width: 100%;
+  max-width: 100%; /* Garante que a tabela não ultrapasse o contêiner */
+  border-collapse: collapse;
+  margin-top: 20px;
+  font-size: 14px;
+}
+
+.styled-table th, .styled-table td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.styled-table th {
+  background-color: #f2f2f2;
+}
+
+.styled-table tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.styled-table tr:hover {
+  background-color: #f1f1f1;
+}
+
+.styled-table-wrapper {
+  max-width: 100%;
+  overflow-x: auto; /* Força a rolagem horizontal se a tabela for maior */
+}

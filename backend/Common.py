@@ -1,13 +1,13 @@
-#Common.py
 import json
 import os
 import datetime
+import logging
+import traceback
 from threading import Event
 
 # Caminho do arquivo de configuração
 AUTO_UPDATE_CONFIG_FILE = 'auto_update_config.json'
-IMPORT_CONFIG_FILE = 'import_config.json'  # Novo arquivo para armazenar ano e mês
-
+IMPORT_CONFIG_FILE = 'import_config.json'
 
 # Evento para bloquear a execução enquanto uma tarefa está em andamento
 task_event = Event()
@@ -22,13 +22,20 @@ task_status = {
     "pse_prof": "idle"
 }
 
-def update_last_import(import_type):
-    config_file = 'configimport.json'
-    
-    # Se o arquivo não existir, criar com uma estrutura básica
-    if not os.path.exists(config_file):
-        with open(config_file, 'w') as f:
-            json.dump({
+# Configuração de logging para monitoramento
+logging.basicConfig(filename='import_tasks.log', level=logging.INFO)
+
+# Cache para configimport.json
+_config_cache = None
+
+def load_config():
+    global _config_cache
+    if _config_cache is None:  # Só carrega o arquivo uma vez
+        if os.path.exists('configimport.json'):
+            with open('configimport.json', 'r') as f:
+                _config_cache = json.load(f)
+        else:
+            _config_cache = {
                 "cadastro": None, 
                 "domiciliofcd": None, 
                 "bpa": None, 
@@ -36,30 +43,30 @@ def update_last_import(import_type):
                 "iaf": None, 
                 "pse": None, 
                 "pse_prof": None
-            }, f)
-        print("Arquivo configimport.json criado com valores padrão.")
-    
+            }
+            print("Arquivo configimport.json criado com valores padrão.")
+    return _config_cache
+
+def save_config():
+    global _config_cache
+    with open('configimport.json', 'w') as f:
+        json.dump(_config_cache, f, indent=4)
+        f.flush()
+        os.fsync(f.fileno())  # Garante que os dados sejam salvos no disco
+
+def update_last_import(import_type):
     try:
-        # Abrir o arquivo e carregar os dados
-        with open(config_file, 'r') as f:
-            config = json.load(f)
-        
-        # Atualizar o tipo de importação com a data/hora atual
+        config = load_config()
         config[import_type] = datetime.datetime.now().strftime('%H:%M %d-%m-%Y')
-
-        # Escrever de volta no arquivo
-        with open(config_file, 'w') as f:
-            json.dump(config, f, indent=4)
-            f.flush()
-            os.fsync(f.fileno())  # Garante que os dados sejam salvos no disco
+        save_config()
         print(f"Última importação de {import_type} registrada com sucesso.")
-
     except Exception as e:
-        print(f"Erro ao atualizar o arquivo configimport.json: {e}")
+        error_message = traceback.format_exc()
+        logging.error(f"Erro ao atualizar o arquivo configimport.json: {error_message}")
 
 def update_task_status(task, status):
     if task in task_status:
         task_status[task] = status
-        print(f"Status da tarefa {task}: {status}")
+        logging.info(f"{datetime.datetime.now()}: Status da tarefa {task}: {status}")
     else:
-        print(f"Tarefa {task} desconhecida. Status não atualizado.")
+        logging.warning(f"{datetime.datetime.now()}: Tarefa {task} desconhecida. Status não atualizado.")
