@@ -20,7 +20,6 @@ const apiCall = async (url, method = 'GET', data = {}) => {
   }
 };
 
-
 // Função para calcular o ano atual e o mês anterior
 const getInitialDateValues = () => {
   const currentDate = new Date();
@@ -48,7 +47,6 @@ const initialState = {
   isFileAvailable: { cadastro: false, domiciliofcd: false, bpa: false, visitas: false, iaf: false, pse: false, pse_prof: false },
   lastImport: { cadastro: '', domiciliofcd: '', bpa: '', visitas: '', iaf: '', pse: '', pse_prof: '' }, // Adiciona lastImport para os novos tipos
 };
-
 
 // Funções de ação para o reducer
 const reducer = (state, action) => {
@@ -79,7 +77,7 @@ const reducer = (state, action) => {
 // Hook customizado para WebSocket
 const useWebSocketProgress = (dispatch) => {
   useEffect(() => {
-    const socket = io(API_BASE_URL);
+    const socket = io(API_BASE_URL, { reconnectionAttempts: 5, reconnectionDelay: 2000 });
 
     socket.on('progress_update', (data) => {
       dispatch({ type: 'SET_PROGRESS', payload: { type: data.type, value: data.progress } });
@@ -97,6 +95,10 @@ const useWebSocketProgress = (dispatch) => {
 
     socket.on('connect_error', (error) => {
       console.error('Erro de conexão com o WebSocket:', error);
+    });
+
+    socket.on('disconnect', () => {
+      console.log('Desconectado. Tentando reconectar...');
     });
 
     return () => {
@@ -177,8 +179,8 @@ function ImportData() {
       isAutoUpdateOn,
       autoUpdateTime,
     })
-      .then((response) => alert(response.status))
-      .catch((error) => console.error('Erro ao salvar configuração de autoatualização:', error));
+      .then(() => alert('Configuração salva com sucesso!'))
+      .catch((error) => alert('Erro ao salvar a configuração.'));
   }, [isAutoUpdateOn, autoUpdateTime]);
 
   // Verificar disponibilidade dos arquivos
@@ -301,10 +303,15 @@ function ImportData() {
       });
   }, []);
 
+  const handleAutoUpdateToggle = useCallback(() => {
+    setIsAutoUpdateOn(prevState => !prevState);
+    saveAutoUpdateConfig(); // Salvar automaticamente quando o switch é alternado
+  }, [isAutoUpdateOn, autoUpdateTime]);
+
   return (
     <div className="config-container">
       <form>
-      <h1>Importar Dados</h1>
+        <h1>Importar Dados</h1>
 
         {/* Seções de Dados */}
         <DataSection type="cadastro" title="Cadastros Individuais (FCI)" state={state} importData={importData} extractData={extractData} />
@@ -313,35 +320,37 @@ function ImportData() {
         <DataSection type="iaf" title="IAF" state={state} importData={importData} extractData={extractData} />
         <DataSection type="pse" title="PSE" state={state} importData={importData} extractData={extractData} />
         <DataSection type="pse_prof" title="PSE Profissionais" state={state} importData={importData} extractData={extractData} />
-        <DataSection type="bpa" title="BPA" state={state} importData={importData} extractData={extractData} />        
+        <DataSection type="bpa" title="BPA" state={state} importData={importData} extractData={extractData} />
+        
         <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
-            <label htmlFor="competencia">Mês:</label>
-            <select
-              id="competencia"
-              name="competencia"
-              value={state.competencia}
-              onChange={(e) => dispatch({ type: 'SET_COMPETENCIA', payload: e.target.value })}
-            >
-              {['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro']
-                .map((mes, index) => <option value={String(index + 1).padStart(2, '0')} key={index}>{mes}</option>)}
-            </select>
-  
-            <label htmlFor="ano">Ano:</label>
-            <input
-              type="number"
-              id="ano"
-              name="ano"
-              min="2000"
-              max="2100"
-              value={state.ano}
-              onChange={(e) => dispatch({ type: 'SET_ANO', payload: e.target.value })}
-            />
-          </div>
+          <label htmlFor="competencia">Mês:</label>
+          <select
+            id="competencia"
+            name="competencia"
+            value={state.competencia}
+            onChange={(e) => dispatch({ type: 'SET_COMPETENCIA', payload: e.target.value })}
+          >
+            {['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro']
+              .map((mes, index) => <option value={String(index + 1).padStart(2, '0')} key={index}>{mes}</option>)}
+          </select>
+
+          <label htmlFor="ano">Ano:</label>
+          <input
+            type="number"
+            id="ano"
+            name="ano"
+            min="2000"
+            max="2100"
+            value={state.ano}
+            onChange={(e) => dispatch({ type: 'SET_ANO', payload: e.target.value })}
+          />
+        </div>
+
         {/* Seção de Atualização Automática */}
         <div>
           <h3>Atualização Automática</h3>
           <Switch
-            onChange={() => setIsAutoUpdateOn(!isAutoUpdateOn)}
+            onChange={handleAutoUpdateToggle}
             checked={isAutoUpdateOn}
             offColor="#ccc"
             onColor="#007bff"

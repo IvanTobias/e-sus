@@ -18,29 +18,27 @@ progress_lock = threading.Lock()  # Lock para proteger acesso concorrente ao pro
 def execute_long_task(config_data, tipo):
     try:
         update_task_status(tipo, "running")
+        log_message(f"Iniciando tarefa de importação para {tipo}. Dados de configuração: {config_data}")
 
-        # Define a função de callback para atualizar o progresso
         def update_progress(progress_value):
             update_progress_safely(tipo, progress_value)
 
         execute_and_store_queries(config_data, tipo, update_progress)
 
-        # Atualiza a última importação no arquivo JSON
-        update_last_import(tipo)
+        update_last_import(tipo)  # Atualiza a última importação
+        update_progress_safely(tipo, 100)  # Certifica que o progresso está a 100%
 
-        # Atualiza o progresso para 100%
-        update_progress_safely(tipo, 100)
-
-        # Marca como "completed"
         update_task_status(tipo, "completed")
+        log_message(f"Tarefa de importação para {tipo} concluída com sucesso.")
 
     except Exception as e:
         error_message = traceback.format_exc()
-        log_message(f"Erro na tarefa {tipo}: {error_message}")
+        log_message(f"Erro na tarefa de importação para {tipo}: {error_message}")
         update_task_status(tipo, "failed")
 
     finally:
-        task_event.set()  # Libera o evento, mesmo se a tarefa falhar
+        task_event.set()  # Libera o evento
+        log_message(f"Tarefa de importação para {tipo} finalizada.")
 
 def update_progress_safely(tipo, progress_value):
     with progress_lock:
@@ -93,18 +91,21 @@ def execute_query(query_name, query, external_engine, local_engine, step_size, t
             if cancel_requests.get(tipo, False):
                 cancel_query(conn, tipo, db_type)
                 return "cancelled"
+
+            log_message(f"Iniciando execução da query para {query_name} no tipo {tipo}.")
             
             count_query = f"SELECT COUNT(*) FROM ({query}) as total_count"
             total_rows = conn.execute(text(count_query), params).scalar()
+            log_message(f"Total de linhas para {query_name}: {total_rows}")
 
             if total_rows is None or total_rows == 0:
-                raise ValueError("Nenhuma linha encontrada na consulta.")
+                raise ValueError(f"Nenhuma linha encontrada para {query_name} no tipo {tipo}.")
 
             result = conn.execute(query, params)
 
             while True:
                 if cancel_requests.get(tipo, False):
-                    log_message(f"Cancelamento detectado durante a execução para {tipo}.")
+                    log_message(f"Cancelamento detectado durante a execução de {query_name} para {tipo}.")
                     cancel_query(conn, tipo, db_type)
                     return "cancelled"
                 
@@ -114,12 +115,13 @@ def execute_query(query_name, query, external_engine, local_engine, step_size, t
 
                 df = pd.DataFrame(rows, columns=result.keys())
                 df = clean_dataframe(df)
+                log_message(f"{len(df)} linhas processadas para {query_name} no tipo {tipo}.")
 
                 with session_scope(Session) as session:
                     try:
                         df.to_sql(query_name, con=session.bind, if_exists='replace' if rows_processed == 0 else 'append', index=False)
                     except Exception as e:
-                        log_message(f"Erro ao salvar chunk no banco de dados: {str(e)}")
+                        log_message(f"Erro ao salvar chunk no banco de dados para {query_name}: {str(e)}")
                         raise
 
                 rows_processed += len(rows)
@@ -127,6 +129,7 @@ def execute_query(query_name, query, external_engine, local_engine, step_size, t
                 if total_rows > 0:
                     progress_value = round((rows_processed / total_rows) * 100, 2)
                     update_progress_safely(tipo, progress_value)
+                    log_message(f"Progresso atualizado para {query_name}: {progress_value}%")
 
                 if rows_processed >= total_rows:
                     update_progress_safely(tipo, 100)
@@ -135,9 +138,8 @@ def execute_query(query_name, query, external_engine, local_engine, step_size, t
         log_message(f"Erro ao executar {query_name} para {tipo}: {str(e)}")
         raise
     finally:
-        log_message(f"Sessão fechada para {query_name} e {tipo}.")
+        log_message(f"Execução de {query_name} para {tipo} concluída. Total processado: {rows_processed} linhas.")
         cancel_requests[tipo] = False
-    log_message(f"Execução de {query_name} para {tipo} concluída.")
 
 def execute_and_store_queries(config_data, tipo, update_progress):
 
