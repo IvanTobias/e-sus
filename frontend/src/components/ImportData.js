@@ -9,6 +9,16 @@ const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://127.0.0.1:500
 // Configuração global do axios para usar UTF-8
 axios.defaults.headers.common['Content-Type'] = 'application/json; charset=utf-8';
 
+const socket = io(API_BASE_URL, {
+  path: '/socket.io',  // Certifique-se de que este caminho está correto para o seu backend
+  transports: ['websocket'],  // Evita o fallback para outras opções, como polling
+  reconnection: true,
+});
+
+socket.on('progress_update', (data) => {
+  console.log('Evento progress_update recebido:', data);
+});
+
 // Função auxiliar para chamadas de API
 const apiCall = async (url, method = 'GET', data = {}) => {
   try {
@@ -77,11 +87,25 @@ const reducer = (state, action) => {
 // Hook customizado para WebSocket
 const useWebSocketProgress = (dispatch) => {
   useEffect(() => {
-    const socket = io(API_BASE_URL, { reconnectionAttempts: 5, reconnectionDelay: 2000 });
+    // Garante que a URL está definida corretamente (importante para evitar o erro ERR_ADDRESS_INVALID)
+    if (!API_BASE_URL) {
+      console.error('API_BASE_URL não definida. Verifique suas variáveis de ambiente.');
+      return;
+    }
 
+    // Inicializa o socket
+    const socket = io(API_BASE_URL, {
+      reconnectionAttempts: 5,         // Tentativas de reconexão
+      reconnectionDelay: 2000,         // Tempo entre as tentativas de reconexão
+      transports: ['websocket'],       // Força o WebSocket como único transporte, evita fallback para polling
+    });
+
+    // Evento para atualizar o progresso recebido via WebSocket
     socket.on('progress_update', (data) => {
+      console.log('Progresso recebido:', data); // Log para depuração
       dispatch({ type: 'SET_PROGRESS', payload: { type: data.type, value: data.progress } });
 
+      // Quando o progresso atinge 100% ou ocorre um erro, desativa o botão
       if (data.progress === 100 || data.error) {
         dispatch({ type: 'SET_RUNNING', payload: { type: data.type, value: false } });
         dispatch({ type: 'SET_BUTTON_DISABLED', payload: { type: data.type, value: false } });
@@ -93,19 +117,32 @@ const useWebSocketProgress = (dispatch) => {
       }
     });
 
+    // Lida com erros de conexão
     socket.on('connect_error', (error) => {
       console.error('Erro de conexão com o WebSocket:', error);
     });
 
+    // Lida com desconexão e tentativa de reconexão
     socket.on('disconnect', () => {
       console.log('Desconectado. Tentando reconectar...');
     });
 
+    // Adiciona eventos de reconexão para melhor acompanhamento
+    socket.on('reconnect_attempt', (attempt) => {
+      console.log(`Tentativa de reconexão #${attempt}`);
+    });
+
+    socket.on('reconnect_failed', () => {
+      console.error('Falha ao reconectar após múltiplas tentativas.');
+    });
+
+    // Limpeza ao desmontar o componente
     return () => {
       socket.disconnect();
     };
   }, [dispatch]);
 };
+
 
 // Componente reutilizável para seções de dados
 const DataSection = ({ type, title, state, importData, extractData }) => (

@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask
 from sqlalchemy import create_engine
 import json
 import os

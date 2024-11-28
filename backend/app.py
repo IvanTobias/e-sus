@@ -1216,7 +1216,7 @@ if __name__ == '__main__':
     if config['isAutoUpdateOn']:
         importdados.schedule_auto_import(importdados.scheduler, config['autoUpdateTime'])
 
-    socketio.run(app, host='0.0.0.0', port=5000, debug=True)  # Executando com suporte ao WebSocket
+    socketio.run(app, host='127.0.0.1', port=5000, debug=True)  # Executando com suporte ao WebSocket
     print("Executando importação automática de dados...")
 
 

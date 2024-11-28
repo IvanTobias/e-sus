@@ -8,7 +8,7 @@ from apscheduler.schedulers.background import BackgroundScheduler
 from Consultas import execute_long_task
 from socketio_config import socketio
 from Conexões import log_message
-from Common import AUTO_UPDATE_CONFIG_FILE, task_event, task_status, update_last_import
+from Common import AUTO_UPDATE_CONFIG_FILE, task_event, update_last_import
 
 # Inicializar o agendador de tarefas
 scheduler = BackgroundScheduler()

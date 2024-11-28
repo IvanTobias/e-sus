@@ -169,7 +169,6 @@ def carregar_config_bpa():
         return "", "", "", "", "M"
     
 seq7, seq8, seq9, seq10, seq11 = carregar_config_bpa()
-
 def gerar_cabecalho_bpa(ano_mes, num_linhas, num_folhas, campo_controle):
     # Cabeçalho fixo
     cbc_hdr = "01"  # Indicador de linha do Header
@@ -307,27 +306,26 @@ def criar_arquivo_bpa():
 
 def executar_procedure(connection):
     # Defina os IDs dos PA que você deseja incluir no WHERE
-    
     pa_ids = [
         '0414020243', '0301100012', '0414020146', '0102010498', '0307040151',
         '0307030032', '0401010066', '0101010036', '0101010010', '0307010031',
         '0404020674', '0404020577', '0101020074', '0307030040', '0307030059',
-        '0401010066', '0301060037', '0307020010', '0301060118', '0301060100',
-        '0414020383', '0414020405', '0307020070', '0301060029', '0301060061',
+        '0301060037', '0307020010', '0301060118', '0301060100',
+        '0414020383', '0414020405', '0307020070', '0301060029', 
         '0307010015', '0414020120', '0101020090', '0414020138', '0414020359',
-        '0301060096', '0101010028', '0101040024', '0102010056', '0201010020',
+        '0301060096', '0101040024', '0102010056', '0201010020',
         '0201010470', '0211070041', '0211070203', '0211070211', '0214010015',
-        '0301010161', '0301040079', '0301100039', '0401010023', '0307010023',
-        '0301010153', '0401010066', '0414020278', '0205020100', '0309050049',
+        '0301040079', '0301100039', '0401010023', '0307010023',
+        '0301010153', '0414020278', '0205020100', '0309050049',
         '0205020186', '0102010293', '0301080399', '0202030776', '0102010501',
-        '0307020118', '0214010074', '0214010058', '0401010031', '0309050022',
-        '0102010510', '0211080055', '0102010072', '0102010218', '0102010218',
+        '0307020118', '0401010031', '0309050022',
+        '0102010510', '0211080055', '0102010072', '0102010218',
         '0301080259', '0301080267', '0102010242', '0414020073', '0102010340',
         '0102010323', '0301040036', '0101020040', '0102010226', '0101020031',
         '0101020015', '0101020023', '0102010528', '0101020082', '0307010040',
-        '0102010307', '0102010064', '0301080160', '0101020066', '0101020058',
+        '0102010307', '0102010064', '0101020066', '0101020058',
         '0404020615', '0307040135', '0401010074', '0414020170', '0211060275',
-        '0404010270', '0211020036', '0301010072', '0211020052', '0301100101',
+        '0211020036', '0211020052', '0301100101', '0301080160',
         '0301100152', '0301100179', '0202010473', '0201020041', '0202060446',
         '0204010071'
     ]
@@ -363,43 +361,28 @@ def executar_procedure(connection):
             'prd_qt_p': row.prd_qt_p
         })
 
-        # Executar o DELETE
-        delete_query = text("""
+    # Executar o DELETE com os IDs corretos fora do loop
+    delete_query = text("""
         DELETE FROM tb_bpa
-WHERE prd_org = 'BPI' 
-  AND (
-    (prd_pa LIKE '%ABPG%' OR prd_pa LIKE '%ABEX%' OR prd_pa LIKE '0301010030' OR prd_pa LIKE '0301010064')
-    OR (prd_uid = '9001808' AND prd_pa NOT IN ('0209010037', '0209010029', '0209010053', '0301010072', '0301010048', '0301010056'))
-    OR prd_pa IN ('0414020243', '0301100012', '0414020146', '0102010498', '0307040151',
-                  '0307030032', '0401010066', '0101010036', '0101010010', '0307010031',
-                  '0404020674', '0404020577', '0101020074', '0307030040', '0307030059',
-                  '0401010066', '0301060037', '0307020010', '0301060118', '0301060100',
-                  '0414020383', '0414020405', '0307020070', '0301060029', '0301060061',
-                  '0307010015', '0414020120', '0101020090', '0414020138', '0414020359',
-                  '0301060096', '0101010028', '0101040024', '0102010056', '0201010020',
-                  '0201010470', '0211070041', '0211070203', '0211070211', '0214010015',
-                  '0301010161', '0301040079', '0301100039', '0401010023', '0307010023',
-                  '0301010153', '0401010066', '0414020278', '0205020100', '0309050049',
-                  '0205020186', '0102010293', '0301080399', '0202030776', '0102010501',
-                  '0307020118', '0214010074', '0214010058', '0401010031', '0309050022',
-                  '0102010510', '0211080055', '0102010072', '0102010218', '0102010218',
-                  '0301080259', '0301080267', '0102010242', '0414020073', '0102010340',
-                  '0102010323', '0301040036', '0101020040', '0102010226', '0101020031',
-                  '0101020015', '0101020023', '0102010528', '0101020082', '0307010040',
-                  '0102010307', '0102010064', '0301080160', '0101020066', '0101020058',
-                  '0404020615', '0307040135', '0401010074', '0414020170', '0211060275',
-                  '0404010270', '0211020036', '0301010072', '0211020052', '0301100101',
-                  '0301100152', '0301100179', '0202010473', '0201020041', '0202060446',
-                  '0204010071'))""")
-        connection.execute(delete_query, {'prd_pa': row.prd_pa})
-        #log_message(f"Dados deletados para UID: {row.prd_uid}, PA: {row.prd_pa}")
+        WHERE prd_org = 'BPI'
+          AND (prd_pa LIKE '%ABPG%' 
+          OR prd_pa LIKE '%ABEX%' 
+          OR prd_pa IN :pa_ids
+          OR prd_pa IN (
+              '0101020104', '0101030010', '0214010201', '0301010269', '0309010063', 
+              '0301040141', '0301050139', '0301050147', '0301010277', '0309010047',
+              '0301100195', '0301100209', '0301100217', '0301100225', '0301100233',
+              '0301100241', '0301100276', '0301100284', '0307010155'
+          ))
+    """)
+    connection.execute(delete_query, {'pa_ids': tuple(pa_ids)})
 
-    log_message(f"Primeira Procedure Concluída")
+    log_message("Primeira Procedure Concluída")
 
 def executar_procedure_segunda(connection):
     # IDs dos PA a serem incluídos no WHERE
     pa_ids = [
-        '0301010110', '0301010030', '0301010048', '0301010056',
+        '0301010110', '0301010030', '0301010056',
         '0301010064', '0301010072', '0301010137'
     ]
 
@@ -445,13 +428,46 @@ def executar_procedure_segunda(connection):
         """)
         connection.execute(delete_query, {'prd_pa': row.prd_pa})
 
-    # 4. Executar o UPDATE para o UID específico
-    update_query = text("""
+    # Atualizações específicas do prd_uid
+    update_uid_query_1 = text("""
     UPDATE tb_bpa
     SET prd_cid = 'G804'
     WHERE prd_uid = '0491381'
     """)
-    connection.execute(update_query)
+    connection.execute(update_uid_query_1)
+
+    update_uid_query_2 = text("""
+    UPDATE tb_bpa
+    SET prd_uid = '6896847'
+    WHERE prd_uid = '0000001'
+    """)
+    connection.execute(update_uid_query_2)
+
+        # Atualização do prd_cid com base nas condições de prd_pa
+    update_cid_query = text("""
+    UPDATE tb_bpa
+    SET prd_cid = CASE
+        WHEN prd_pa = '0302070036' THEN 'T951'
+        WHEN prd_pa = '0302010025' THEN 'N319'
+        WHEN prd_pa = '0302070010' THEN 'T302'
+        WHEN prd_pa = '0302060057' THEN 'S141'
+        WHEN prd_pa = '0302060030' THEN 'G838'
+        WHEN prd_pa = '0302060014' THEN 'I694'
+        WHEN prd_pa = '0302050027' THEN 'M255'
+        WHEN prd_pa = '0302050019' THEN 'T932'
+        WHEN prd_pa = '0302040056' THEN 'I988'
+        WHEN prd_pa = '0302040030' THEN 'Q048'
+        WHEN prd_pa = '0302040021' THEN 'J998'
+        WHEN prd_pa = '0302060022' THEN 'I694'
+        ELSE prd_cid
+    END
+    WHERE prd_pa IN (
+        '0302070036', '0302010025', '0302070010', '0302060057',
+        '0302060030', '0302060014', '0302050027', '0302050019',
+        '0302040056', '0302040030', '0302040021', '0302060022'
+    )
+    """)
+    connection.execute(update_cid_query)
 
     # Log para confirmar a conclusão
     log_message("Segunda Procedure Concluída")
@@ -542,11 +558,13 @@ def executar_procedure_terceira(connection):
     return max_folha_terceira
 
 def executar_procedure_quarta(connection):
+    fol_novo = 1  # Inicializa a folha na primeira
+    seq_novo = 0  # Inicializa a sequência
+    cnes_atual = None  # Para acompanhar mudanças de CNES
+    max_folha_quarta = 0  # Acompanhar a maior folha usada
 
-    fol_novo = 0
-    seq_novo = 0
-    cnes = ''
-    max_folha_quarta = 0
+    # Variável para armazenar o último registro para comparação
+    ultimo_registro = None
 
     # Consulta para selecionar os dados
     query_select = text("""
@@ -563,15 +581,17 @@ def executar_procedure_quarta(connection):
          s_prd.prd_nmpac,
          s_prd.prd_dtnasc,
          s_prd.prd_dtaten,
-         s_prd.prd_cnspac
+         s_prd.prd_cnspac,
+         COALESCE(s_prd.prd_cid, '') AS prd_cid  -- Tratar CID como vazio se for nulo
     FROM tb_bpa as s_prd
     WHERE s_prd.prd_org = 'BPI'
-    ORDER BY s_prd.prd_uid, s_prd.prd_pa, s_prd.prd_cnsmed, s_prd.prd_nmpac, s_prd.prd_dtaten
+    ORDER BY s_prd.prd_uid, s_prd.prd_cnsmed, s_prd.prd_cbo, s_prd.prd_flh, s_prd.prd_seq, prd_dtaten
     """)
 
     results = connection.execute(query_select)
 
     for row in results:
+        # Desempacotando os valores
         prd_uid = row.prd_uid
         prd_pa = row.prd_pa
         prd_cnsmed = row.prd_cnsmed
@@ -585,23 +605,31 @@ def executar_procedure_quarta(connection):
         prd_dtnasc = row.prd_dtnasc
         prd_dtaten = row.prd_dtaten
         prd_cnspac = row.prd_cnspac
+        prd_cid = row.prd_cid  # CID pode ser vazio
 
-        seq_novo += 1
-
-        if prd_uid != cnes:
-            cnes = prd_uid
-            seq_novo = 1
+        # Resetar contadores ao mudar de CNES
+        if prd_uid != cnes_atual:
+            cnes_atual = prd_uid
             fol_novo = 1
-            #if prd_uid == '6896847':
-                #fol_novo = 300
+            seq_novo = 1  # Sempre iniciar com sequência 1 quando mudar de CNES
+        else:
+            # Criação de uma chave única para identificar cada registro
+            # Incluindo o CID tratado (mesmo vazio)
+            registro_atual = (prd_uid, prd_pa, prd_cnsmed, prd_nmpac, prd_dtaten, prd_cid)
 
+            # Incrementa a sequência se o registro atual for diferente do último
+            if registro_atual != ultimo_registro:
+                seq_novo += 1
+                ultimo_registro = registro_atual
+
+        # Se a sequência for maior que 20, inicia uma nova folha
         if seq_novo > 20:
             seq_novo = 1
             fol_novo += 1
 
-
-        prd_flh_novo = f"{fol_novo:03}"
-        prd_seq_novo = f"{seq_novo:02}"
+        # Formatar os valores para salvar no banco
+        prd_flh_novo = f"{fol_novo:03}"  # Formatar folha com 3 dígitos
+        prd_seq_novo = f"{seq_novo:02}"  # Formatar sequência com 2 dígitos
 
         # Atualizar o registro na tabela
         update_query = text("""
@@ -621,6 +649,7 @@ def executar_procedure_quarta(connection):
           AND prd_dtnasc = :prd_dtnasc
           AND prd_dtaten = :prd_dtaten
           AND prd_cnspac = :prd_cnspac
+          AND COALESCE(prd_cid, '') = :prd_cid  -- Adicionando verificação CID
         """)
 
         connection.execute(update_query, {
@@ -638,13 +667,15 @@ def executar_procedure_quarta(connection):
             'prd_nmpac': prd_nmpac,
             'prd_dtnasc': prd_dtnasc,
             'prd_dtaten': prd_dtaten,
-            'prd_cnspac': prd_cnspac
+            'prd_cnspac': prd_cnspac,
+            'prd_cid': prd_cid  # Comparar diretamente
         })
 
-        # Atualizar max_folha_quarta
+        # Atualizar a maior folha para relatório final
         if fol_novo > max_folha_quarta:
             max_folha_quarta = fol_novo
-        #log_message(f"Max Folha Quarta: {max_folha_quarta}")
+
+    log_message(f"Max Folha Quarta: {max_folha_quarta}")
     log_message(f"Quarta Procedure Concluída")
     return max_folha_quarta
 
