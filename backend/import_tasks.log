@@ -648,3 +648,574 @@ INFO:flask_caching:Cache used for key: view//api/unidades-saude
 INFO:flask_caching:Cache used for key: view//api/unidades-saude
 INFO:root:2024-11-28 09:44:35.133207: Status da tarefa bpa: running
 INFO:root:2024-11-28 09:45:45.695839: Status da tarefa bpa: completed
+INFO:werkzeug: * Detected change in 'C:\\Users\\ivantp\\Downloads\\flask-react-project\\backend\\Consultas.py', reloading
+INFO:werkzeug: * Restarting with stat
+INFO:apscheduler.scheduler:Scheduler started
+INFO:apscheduler.scheduler:Added job "auto_update_imports_wrapper" to job store "default"
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 111-947-065
+INFO:root:2024-11-28 09:55:41.455746: Status da tarefa bpa: running
+INFO:root:2024-11-28 09:56:30.018451: Status da tarefa bpa: completed
+INFO:apscheduler.scheduler:Scheduler started
+INFO:apscheduler.scheduler:Added job "auto_update_imports_wrapper" to job store "default"
+INFO:werkzeug: * Restarting with stat
+INFO:apscheduler.scheduler:Scheduler started
+INFO:apscheduler.scheduler:Added job "auto_update_imports_wrapper" to job store "default"
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 715-386-771
+INFO:root:2024-11-28 14:09:47.973210: Status da tarefa bpa: running
+INFO:root:2024-11-28 14:10:04.815665: Status da tarefa bpa: completed
+INFO:werkzeug: * Detected change in 'C:\\Users\\ivantp\\Downloads\\flask-react-project\\backend\\Gerar_BPA.py', reloading
+INFO:werkzeug: * Restarting with stat
+INFO:apscheduler.scheduler:Scheduler started
+INFO:apscheduler.scheduler:Added job "auto_update_imports_wrapper" to job store "default"
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 715-386-771
+INFO:apscheduler.executors.default:Running job "auto_update_imports_wrapper (trigger: cron[hour='23', minute='0'], next run at: 2024-11-29 23:00:00 -03)" (scheduled at 2024-11-28 23:00:00-03:00)
+INFO:apscheduler.executors.default:Running job "auto_update_imports_wrapper (trigger: cron[hour='23', minute='0'], next run at: 2024-11-29 23:00:00 -03)" (scheduled at 2024-11-28 23:00:00-03:00)
+INFO:root:2024-11-28 23:00:00.598520: Status da tarefa cadastro: running
+INFO:root:2024-11-28 23:00:00.640864: Status da tarefa cadastro: running
+INFO:root:2024-11-28 23:00:08.903657: Status da tarefa cadastro: failed
+INFO:root:2024-11-28 23:00:08.908328: Status da tarefa cadastro: failed
+INFO:root:2024-11-28 23:00:19.982347: Status da tarefa domiciliofcd: running
+INFO:root:2024-11-28 23:00:20.013181: Status da tarefa domiciliofcd: running
+INFO:root:2024-11-28 23:00:35.724782: Status da tarefa domiciliofcd: completed
+INFO:root:2024-11-28 23:00:35.732533: Status da tarefa domiciliofcd: completed
+INFO:root:2024-11-28 23:00:46.833555: Status da tarefa visitas: running
+INFO:root:2024-11-28 23:00:46.834583: Status da tarefa visitas: running
+INFO:root:2024-11-28 23:07:35.982860: Status da tarefa visitas: completed
+INFO:root:2024-11-28 23:07:36.268845: Status da tarefa visitas: completed
+INFO:root:2024-11-28 23:07:47.047764: Status da tarefa iaf: running
+INFO:root:2024-11-28 23:07:47.344780: Status da tarefa iaf: running
+INFO:root:2024-11-28 23:07:47.711829: Status da tarefa iaf: completed
+INFO:root:2024-11-28 23:07:47.880351: Status da tarefa iaf: completed
+INFO:root:2024-11-28 23:07:58.813691: Status da tarefa pse: running
+INFO:root:2024-11-28 23:07:58.987301: Status da tarefa pse: running
+INFO:root:2024-11-28 23:07:59.223497: Status da tarefa pse: completed
+INFO:root:2024-11-28 23:07:59.379093: Status da tarefa pse: completed
+INFO:root:2024-11-28 23:08:10.289542: Status da tarefa pse_prof: running
+INFO:root:2024-11-28 23:08:10.448198: Status da tarefa pse_prof: running
+INFO:root:2024-11-28 23:08:10.770067: Status da tarefa pse_prof: completed
+INFO:root:2024-11-28 23:08:10.914048: Status da tarefa pse_prof: completed
+INFO:apscheduler.executors.default:Job "auto_update_imports_wrapper (trigger: cron[hour='23', minute='0'], next run at: 2024-11-29 23:00:00 -03)" executed successfully
+INFO:apscheduler.executors.default:Job "auto_update_imports_wrapper (trigger: cron[hour='23', minute='0'], next run at: 2024-11-29 23:00:00 -03)" executed successfully
+INFO:flask_caching:Cache used for key: view//api/unidades-saude
+INFO:flask_caching:Cache used for key: view//api/unidades-saude
+INFO:flask_caching:Cache used for key: view//api/unidades-saude
+WARNING:apscheduler.executors.default:Run time of job "auto_update_imports_wrapper (trigger: cron[hour='23', minute='0'], next run at: 2024-11-30 23:00:00 -03)" was missed by 0:00:01.292715
+WARNING:apscheduler.executors.default:Run time of job "auto_update_imports_wrapper (trigger: cron[hour='23', minute='0'], next run at: 2024-11-30 23:00:00 -03)" was missed by 0:00:01.325146
+WARNING:apscheduler.executors.default:Run time of job "auto_update_imports_wrapper (trigger: cron[hour='23', minute='0'], next run at: 2024-12-01 23:00:00 -03)" was missed by 0:00:01.237956
+WARNING:apscheduler.executors.default:Run time of job "auto_update_imports_wrapper (trigger: cron[hour='23', minute='0'], next run at: 2024-12-01 23:00:00 -03)" was missed by 0:00:01.241143
+WARNING:apscheduler.executors.default:Run time of job "auto_update_imports_wrapper (trigger: cron[hour='23', minute='0'], next run at: 2024-12-02 23:00:00 -03)" was missed by 0:00:01.271976
+WARNING:apscheduler.executors.default:Run time of job "auto_update_imports_wrapper (trigger: cron[hour='23', minute='0'], next run at: 2024-12-02 23:00:00 -03)" was missed by 0:00:01.274015
+WARNING:apscheduler.executors.default:Run time of job "auto_update_imports_wrapper (trigger: cron[hour='23', minute='0'], next run at: 2024-12-03 23:00:00 -03)" was missed by 0:00:01.268612
+WARNING:apscheduler.executors.default:Run time of job "auto_update_imports_wrapper (trigger: cron[hour='23', minute='0'], next run at: 2024-12-04 23:00:00 -03)" was missed by 0:00:01.268856
+INFO:apscheduler.scheduler:Scheduler started
+INFO:apscheduler.scheduler:Added job "auto_update_imports_wrapper" to job store "default"
+INFO:werkzeug: * Restarting with stat
+INFO:apscheduler.scheduler:Scheduler started
+INFO:apscheduler.scheduler:Added job "auto_update_imports_wrapper" to job store "default"
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 111-947-065
+INFO:root:2024-12-05 09:10:58.585263: Status da tarefa bpa: running
+INFO:root:2024-12-05 09:11:33.738936: Status da tarefa bpa: completed
+INFO:werkzeug: * Detected change in 'C:\\Users\\ivantp\\Downloads\\flask-react-project\\backend\\Consultas.py', reloading
+INFO:werkzeug: * Restarting with stat
+INFO:apscheduler.scheduler:Scheduler started
+INFO:apscheduler.scheduler:Added job "auto_update_imports_wrapper" to job store "default"
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 111-947-065
+INFO:root:2024-12-05 09:24:25.425587: Status da tarefa bpa: running
+INFO:root:2024-12-05 09:24:57.487040: Status da tarefa bpa: completed
+INFO:root:2024-12-05 09:25:02.887040: Status da tarefa bpa: running
+INFO:root:2024-12-05 09:25:14.597911: Status da tarefa bpa: completed
+INFO:apscheduler.scheduler:Scheduler started
+INFO:apscheduler.scheduler:Added job "auto_update_imports_wrapper" to job store "default"
+INFO:werkzeug: * Restarting with stat
+INFO:apscheduler.scheduler:Scheduler started
+INFO:apscheduler.scheduler:Added job "auto_update_imports_wrapper" to job store "default"
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 587-281-715
+INFO:root:2024-12-25 18:24:40.575123: Status da tarefa bpa: running
+INFO:root:2024-12-25 18:25:20.148247: Status da tarefa bpa: completed
+INFO:apscheduler.executors.default:Running job "auto_update_imports_wrapper (trigger: cron[hour='23', minute='0'], next run at: 2024-12-25 23:00:00 -03)" (scheduled at 2024-12-25 23:00:00-03:00)
+INFO:apscheduler.executors.default:Running job "auto_update_imports_wrapper (trigger: cron[hour='23', minute='0'], next run at: 2024-12-25 23:00:00 -03)" (scheduled at 2024-12-25 23:00:00-03:00)
+INFO:root:2024-12-25 23:00:00.273271: Status da tarefa cadastro: running
+INFO:root:2024-12-25 23:00:00.282623: Status da tarefa cadastro: running
+INFO:root:2024-12-25 23:00:51.682461: Status da tarefa cadastro: completed
+INFO:root:2024-12-25 23:00:52.418170: Status da tarefa cadastro: completed
+INFO:root:2024-12-25 23:01:02.763399: Status da tarefa domiciliofcd: running
+INFO:root:2024-12-25 23:01:03.492848: Status da tarefa domiciliofcd: running
+INFO:root:2024-12-25 23:01:27.250931: Status da tarefa domiciliofcd: completed
+INFO:root:2024-12-25 23:01:27.769884: Status da tarefa domiciliofcd: completed
+INFO:root:2024-12-25 23:01:38.316857: Status da tarefa visitas: running
+INFO:root:2024-12-25 23:01:38.837361: Status da tarefa visitas: running
+INFO:root:2024-12-25 23:09:33.254193: Status da tarefa visitas: completed
+INFO:root:2024-12-25 23:09:35.131232: Status da tarefa visitas: completed
+INFO:root:2024-12-25 23:09:44.319921: Status da tarefa iaf: running
+INFO:root:2024-12-25 23:09:44.991221: Status da tarefa iaf: completed
+INFO:root:2024-12-25 23:09:46.190224: Status da tarefa iaf: running
+INFO:root:2024-12-25 23:09:46.680842: Status da tarefa iaf: completed
+INFO:root:2024-12-25 23:09:56.064543: Status da tarefa pse: running
+INFO:root:2024-12-25 23:09:56.510247: Status da tarefa pse: completed
+INFO:root:2024-12-25 23:09:57.759315: Status da tarefa pse: running
+INFO:root:2024-12-25 23:09:58.208279: Status da tarefa pse: completed
+INFO:root:2024-12-25 23:10:07.581061: Status da tarefa pse_prof: running
+INFO:root:2024-12-25 23:10:08.146806: Status da tarefa pse_prof: completed
+INFO:root:2024-12-25 23:10:09.286329: Status da tarefa pse_prof: running
+INFO:root:2024-12-25 23:10:09.841567: Status da tarefa pse_prof: completed
+INFO:apscheduler.executors.default:Job "auto_update_imports_wrapper (trigger: cron[hour='23', minute='0'], next run at: 2024-12-26 23:00:00 -03)" executed successfully
+INFO:apscheduler.executors.default:Job "auto_update_imports_wrapper (trigger: cron[hour='23', minute='0'], next run at: 2024-12-26 23:00:00 -03)" executed successfully
+WARNING:apscheduler.executors.default:Run time of job "auto_update_imports_wrapper (trigger: cron[hour='23', minute='0'], next run at: 2024-12-27 23:00:00 -03)" was missed by 0:00:01.344586
+WARNING:apscheduler.executors.default:Run time of job "auto_update_imports_wrapper (trigger: cron[hour='23', minute='0'], next run at: 2024-12-28 23:00:00 -03)" was missed by 0:00:01.338211
+WARNING:apscheduler.executors.default:Run time of job "auto_update_imports_wrapper (trigger: cron[hour='23', minute='0'], next run at: 2024-12-29 23:00:00 -03)" was missed by 0:00:01.332689
+WARNING:apscheduler.executors.default:Run time of job "auto_update_imports_wrapper (trigger: cron[hour='23', minute='0'], next run at: 2024-12-29 23:00:00 -03)" was missed by 0:00:01.339998
+WARNING:apscheduler.executors.default:Run time of job "auto_update_imports_wrapper (trigger: cron[hour='23', minute='0'], next run at: 2024-12-30 23:00:00 -03)" was missed by 0:00:01.333227
+INFO:werkzeug: * Detected change in 'C:\\Users\\ivantp\\Downloads\\flask-react-project\\backend\\Gerar_BPA.py', reloading
+INFO:werkzeug: * Restarting with stat
+INFO:apscheduler.scheduler:Scheduler started
+INFO:apscheduler.scheduler:Added job "auto_update_imports_wrapper" to job store "default"
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 587-281-715
+INFO:root:2024-12-30 08:53:59.776219: Status da tarefa bpa: running
+INFO:root:2024-12-30 08:54:37.569224: Status da tarefa bpa: completed
+INFO:apscheduler.scheduler:Scheduler started
+INFO:apscheduler.scheduler:Added job "auto_update_imports_wrapper" to job store "default"
+INFO:werkzeug: * Restarting with stat
+INFO:apscheduler.scheduler:Scheduler started
+INFO:apscheduler.scheduler:Added job "auto_update_imports_wrapper" to job store "default"
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 111-947-065
+INFO:root:2025-01-27 12:55:52.973552: Status da tarefa bpa: running
+INFO:root:2025-01-27 12:56:34.598205: Status da tarefa bpa: completed
+INFO:apscheduler.scheduler:Scheduler started
+INFO:apscheduler.scheduler:Added job "auto_update_imports_wrapper" to job store "default"
+INFO:werkzeug: * Restarting with stat
+INFO:apscheduler.scheduler:Scheduler started
+INFO:apscheduler.scheduler:Added job "auto_update_imports_wrapper" to job store "default"
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 111-947-065
+INFO:root:2025-02-24 10:06:19.295488: Status da tarefa bpa: running
+INFO:root:2025-02-24 10:07:04.296889: Status da tarefa bpa: completed
+INFO:apscheduler.executors.default:Running job "auto_update_imports_wrapper (trigger: cron[hour='23', minute='0'], next run at: 2025-02-25 23:00:00 -03)" (scheduled at 2025-02-24 23:00:00-03:00)
+INFO:apscheduler.executors.default:Running job "auto_update_imports_wrapper (trigger: cron[hour='23', minute='0'], next run at: 2025-02-25 23:00:00 -03)" (scheduled at 2025-02-24 23:00:00-03:00)
+INFO:root:2025-02-24 23:00:00.797823: Status da tarefa cadastro: running
+INFO:root:2025-02-24 23:00:00.797823: Status da tarefa cadastro: running
+INFO:root:2025-02-24 23:01:08.437266: Status da tarefa cadastro: completed
+INFO:root:2025-02-24 23:01:09.152636: Status da tarefa cadastro: completed
+INFO:root:2025-02-24 23:01:19.528541: Status da tarefa domiciliofcd: running
+INFO:root:2025-02-24 23:01:20.242957: Status da tarefa domiciliofcd: running
+INFO:root:2025-02-24 23:01:45.061603: Status da tarefa domiciliofcd: completed
+INFO:root:2025-02-24 23:01:45.591938: Status da tarefa domiciliofcd: completed
+INFO:root:2025-02-24 23:01:56.167381: Status da tarefa visitas: running
+INFO:root:2025-02-24 23:01:56.680398: Status da tarefa visitas: running
+INFO:root:2025-02-24 23:03:35.691970: Status da tarefa visitas: completed
+INFO:root:2025-02-24 23:03:38.169549: Status da tarefa visitas: completed
+INFO:root:2025-02-24 23:03:46.751768: Status da tarefa iaf: running
+INFO:root:2025-02-24 23:03:47.432200: Status da tarefa iaf: completed
+INFO:root:2025-02-24 23:03:49.258242: Status da tarefa iaf: running
+INFO:root:2025-02-24 23:03:49.909716: Status da tarefa iaf: completed
+INFO:root:2025-02-24 23:03:58.488866: Status da tarefa pse: running
+INFO:root:2025-02-24 23:03:59.013042: Status da tarefa pse: completed
+INFO:root:2025-02-24 23:04:00.977077: Status da tarefa pse: running
+INFO:root:2025-02-24 23:04:01.484348: Status da tarefa pse: completed
+INFO:root:2025-02-24 23:04:10.091467: Status da tarefa pse_prof: running
+INFO:root:2025-02-24 23:04:10.674163: Status da tarefa pse_prof: completed
+INFO:root:2025-02-24 23:04:12.572129: Status da tarefa pse_prof: running
+INFO:root:2025-02-24 23:04:13.124938: Status da tarefa pse_prof: completed
+INFO:apscheduler.executors.default:Job "auto_update_imports_wrapper (trigger: cron[hour='23', minute='0'], next run at: 2025-02-25 23:00:00 -03)" executed successfully
+INFO:apscheduler.executors.default:Job "auto_update_imports_wrapper (trigger: cron[hour='23', minute='0'], next run at: 2025-02-25 23:00:00 -03)" executed successfully
+INFO:apscheduler.scheduler:Scheduler started
+INFO:apscheduler.scheduler:Added job "auto_update_imports_wrapper" to job store "default"
+INFO:werkzeug: * Restarting with stat
+INFO:apscheduler.scheduler:Scheduler started
+INFO:apscheduler.scheduler:Added job "auto_update_imports_wrapper" to job store "default"
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 111-947-065
+INFO:root:2025-03-31 12:49:25.769415: Status da tarefa bpa: running
+INFO:root:2025-03-31 12:50:07.955050: Status da tarefa bpa: completed
+INFO:apscheduler.scheduler:Scheduler started
+INFO:apscheduler.scheduler:Added job "auto_update_imports_wrapper" to job store "default"
+INFO:werkzeug: * Restarting with stat
+INFO:apscheduler.scheduler:Scheduler started
+INFO:apscheduler.scheduler:Added job "auto_update_imports_wrapper" to job store "default"
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 111-947-065
+INFO:root:2025-04-02 10:19:55.576614: Status da tarefa cadastro: running
+INFO:root:2025-04-02 10:21:00.536378: Status da tarefa cadastro: completed
+INFO:root:2025-04-02 10:21:02.989753: Status da tarefa bpa: running
+INFO:root:2025-04-02 10:22:17.899958: Status da tarefa bpa: completed
+INFO:root:2025-04-02 10:22:24.595590: Status da tarefa bpa: running
+INFO:root:2025-04-02 10:22:55.000501: Status da tarefa bpa: completed
+INFO:root:2025-04-02 10:23:35.058570: Status da tarefa bpa: running
+INFO:root:2025-04-02 10:24:02.454435: Status da tarefa bpa: completed
+INFO:root:2025-04-02 10:50:45.534835: Status da tarefa bpa: running
+INFO:root:2025-04-02 10:51:16.212747: Status da tarefa bpa: completed
+INFO:werkzeug: * Detected change in 'C:\\Users\\ivantp\\Downloads\\flask-react-project\\backend\\Gerar_BPA.py', reloading
+INFO:werkzeug: * Restarting with stat
+INFO:apscheduler.scheduler:Scheduler started
+INFO:apscheduler.scheduler:Added job "auto_update_imports_wrapper" to job store "default"
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 111-947-065
+INFO:apscheduler.scheduler:Scheduler started
+INFO:apscheduler.scheduler:Added job "auto_update_imports_wrapper" to job store "default"
+INFO:werkzeug: * Restarting with stat
+INFO:apscheduler.scheduler:Scheduler started
+INFO:apscheduler.scheduler:Added job "auto_update_imports_wrapper" to job store "default"
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 111-947-065
+INFO:root:2025-04-02 11:43:55.392840: Status da tarefa bpa: running
+INFO:root:2025-04-02 11:44:27.261200: Status da tarefa bpa: completed
+INFO:apscheduler.executors.default:Running job "auto_update_imports_wrapper (trigger: cron[hour='23', minute='0'], next run at: 2025-04-03 23:00:00 -03)" (scheduled at 2025-04-02 23:00:00-03:00)
+INFO:apscheduler.executors.default:Running job "auto_update_imports_wrapper (trigger: cron[hour='23', minute='0'], next run at: 2025-04-03 23:00:00 -03)" (scheduled at 2025-04-02 23:00:00-03:00)
+INFO:root:2025-04-02 23:00:00.757207: Status da tarefa cadastro: running
+INFO:root:2025-04-02 23:00:00.758218: Status da tarefa cadastro: running
+INFO:root:2025-04-02 23:00:55.957864: Status da tarefa cadastro: completed
+INFO:root:2025-04-02 23:00:56.322873: Status da tarefa cadastro: completed
+INFO:root:2025-04-02 23:01:07.039788: Status da tarefa domiciliofcd: running
+INFO:root:2025-04-02 23:01:07.399181: Status da tarefa domiciliofcd: running
+INFO:root:2025-04-02 23:01:32.862331: Status da tarefa domiciliofcd: completed
+INFO:root:2025-04-02 23:01:33.478765: Status da tarefa domiciliofcd: completed
+INFO:root:2025-04-02 23:01:43.923968: Status da tarefa visitas: running
+INFO:root:2025-04-02 23:01:44.549250: Status da tarefa visitas: running
+INFO:root:2025-04-02 23:04:03.359480: Status da tarefa visitas: completed
+INFO:root:2025-04-02 23:04:04.486261: Status da tarefa visitas: completed
+INFO:root:2025-04-02 23:04:14.427847: Status da tarefa iaf: running
+INFO:root:2025-04-02 23:04:15.083831: Status da tarefa iaf: completed
+INFO:root:2025-04-02 23:04:15.563446: Status da tarefa iaf: running
+INFO:root:2025-04-02 23:04:16.098495: Status da tarefa iaf: completed
+INFO:root:2025-04-02 23:04:26.155272: Status da tarefa pse: running
+INFO:root:2025-04-02 23:04:26.549506: Status da tarefa pse: completed
+INFO:root:2025-04-02 23:04:27.190080: Status da tarefa pse: running
+INFO:root:2025-04-02 23:04:27.604007: Status da tarefa pse: completed
+INFO:root:2025-04-02 23:04:37.642882: Status da tarefa pse_prof: running
+INFO:root:2025-04-02 23:04:38.211114: Status da tarefa pse_prof: completed
+INFO:root:2025-04-02 23:04:38.696058: Status da tarefa pse_prof: running
+INFO:root:2025-04-02 23:04:39.192958: Status da tarefa pse_prof: completed
+INFO:apscheduler.executors.default:Job "auto_update_imports_wrapper (trigger: cron[hour='23', minute='0'], next run at: 2025-04-03 23:00:00 -03)" executed successfully
+INFO:apscheduler.executors.default:Job "auto_update_imports_wrapper (trigger: cron[hour='23', minute='0'], next run at: 2025-04-03 23:00:00 -03)" executed successfully
+INFO:apscheduler.scheduler:Scheduler started
+INFO:apscheduler.scheduler:Added job "auto_update_imports_wrapper" to job store "default"
+INFO:werkzeug:[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+INFO:werkzeug:[33mPress CTRL+C to quit[0m
+INFO:werkzeug: * Restarting with stat
+INFO:apscheduler.scheduler:Scheduler started
+INFO:apscheduler.scheduler:Added job "auto_update_imports_wrapper" to job store "default"
+INFO:werkzeug: * Restarting with stat
+INFO:apscheduler.scheduler:Scheduler started
+INFO:apscheduler.scheduler:Added job "auto_update_imports_wrapper" to job store "default"
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 111-947-065
+INFO:root:2025-04-16 14:14:34.840894: Status da tarefa bpa: running
+INFO:root:2025-04-16 14:15:12.952719: Status da tarefa bpa: completed
+INFO:flask_caching:Cache used for key: view//api/unidades-saude
+INFO:flask_caching:Cache used for key: view//api/unidades-saude
+INFO:flask_caching:Cache used for key: view//api/unidades-saude
+INFO:werkzeug: * Detected change in 'C:\\Users\\ivantp\\Downloads\\flask-react-project\\backend\\Gerar_BPA.py', reloading
+INFO:werkzeug: * Restarting with stat
+INFO:apscheduler.scheduler:Scheduler started
+INFO:apscheduler.scheduler:Added job "auto_update_imports_wrapper" to job store "default"
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 111-947-065
+INFO:root:2025-04-16 14:39:18.101335: Status da tarefa bpa: running
+INFO:root:2025-04-16 14:39:48.454677: Status da tarefa bpa: completed
+INFO:werkzeug: * Detected change in 'C:\\Users\\ivantp\\Downloads\\flask-react-project\\backend\\Gerar_BPA.py', reloading
+INFO:werkzeug: * Restarting with stat
+INFO:apscheduler.scheduler:Scheduler started
+INFO:apscheduler.scheduler:Added job "auto_update_imports_wrapper" to job store "default"
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 111-947-065
+INFO:root:2025-04-16 14:55:29.831913: Status da tarefa bpa: running
+INFO:root:2025-04-16 14:56:04.259947: Status da tarefa bpa: completed
+INFO:werkzeug: * Detected change in 'C:\\Users\\ivantp\\Downloads\\flask-react-project\\backend\\Gerar_BPA.py', reloading
+INFO:werkzeug: * Restarting with stat
+INFO:apscheduler.scheduler:Scheduler started
+INFO:apscheduler.scheduler:Added job "auto_update_imports_wrapper" to job store "default"
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 111-947-065
+INFO:root:2025-04-16 15:34:44.491657: Status da tarefa bpa: running
+INFO:root:2025-04-16 15:35:14.605318: Status da tarefa bpa: completed
+INFO:apscheduler.executors.default:Running job "auto_update_imports_wrapper (trigger: cron[hour='23', minute='0'], next run at: 2025-04-17 23:00:00 -03)" (scheduled at 2025-04-16 23:00:00-03:00)
+INFO:root:2025-04-16 23:00:00.532468: Status da tarefa cadastro: running
+INFO:apscheduler.executors.default:Running job "auto_update_imports_wrapper (trigger: cron[hour='23', minute='0'], next run at: 2025-04-17 23:00:00 -03)" (scheduled at 2025-04-16 23:00:00-03:00)
+INFO:root:2025-04-16 23:00:00.594609: Status da tarefa cadastro: running
+INFO:root:2025-04-16 23:00:55.182452: Status da tarefa cadastro: completed
+INFO:root:2025-04-16 23:00:55.310232: Status da tarefa cadastro: completed
+INFO:root:2025-04-16 23:01:06.261598: Status da tarefa domiciliofcd: running
+INFO:root:2025-04-16 23:01:06.402232: Status da tarefa domiciliofcd: running
+INFO:root:2025-04-16 23:01:32.124973: Status da tarefa domiciliofcd: completed
+INFO:root:2025-04-16 23:01:32.422736: Status da tarefa domiciliofcd: completed
+INFO:root:2025-04-16 23:01:43.229648: Status da tarefa visitas: running
+INFO:root:2025-04-16 23:01:43.526875: Status da tarefa visitas: running
+INFO:root:2025-04-16 23:04:25.999946: Status da tarefa visitas: completed
+INFO:root:2025-04-16 23:04:26.274071: Status da tarefa visitas: completed
+INFO:root:2025-04-16 23:04:37.115240: Status da tarefa iaf: running
+INFO:root:2025-04-16 23:04:37.363689: Status da tarefa iaf: running
+INFO:root:2025-04-16 23:04:38.420249: Status da tarefa iaf: completed
+INFO:root:2025-04-16 23:04:38.485207: Status da tarefa iaf: completed
+INFO:root:2025-04-16 23:04:49.572693: Status da tarefa pse: running
+INFO:root:2025-04-16 23:04:49.588028: Status da tarefa pse: running
+INFO:root:2025-04-16 23:04:50.344413: Status da tarefa pse: completed
+INFO:root:2025-04-16 23:04:50.365663: Status da tarefa pse: completed
+INFO:root:2025-04-16 23:05:01.446494: Status da tarefa pse_prof: running
+INFO:root:2025-04-16 23:05:01.462766: Status da tarefa pse_prof: running
+INFO:root:2025-04-16 23:05:02.081625: Status da tarefa pse_prof: completed
+INFO:root:2025-04-16 23:05:02.093507: Status da tarefa pse_prof: completed
+INFO:apscheduler.executors.default:Job "auto_update_imports_wrapper (trigger: cron[hour='23', minute='0'], next run at: 2025-04-17 23:00:00 -03)" executed successfully
+INFO:werkzeug: * Detected change in 'C:\\Users\\ivantp\\Downloads\\flask-react-project\\backend\\Gerar_BPA.py', reloading
+INFO:werkzeug: * Restarting with stat
+INFO:apscheduler.scheduler:Scheduler started
+INFO:apscheduler.scheduler:Added job "auto_update_imports_wrapper" to job store "default"
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 111-947-065
+INFO:root:2025-04-17 07:32:05.921926: Status da tarefa bpa: running
+INFO:root:2025-04-17 07:32:44.334308: Status da tarefa bpa: completed
+INFO:werkzeug: * Detected change in 'C:\\Users\\ivantp\\Downloads\\flask-react-project\\backend\\Gerar_BPA.py', reloading
+INFO:werkzeug: * Restarting with stat
+INFO:apscheduler.scheduler:Scheduler started
+INFO:apscheduler.scheduler:Added job "auto_update_imports_wrapper" to job store "default"
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 111-947-065
+INFO:root:2025-04-17 08:11:16.860695: Status da tarefa bpa: running
+INFO:root:2025-04-17 08:11:43.459082: Status da tarefa bpa: completed
+INFO:flask_caching:Cache used for key: view//api/unidades-saude
+INFO:flask_caching:Cache used for key: view//api/unidades-saude
+INFO:flask_caching:Cache used for key: view//api/unidades-saude
+INFO:werkzeug: * Detected change in 'C:\\Users\\ivantp\\Downloads\\flask-react-project\\backend\\Gerar_BPA.py', reloading
+INFO:werkzeug: * Restarting with stat
+INFO:apscheduler.scheduler:Scheduler started
+INFO:apscheduler.scheduler:Added job "auto_update_imports_wrapper" to job store "default"
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 111-947-065
+INFO:root:2025-04-17 08:25:27.327300: Status da tarefa bpa: running
+INFO:root:2025-04-17 08:25:55.933273: Status da tarefa bpa: completed
+INFO:werkzeug: * Detected change in 'C:\\Users\\ivantp\\Downloads\\flask-react-project\\backend\\Gerar_BPA.py', reloading
+INFO:werkzeug: * Restarting with stat
+INFO:apscheduler.scheduler:Scheduler started
+INFO:apscheduler.scheduler:Added job "auto_update_imports_wrapper" to job store "default"
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 111-947-065
+INFO:werkzeug: * Detected change in 'C:\\Users\\ivantp\\Downloads\\flask-react-project\\backend\\app.py', reloading
+INFO:werkzeug: * Restarting with stat
+INFO:apscheduler.scheduler:Scheduler started
+INFO:apscheduler.scheduler:Added job "auto_update_imports_wrapper" to job store "default"
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 111-947-065
+INFO:werkzeug: * Detected change in 'C:\\Users\\ivantp\\Downloads\\flask-react-project\\backend\\app.py', reloading
+INFO:werkzeug: * Restarting with stat
+INFO:apscheduler.scheduler:Scheduler started
+INFO:apscheduler.scheduler:Added job "auto_update_imports_wrapper" to job store "default"
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 111-947-065
+INFO:werkzeug: * Detected change in 'C:\\Users\\ivantp\\Downloads\\flask-react-project\\backend\\Gerar_BPA.py', reloading
+INFO:werkzeug: * Restarting with stat
+INFO:apscheduler.scheduler:Scheduler started
+INFO:apscheduler.scheduler:Added job "auto_update_imports_wrapper" to job store "default"
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 111-947-065
+INFO:werkzeug: * Detected change in 'C:\\Users\\ivantp\\Downloads\\flask-react-project\\backend\\Gerar_BPA.py', reloading
+INFO:werkzeug: * Restarting with stat
+INFO:apscheduler.scheduler:Scheduler started
+INFO:apscheduler.scheduler:Added job "auto_update_imports_wrapper" to job store "default"
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 111-947-065
+INFO:apscheduler.scheduler:Scheduler started
+INFO:apscheduler.scheduler:Added job "auto_update_imports_wrapper" to job store "default"
+INFO:werkzeug: * Restarting with stat
+INFO:apscheduler.scheduler:Scheduler started
+INFO:apscheduler.scheduler:Added job "auto_update_imports_wrapper" to job store "default"
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 111-947-065
+INFO:flask_caching:Cache used for key: view//api/unidades-saude
+INFO:flask_caching:Cache used for key: view//api/unidades-saude
+INFO:flask_caching:Cache used for key: view//api/unidades-saude
+INFO:flask_caching:Cache used for key: view//api/unidades-saude
+INFO:flask_caching:Cache used for key: view//api/unidades-saude
+INFO:flask_caching:Cache used for key: view//api/unidades-saude
+INFO:flask_caching:Cache used for key: view//api/unidades-saude
+INFO:root:2025-04-17 09:09:48.343783: Status da tarefa bpa: running
+INFO:root:2025-04-17 09:10:17.537638: Status da tarefa bpa: completed
+INFO:werkzeug: * Detected change in 'C:\\Users\\ivantp\\Downloads\\flask-react-project\\backend\\Gerar_BPA.py', reloading
+INFO:werkzeug: * Restarting with stat
+INFO:apscheduler.scheduler:Scheduler started
+INFO:apscheduler.scheduler:Added job "auto_update_imports_wrapper" to job store "default"
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 111-947-065
+INFO:werkzeug: * Detected change in 'C:\\Users\\ivantp\\Downloads\\flask-react-project\\backend\\Gerar_BPA.py', reloading
+INFO:werkzeug: * Restarting with stat
+INFO:apscheduler.scheduler:Scheduler started
+INFO:apscheduler.scheduler:Added job "auto_update_imports_wrapper" to job store "default"
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 111-947-065
+INFO:werkzeug: * Detected change in 'C:\\Users\\ivantp\\Downloads\\flask-react-project\\backend\\Gerar_BPA.py', reloading
+INFO:werkzeug: * Restarting with stat
+INFO:apscheduler.scheduler:Scheduler started
+INFO:apscheduler.scheduler:Added job "auto_update_imports_wrapper" to job store "default"
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 111-947-065
+INFO:werkzeug: * Detected change in 'C:\\Users\\ivantp\\Downloads\\flask-react-project\\backend\\Gerar_BPA.py', reloading
+INFO:werkzeug: * Restarting with stat
+INFO:apscheduler.scheduler:Scheduler started
+INFO:apscheduler.scheduler:Added job "auto_update_imports_wrapper" to job store "default"
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 111-947-065
+INFO:werkzeug: * Detected change in 'C:\\Users\\ivantp\\Downloads\\flask-react-project\\backend\\Gerar_BPA.py', reloading
+INFO:werkzeug: * Restarting with stat
+INFO:apscheduler.scheduler:Scheduler started
+INFO:apscheduler.scheduler:Added job "auto_update_imports_wrapper" to job store "default"
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 111-947-065
+INFO:werkzeug: * Detected change in 'C:\\Users\\ivantp\\Downloads\\flask-react-project\\backend\\Gerar_BPA.py', reloading
+INFO:werkzeug: * Restarting with stat
+INFO:apscheduler.scheduler:Scheduler started
+INFO:apscheduler.scheduler:Added job "auto_update_imports_wrapper" to job store "default"
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 111-947-065
+INFO:werkzeug: * Detected change in 'C:\\Users\\ivantp\\Downloads\\flask-react-project\\backend\\Gerar_BPA.py', reloading
+INFO:werkzeug: * Restarting with stat
+INFO:apscheduler.scheduler:Scheduler started
+INFO:apscheduler.scheduler:Added job "auto_update_imports_wrapper" to job store "default"
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 111-947-065
+INFO:werkzeug: * Detected change in 'C:\\Users\\ivantp\\Downloads\\flask-react-project\\backend\\Gerar_BPA.py', reloading
+INFO:werkzeug: * Restarting with stat
+INFO:apscheduler.scheduler:Scheduler started
+INFO:apscheduler.scheduler:Added job "auto_update_imports_wrapper" to job store "default"
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 111-947-065
+INFO:werkzeug: * Detected change in 'C:\\Users\\ivantp\\Downloads\\flask-react-project\\backend\\Gerar_BPA.py', reloading
+INFO:werkzeug: * Restarting with stat
+INFO:apscheduler.scheduler:Scheduler started
+INFO:apscheduler.scheduler:Added job "auto_update_imports_wrapper" to job store "default"
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 111-947-065
+INFO:werkzeug: * Detected change in 'C:\\Users\\ivantp\\Downloads\\flask-react-project\\backend\\Gerar_BPA.py', reloading
+INFO:werkzeug: * Restarting with stat
+INFO:apscheduler.scheduler:Scheduler started
+INFO:apscheduler.scheduler:Added job "auto_update_imports_wrapper" to job store "default"
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 111-947-065
+INFO:werkzeug: * Detected change in 'C:\\Users\\ivantp\\Downloads\\flask-react-project\\backend\\Gerar_BPA.py', reloading
+INFO:werkzeug: * Restarting with stat
+INFO:apscheduler.scheduler:Scheduler started
+INFO:apscheduler.scheduler:Added job "auto_update_imports_wrapper" to job store "default"
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 111-947-065
+INFO:root:2025-04-17 11:37:44.441977: Status da tarefa bpa: running
+INFO:root:2025-04-17 11:38:13.416718: Status da tarefa bpa: completed
+INFO:werkzeug: * Detected change in 'C:\\Users\\ivantp\\Downloads\\flask-react-project\\backend\\app.py', reloading
+INFO:werkzeug: * Restarting with stat
+INFO:apscheduler.scheduler:Scheduler started
+INFO:apscheduler.scheduler:Added job "auto_update_imports_wrapper" to job store "default"
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 111-947-065
+INFO:werkzeug: * Detected change in 'C:\\Users\\ivantp\\Downloads\\flask-react-project\\backend\\Gerar_BPA.py', reloading
+INFO:werkzeug: * Restarting with stat
+INFO:apscheduler.scheduler:Scheduler started
+INFO:apscheduler.scheduler:Added job "auto_update_imports_wrapper" to job store "default"
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 111-947-065
+INFO:werkzeug: * Detected change in 'C:\\Users\\ivantp\\Downloads\\flask-react-project\\backend\\Gerar_BPA.py', reloading
+INFO:werkzeug: * Restarting with stat
+INFO:apscheduler.scheduler:Scheduler started
+INFO:apscheduler.scheduler:Added job "auto_update_imports_wrapper" to job store "default"
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 111-947-065
+INFO:werkzeug: * Detected change in 'C:\\Users\\ivantp\\Downloads\\flask-react-project\\backend\\Gerar_BPA.py', reloading
+INFO:werkzeug: * Restarting with stat
+INFO:apscheduler.scheduler:Scheduler started
+INFO:apscheduler.scheduler:Added job "auto_update_imports_wrapper" to job store "default"
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 111-947-065
+INFO:apscheduler.executors.default:Running job "auto_update_imports_wrapper (trigger: cron[hour='23', minute='0'], next run at: 2025-04-18 23:00:00 -03)" (scheduled at 2025-04-17 23:00:00-03:00)
+INFO:root:2025-04-17 23:00:00.694405: Status da tarefa cadastro: running
+INFO:apscheduler.executors.default:Running job "auto_update_imports_wrapper (trigger: cron[hour='23', minute='0'], next run at: 2025-04-18 23:00:00 -03)" (scheduled at 2025-04-17 23:00:00-03:00)
+INFO:root:2025-04-17 23:00:00.898550: Status da tarefa cadastro: running
+INFO:root:2025-04-17 23:01:04.279780: Status da tarefa cadastro: completed
+INFO:root:2025-04-17 23:01:04.502680: Status da tarefa cadastro: completed
+INFO:root:2025-04-17 23:01:15.357430: Status da tarefa domiciliofcd: running
+INFO:root:2025-04-17 23:01:15.604241: Status da tarefa domiciliofcd: running
+INFO:root:2025-04-17 23:01:41.244958: Status da tarefa domiciliofcd: completed
+INFO:root:2025-04-17 23:01:41.716668: Status da tarefa domiciliofcd: completed
+INFO:root:2025-04-17 23:01:52.327821: Status da tarefa visitas: running
+INFO:root:2025-04-17 23:01:52.819514: Status da tarefa visitas: running
+INFO:root:2025-04-17 23:04:40.442595: Status da tarefa visitas: completed
+INFO:root:2025-04-17 23:04:40.773119: Status da tarefa visitas: completed
+INFO:root:2025-04-17 23:04:51.545788: Status da tarefa iaf: running
+INFO:root:2025-04-17 23:04:51.884689: Status da tarefa iaf: running
+INFO:root:2025-04-17 23:04:52.378301: Status da tarefa iaf: completed
+INFO:root:2025-04-17 23:04:52.542324: Status da tarefa iaf: completed
+INFO:root:2025-04-17 23:05:03.462733: Status da tarefa pse: running
+INFO:root:2025-04-17 23:05:03.632031: Status da tarefa pse: running
+INFO:root:2025-04-17 23:05:04.014233: Status da tarefa pse: completed
+INFO:root:2025-04-17 23:05:04.137557: Status da tarefa pse: completed
+INFO:root:2025-04-17 23:05:15.129416: Status da tarefa pse_prof: running
+INFO:root:2025-04-17 23:05:15.250515: Status da tarefa pse_prof: running
+INFO:root:2025-04-17 23:05:15.881890: Status da tarefa pse_prof: completed
+INFO:root:2025-04-17 23:05:15.893713: Status da tarefa pse_prof: completed
+INFO:apscheduler.executors.default:Job "auto_update_imports_wrapper (trigger: cron[hour='23', minute='0'], next run at: 2025-04-18 23:00:00 -03)" executed successfully
+INFO:apscheduler.executors.default:Job "auto_update_imports_wrapper (trigger: cron[hour='23', minute='0'], next run at: 2025-04-18 23:00:00 -03)" executed successfully
+WARNING:apscheduler.executors.default:Run time of job "auto_update_imports_wrapper (trigger: cron[hour='23', minute='0'], next run at: 2025-04-19 23:00:00 -03)" was missed by 0:00:01.376312
+WARNING:apscheduler.executors.default:Run time of job "auto_update_imports_wrapper (trigger: cron[hour='23', minute='0'], next run at: 2025-04-19 23:00:00 -03)" was missed by 0:00:01.403500
+WARNING:apscheduler.executors.default:Run time of job "auto_update_imports_wrapper (trigger: cron[hour='23', minute='0'], next run at: 2025-04-20 23:00:00 -03)" was missed by 0:00:01.329897
+WARNING:apscheduler.executors.default:Run time of job "auto_update_imports_wrapper (trigger: cron[hour='23', minute='0'], next run at: 2025-04-20 23:00:00 -03)" was missed by 0:00:01.340800
+WARNING:apscheduler.executors.default:Run time of job "auto_update_imports_wrapper (trigger: cron[hour='23', minute='0'], next run at: 2025-04-21 23:00:00 -03)" was missed by 0:00:01.336858
+WARNING:apscheduler.executors.default:Run time of job "auto_update_imports_wrapper (trigger: cron[hour='23', minute='0'], next run at: 2025-04-21 23:00:00 -03)" was missed by 0:00:01.348938
+WARNING:apscheduler.executors.default:Run time of job "auto_update_imports_wrapper (trigger: cron[hour='23', minute='0'], next run at: 2025-04-22 23:00:00 -03)" was missed by 0:00:01.335677
+WARNING:apscheduler.executors.default:Run time of job "auto_update_imports_wrapper (trigger: cron[hour='23', minute='0'], next run at: 2025-04-22 23:00:00 -03)" was missed by 0:00:01.340309
+INFO:werkzeug: * Detected change in 'C:\\Users\\ivantp\\Downloads\\flask-react-project\\backend\\Gerar_BPA.py', reloading
+INFO:werkzeug: * Restarting with stat
+INFO:apscheduler.scheduler:Scheduler started
+INFO:apscheduler.scheduler:Added job "auto_update_imports_wrapper" to job store "default"
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 111-947-065
+INFO:root:2025-04-22 07:26:18.527308: Status da tarefa bpa: running
+INFO:root:2025-04-22 07:27:14.910235: Status da tarefa bpa: completed
+INFO:werkzeug: * Detected change in 'C:\\Users\\ivantp\\Downloads\\flask-react-project\\backend\\Gerar_BPA.py', reloading
+INFO:werkzeug: * Restarting with stat
+INFO:apscheduler.scheduler:Scheduler started
+INFO:apscheduler.scheduler:Added job "auto_update_imports_wrapper" to job store "default"
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 111-947-065
+INFO:root:2025-04-22 08:13:41.435223: Status da tarefa bpa: running
+INFO:root:2025-04-22 08:14:13.127193: Status da tarefa bpa: completed
+INFO:werkzeug: * Detected change in 'C:\\Users\\ivantp\\Downloads\\flask-react-project\\backend\\Gerar_BPA.py', reloading
+INFO:werkzeug: * Restarting with stat
+INFO:apscheduler.scheduler:Scheduler started
+INFO:apscheduler.scheduler:Added job "auto_update_imports_wrapper" to job store "default"
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 111-947-065
+INFO:werkzeug: * Detected change in 'C:\\Users\\ivantp\\Downloads\\flask-react-project\\backend\\Gerar_BPA.py', reloading
+INFO:werkzeug: * Restarting with stat
+INFO:apscheduler.scheduler:Scheduler started
+INFO:apscheduler.scheduler:Added job "auto_update_imports_wrapper" to job store "default"
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 111-947-065
+INFO:werkzeug: * Detected change in 'C:\\Users\\ivantp\\Downloads\\flask-react-project\\backend\\Gerar_BPA.py', reloading
+INFO:werkzeug: * Restarting with stat
+INFO:apscheduler.scheduler:Scheduler started
+INFO:apscheduler.scheduler:Added job "auto_update_imports_wrapper" to job store "default"
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 111-947-065
+INFO:werkzeug: * Detected change in 'C:\\Users\\ivantp\\Downloads\\flask-react-project\\backend\\Gerar_BPA.py', reloading
+INFO:werkzeug: * Restarting with stat
+INFO:apscheduler.scheduler:Scheduler started
+INFO:apscheduler.scheduler:Added job "auto_update_imports_wrapper" to job store "default"
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 111-947-065
+INFO:werkzeug: * Detected change in 'C:\\Users\\ivantp\\Downloads\\flask-react-project\\backend\\Gerar_BPA.py', reloading
+INFO:werkzeug: * Restarting with stat
+INFO:apscheduler.scheduler:Scheduler started
+INFO:apscheduler.scheduler:Added job "auto_update_imports_wrapper" to job store "default"
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 111-947-065
+INFO:werkzeug: * Detected change in 'C:\\Users\\ivantp\\Downloads\\flask-react-project\\backend\\Gerar_BPA.py', reloading
+INFO:werkzeug: * Restarting with stat
+INFO:apscheduler.scheduler:Scheduler started
+INFO:apscheduler.scheduler:Added job "auto_update_imports_wrapper" to job store "default"
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 111-947-065
+INFO:root:2025-04-22 08:50:44.034469: Status da tarefa bpa: running
+INFO:root:2025-04-22 08:51:16.486360: Status da tarefa bpa: completed
+INFO:werkzeug: * Detected change in 'C:\\Users\\ivantp\\Downloads\\flask-react-project\\backend\\Gerar_BPA.py', reloading

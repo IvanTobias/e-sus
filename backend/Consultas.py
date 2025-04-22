@@ -413,16 +413,24 @@ LEFT JOIN
 LEFT JOIN 
     tb_ciap tc ON rl_evolucao_avaliacao_ciap_cid.co_ciap = tc.co_seq_ciap 
 WHERE 
-    tb_unidade_saude.nu_cnes NOT IN ('4565703') AND
+    --tb_unidade_saude.nu_cnes NOT IN ('4565703') AND
     EXTRACT(YEAR FROM tb_atend.dt_inicio) = :ano
     AND EXTRACT(MONTH FROM tb_atend.dt_inicio) = :mes
     AND tb_proced.co_proced IS NOT NULL 
-    AND tb_proced.co_proced NOT IN ('0101020104','0101030010','0307010155','0301100284',
-    '0301100276','0301100241','0301100233','0301100225','0301100217',
-    '0301100209','0301100195','0301050147','0301050139','0301040141',
-    '0301010277','0301010269','0301010064','0301010030','0214010201',
-    'ABPG042','ABPO015', 'ABPG040', 'ABPG039', 'ABPG038', 'ABPG034', 
-    'ABEX022', 'ABEX013', 'ABEX012','0301100268', '0301100250', '0101040083', '0101040075')
+    AND tb_proced.co_proced NOT IN ('0101020104', '0101030010', '0101030029', '0101040024', '0101040059',
+        '0102010072', '0102010226', '0201020025', '0201020033', '0201020041',
+        '0201020068', '0202030245', '0214010015', '0214010066', '0214010104',
+        '0301010110', '0301010129', '0301010153', '0301010269', '0301010277',
+        '0301010315', '0301040036', '0301040079', '0301040087', '0301040141',
+        '0301050112', '0301050120', '0301050139', '0301050147', '0301060037',
+        '0301080224', '0301100039', '0301100047', '0301100055', '0301100071',
+        '0301100101', '0301100144', '0301100152', '0301100187', '0301100195',
+        '0301100209', '0301100217', '0301100225', '0301100233', '0301100241',
+        '0301100250', '0301100268', '0301100276', '0301100284', '0302020012',
+        '0302050035', '0307010155', '0309010047', '0309010063', '0404010270',
+        '0214010201', '0301010064', '0301010030', '0209010053', '0209010037','0209010029',
+        'ABPG042', 'ABPO015', 'ABPG040', 'ABPG039', 'ABPG038', 'ABPG034', 'ABEX022', 'ABEX013',
+        'ABEX012', '0101040083', '0101040075', '0201020041')
 GROUP BY 
     tb_unidade_saude.nu_cnes, tb_atend.dt_inicio, tb_prof.nu_cns, tb_cbo.co_cbo_2002, 
     tb_proced.co_proced, tb_proced.co_proced_filtro, tb_cidadao.nu_cns, tb_cidadao.no_cidadao,
@@ -563,16 +571,24 @@ LEFT JOIN
 LEFT JOIN 
     tb_ciap tc ON rl_evolucao_avaliacao_ciap_cid.co_ciap = tc.co_seq_ciap 
 WHERE 
-    tb_unidade_saude.nu_cnes NOT IN ('4565703') AND
+    --tb_unidade_saude.nu_cnes NOT IN ('4565703') AND
     EXTRACT(YEAR FROM tb_atend.dt_inicio) = :ano
     AND EXTRACT(MONTH FROM tb_atend.dt_inicio) = :mes  
     AND tb_proced.co_proced IS NOT NULL 
-    AND tb_proced.co_proced NOT IN ('0101020104','0101030010','0307010155','0301100284',
-    '0301100276','0301100241','0301100233','0301100225','0301100217',
-    '0301100209','0301100195','0301050147','0301050139','0301040141',
-    '0301010277','0301010269','0301010064','0301010030','0214010201',
-    'ABPG042','ABPO015', 'ABPG040', 'ABPG039', 'ABPG038', 'ABPG034', 
-    'ABEX022', 'ABEX013', 'ABEX012','0301100268', '0301100250', '0101040083', '0101040075')
+    AND tb_proced.co_proced NOT IN ('0101020104', '0101030010', '0101030029', '0101040024', '0101040059',
+        '0102010072', '0102010226', '0201020025', '0201020033', '0201020041',
+        '0201020068', '0202030245', '0214010015', '0214010066', '0214010104',
+        '0301010110', '0301010129', '0301010153', '0301010269', '0301010277',
+        '0301010315', '0301040036', '0301040079', '0301040087', '0301040141',
+        '0301050112', '0301050120', '0301050139', '0301050147', '0301060037',
+        '0301080224', '0301100039', '0301100047', '0301100055', '0301100071',
+        '0301100101', '0301100144', '0301100152', '0301100187', '0301100195',
+        '0301100209', '0301100217', '0301100225', '0301100233', '0301100241',
+        '0301100250', '0301100268', '0301100276', '0301100284', '0302020012',
+        '0302050035', '0307010155', '0309010047', '0309010063', '0404010270',
+        '0214010201', '0301010064', '0301010030', '0209010053', '0209010037','0209010029',
+        'ABPG042', 'ABPO015', 'ABPG040', 'ABPG039', 'ABPG038', 'ABPG034', 'ABEX022', 'ABEX013',
+        'ABEX012', '0101040083', '0101040075', '0201020041')
 GROUP BY 
     tb_unidade_saude.nu_cnes, tb_atend.dt_inicio, tb_prof.nu_cns, tb_cbo.co_cbo_2002, 
     tb_proced.co_proced, tb_proced.co_proced_filtro, tb_cidadao.nu_cns, tb_cidadao.no_cidadao,
@@ -753,318 +769,26 @@ INNER JOIN
 INNER JOIN 
     tb_dim_tipo_origem_dado_transp ON tb_dim_tipo_origem_dado_transp.co_seq_dim_tp_orgm_dado_transp = tb_fat_proced_atend_proced.co_dim_tipo_origem_dado_transp 
 WHERE 
-    tb_dim_unidade_saude.nu_cnes NOT IN ('4565703') AND
+    --tb_dim_unidade_saude.nu_cnes NOT IN ('4565703') AND
     EXTRACT(YEAR FROM tb_fat_proced_atend.dt_inicial_atendimento) = :ano
     AND EXTRACT(MONTH FROM tb_fat_proced_atend.dt_inicial_atendimento) = :mes
     AND tb_dim_procedimento.co_proced IS NOT NULL 
-    AND tb_dim_procedimento.co_proced NOT IN ('0101020104','0101030010','0307010155','0301100284',
-    '0301100276','0301100241','0301100233','0301100225','0301100217',
-    '0301100209','0301100195','0301050147','0301050139','0301040141',
-    '0301010277','0301010269','0301010064','0301010030','0214010201',
-    'ABPG042','ABPO015', 'ABPG040', 'ABPG039', 'ABPG038', 'ABPG034', 
-    'ABEX022', 'ABEX013', 'ABEX012','0301100268', '0301100250', '0101040083', '0101040075')
+   AND tb_dim_procedimento.co_proced NOT IN ('0101020104', '0101030010', '0101030029', '0101040024', '0101040059',
+        '0102010072', '0102010226', '0201020025', '0201020033', '0201020041',
+        '0201020068', '0202030245', '0214010015', '0214010066', '0214010104',
+        '0301010110', '0301010129', '0301010153', '0301010269', '0301010277',
+        '0301010315', '0301040036', '0301040079', '0301040087', '0301040141',
+        '0301050112', '0301050120', '0301050139', '0301050147', '0301060037',
+        '0301080224', '0301100039', '0301100047', '0301100055', '0301100071',
+        '0301100101', '0301100144', '0301100152', '0301100187', '0301100195',
+        '0301100209', '0301100217', '0301100225', '0301100233', '0301100241',
+        '0301100250', '0301100268', '0301100276', '0301100284', '0302020012',
+        '0302050035', '0307010155', '0309010047', '0309010063', '0404010270',
+        '0214010201', '0301010064', '0301010030', '0209010053', '0209010037','0209010029',
+        'ABPG042', 'ABPO015', 'ABPG040', 'ABPG039', 'ABPG038', 'ABPG034', 'ABEX022', 'ABEX013',
+        'ABEX012', '0101040083', '0101040075', '0201020041'
+    )
     AND tb_dim_tipo_ficha.nu_identificador = '7'
-UNION ALL
-SELECT DISTINCT
-    unidade.nu_cnes AS PRD_UID,
-    CAST(EXTRACT(YEAR FROM atend.dt_final_atendimento) || 
-        CAST(LPAD(CAST(EXTRACT(MONTH FROM atend.dt_final_atendimento) AS varchar(2)), 2, '0') AS VARCHAR(2)) AS VARCHAR(6)) AS PRD_CMP,
-    Prof.nu_cns AS PRD_CNSMED,
-    cbo.nu_cbo AS PRD_CBO,
-    '001' AS PRD_FLH,
-    '1' AS PRD_SEQ,
-    UNNEST(REGEXP_MATCHES(fat_proced_atend.ds_filtro_procedimento, '[^\|]+', 'g')) AS PRD_PA,
-    CASE 
-        WHEN cid.nu_cns IS NOT NULL THEN cid.nu_cns 
-        ELSE '' 
-    END AS PRD_CNSPAC,
-    CASE 
-        WHEN cid.nu_cns IS NULL THEN cid.nu_cpf 
-        ELSE '' 
-    END AS PRD_CPF_PCNTE,
-    SUBSTRING(cid.no_cidadao, 1,30) AS PRD_NMPAC,
-    EXTRACT(YEAR FROM cid.dt_nascimento) || 
-        CAST(LPAD(CAST(EXTRACT(MONTH FROM cid.dt_nascimento) AS varchar(2)), 2, '0') AS VARCHAR(2)) || 
-        CAST(LPAD(CAST(EXTRACT(DAY FROM cid.dt_nascimento) AS varchar(2)), 2, '0') AS VARCHAR(2)) AS PRD_DTNASC,
-    CASE
-        WHEN cid.no_sexo = 'FEMININO' THEN 'F'
-        ELSE 'M'
-    END AS PRD_SEXO,
-    CASE 
-        WHEN tb_localidade.co_ibge IS NULL THEN '350390' 
-        ELSE SUBSTRING(tb_localidade.co_ibge,1,6) 
-    END AS PRD_IBGE,
-    EXTRACT(YEAR FROM atend.dt_inicial_atendimento) || 
-        CAST(LPAD(CAST(EXTRACT(MONTH FROM atend.dt_inicial_atendimento) AS varchar(2)), 2, '0') AS VARCHAR(2)) || 
-        CAST(LPAD(CAST(EXTRACT(DAY FROM atend.dt_inicial_atendimento) AS varchar(2)), 2, '0') AS VARCHAR(2)) AS PRD_DTATEN,
-    CASE 
-        WHEN fat_proced_atend.ds_filtro_procedimento LIKE '%0302070036%' THEN 'T951'
-        WHEN fat_proced_atend.ds_filtro_procedimento LIKE '%0302010025%' THEN 'N319'
-        WHEN fat_proced_atend.ds_filtro_procedimento LIKE '%0302070010%' THEN 'T302'
-        WHEN fat_proced_atend.ds_filtro_procedimento LIKE '%0302060057%' THEN 'S141'
-        WHEN fat_proced_atend.ds_filtro_procedimento LIKE '%0302060030%' THEN 'G838'
-        WHEN fat_proced_atend.ds_filtro_procedimento LIKE '%0302060014%' THEN 'I694'
-        WHEN fat_proced_atend.ds_filtro_procedimento LIKE '%0302050027%' THEN 'M255'
-        WHEN fat_proced_atend.ds_filtro_procedimento LIKE '%0302050019%' THEN 'T932'
-        WHEN fat_proced_atend.ds_filtro_procedimento LIKE '%0302040056%' THEN 'I988'
-        WHEN fat_proced_atend.ds_filtro_procedimento LIKE '%0302040030%' THEN 'Q048'
-        WHEN fat_proced_atend.ds_filtro_procedimento LIKE '%0302040021%' THEN 'J998'
-        WHEN fat_proced_atend.ds_filtro_procedimento LIKE '%0302060022%' THEN 'I694'       
-        ELSE REPLACE(atend.ds_filtro_cids, '|', '')
-    END AS PRD_CID,
-    CAST(LPAD(CAST(EXTRACT(YEAR FROM age(cid.dt_nascimento)) AS varchar(3)), 3, '0') AS VARCHAR(3)) AS PRD_IDADE,
-    000001 AS PRD_QT_P,
-    '01' AS PRD_CATEN,
-    '' AS PRD_NAUT,
-    'BPI' AS PRD_ORG,
-    EXTRACT(YEAR FROM atend.dt_inicial_atendimento) || 
-        CAST(LPAD(CAST(EXTRACT(MONTH FROM atend.dt_inicial_atendimento) AS varchar(2)), 2, '0') AS VARCHAR(2)) AS PRD_MVM,
-    '0' AS PRD_FLPA,
-    '0' AS PRD_FLCBO,
-    '0' AS PRD_FLCA,
-    '0' AS PRD_FLIDA,
-    '0' AS PRD_FLQT,
-    '0' AS PRD_FLER,
-    '0' AS PRD_FLMUN,
-    '0' AS PRD_FLCID,
-    CASE 
-        WHEN cid.co_raca_cor = '1' THEN '01'
-        WHEN cid.co_raca_cor = '2' THEN '02'           
-        WHEN cid.co_raca_cor = '3' THEN '04'           
-        WHEN cid.co_raca_cor = '4' THEN '03'           
-        WHEN cid.co_raca_cor = '5' THEN '05'           
-        WHEN cid.co_raca_cor = '6' THEN '03'     
-        ELSE LPAD(CAST(cid.co_raca_cor AS VARCHAR(2)), 2, '0')
-    END AS PRD_RACA,
-    '' AS PRD_SERVICO,
-    '' AS PRD_CLASSIFICACAO,
-    '' AS PRD_ETNIA,
-    '010' AS PRD_NAC,
-    '00' AS PRD_ADVQT,
-    '' AS PRD_CNPJ,
-    '' AS PRD_EQP_AREA,
-    '' AS PRD_EQP_SEQ,
-    CASE 
-        WHEN tb_tipo_logradouro.nu_dne IS NULL THEN '081' 
-        ELSE tb_tipo_logradouro.nu_dne 
-    END AS PRD_LOGRAD_PCNTE,
-    CASE 
-        WHEN cid.ds_cep IS NULL THEN '07400970'
-        WHEN cid.ds_cep IN ('07400000') THEN '07400970'
-        ELSE cid.ds_cep 
-    END AS PRD_CEP_PCNTE,
-    CASE
-        WHEN cid.ds_logradouro IS NULL THEN SUBSTRING('Avenida dos Expedicionarios',1,30)
-        ELSE SUBSTRING(cid.ds_logradouro,1,30) 
-    END AS PRD_END_PCNTE,
-    SUBSTRING(cid.ds_complemento,1,10) AS PRD_COMPL_PCNTE,
-    CASE
-        WHEN cid.nu_numero IS NULL THEN  SUBSTRING('S/N',1,5) 
-        ELSE SUBSTRING(cid.nu_numero,1,5) 
-    END AS PRD_NUM_PCNTE,
-    CASE WHEN cid.no_bairro IS NULL THEN 'Centro' 
-        ELSE SUBSTRING(cid.no_bairro,1,30) 
-    END AS PRD_BAIRRO_PCNTE,
-    SUBSTRING(cid.nu_telefone_residencial, 1 , 2) AS PRD_DDTEL_PCNTE,
-    SUBSTRING(cid.nu_telefone_residencial, 3 , 9) AS PRD_TEL_PCNTE,
-    '' AS PRD_EMAIL_PCNTE,
-    '' AS PRD_INE 
-FROM 
-    tb_fat_atendimento_individual atend
-INNER JOIN 
-    tb_dim_municipio tb_localidade ON atend.co_dim_municipio = tb_localidade.co_seq_dim_municipio
-INNER JOIN 
-    tb_dim_uf dimensaouf2_ ON tb_localidade.co_dim_uf = dimensaouf2_.co_seq_dim_uf
-INNER JOIN 
-    tb_dim_unidade_saude unidade ON atend.co_dim_unidade_saude_1 = unidade.co_seq_dim_unidade_saude
-INNER JOIN 
-    tb_dim_equipe dimensaoeq4_ ON atend.co_dim_equipe_1 = dimensaoeq4_.co_seq_dim_equipe
-INNER JOIN 
-    tb_dim_profissional Prof ON atend.co_dim_profissional_1 = Prof.co_seq_dim_profissional
-INNER JOIN 
-    tb_dim_tipo_atendimento dimtipoate6_ ON atend.co_dim_tipo_atendimento = dimtipoate6_.co_seq_dim_tipo_atendimento
-INNER JOIN 
-    tb_dim_sexo dimensaose7_ ON atend.co_dim_sexo = dimensaose7_.co_seq_dim_sexo
-INNER JOIN 
-    tb_dim_tipo_origem dimensaoti8_ ON atend.co_dim_cds_tipo_origem = dimensaoti8_.co_seq_dim_tipo_origem
-INNER JOIN 
-    tb_dim_turno dimensaotu9_ ON atend.co_dim_turno = dimensaotu9_.co_seq_dim_turno
-INNER JOIN 
-    tb_dim_cbo cbo ON atend.co_dim_cbo_1 = cbo.co_seq_dim_cbo
-INNER JOIN 
-    tb_fat_proced_atend fat_proced_atend ON atend.nu_uuid_ficha = fat_proced_atend.nu_uuid_ficha
-INNER JOIN    
-	tb_fat_cidadao_pec tfcp ON atend.co_fat_cidadao_pec = tfcp.co_seq_fat_cidadao_pec
-INNER JOIN
-    tb_cidadao cid ON tfcp.co_cidadao = cid.co_seq_cidadao
-JOIN
-    public.tb_tipo_logradouro ON tb_tipo_logradouro.co_tipo_logradouro = cid.tp_logradouro
-WHERE 
-TO_CHAR(TO_DATE(atend.co_dim_tempo::text, 'YYYYMMDD'), 'YYYY') = :ano
-AND TO_CHAR(TO_DATE(atend.co_dim_tempo::text, 'YYYYMMDD'), 'MM') = :mes
-    AND unidade.nu_cnes = '4565703'
-    AND (dimtipoate6_.co_seq_dim_tipo_atendimento <> '5'AND
-  fat_proced_atend.ds_filtro_procedimento NOT LIKE '%ABPO015%' 
-    AND fat_proced_atend.ds_filtro_procedimento NOT LIKE '%ABPG010%'
-    AND fat_proced_atend.ds_filtro_procedimento NOT LIKE '%ABPG012%'
-    AND fat_proced_atend.ds_filtro_procedimento NOT LIKE '%ABPG040%'
-    AND fat_proced_atend.ds_filtro_procedimento NOT LIKE '%ABPG039%'
-    AND fat_proced_atend.ds_filtro_procedimento NOT LIKE '%ABPG038%'
-    AND fat_proced_atend.ds_filtro_procedimento NOT LIKE '%ABPG034%'
-    AND fat_proced_atend.ds_filtro_procedimento NOT LIKE '%ABEX022%'
-    AND fat_proced_atend.ds_filtro_procedimento NOT LIKE '%ABEX013%'
-    AND fat_proced_atend.ds_filtro_procedimento NOT LIKE '%ABEX012%'
-    AND fat_proced_atend.ds_filtro_procedimento NOT LIKE '%0301100268%'
-    AND fat_proced_atend.ds_filtro_procedimento NOT LIKE '%0301100250%'
-    AND fat_proced_atend.ds_filtro_procedimento NOT LIKE '%0101040083%'
-    AND fat_proced_atend.ds_filtro_procedimento NOT LIKE '%0101040075%'
-    AND fat_proced_atend.ds_filtro_procedimento NOT LIKE '%0301010064%'
-    AND fat_proced_atend.ds_filtro_procedimento NOT LIKE '%ABPG025%'
-    AND fat_proced_atend.ds_filtro_procedimento NOT LIKE '%ABPG024%'
-    AND fat_proced_atend.ds_filtro_procedimento NOT LIKE '%0301010030%'
-    AND fat_proced_atend.ds_filtro_procedimento NOT LIKE '%0301010129%')
-    UNION ALL 
- SELECT DISTINCT
-    unidade.nu_cnes AS PRD_UID,
-    CAST(EXTRACT(YEAR FROM atend.dt_final_atendimento) || 
-        CAST(LPAD(CAST(EXTRACT(MONTH FROM atend.dt_final_atendimento) AS varchar(2)), 2, '0') AS VARCHAR(2)) AS VARCHAR(6)) AS PRD_CMP,
-    Prof.nu_cns AS PRD_CNSMED,
-    cbo.nu_cbo AS PRD_CBO,
-    '001' AS PRD_FLH,
-    '1' AS PRD_SEQ,
-    procedimento AS PRD_PA, -- Procedimentos já divididos em linhas
-    CASE 
-        WHEN cid.nu_cns IS NOT NULL THEN cid.nu_cns 
-        ELSE '' 
-    END AS PRD_CNSPAC,
-    CASE 
-        WHEN cid.nu_cns IS NULL THEN cid.nu_cpf 
-        ELSE '' 
-    END AS PRD_CPF_PCNTE,
-    SUBSTRING(cid.no_cidadao, 1, 30) AS PRD_NMPAC,
-    EXTRACT(YEAR FROM cid.dt_nascimento) || 
-        CAST(LPAD(CAST(EXTRACT(MONTH FROM cid.dt_nascimento) AS varchar(2)), 2, '0') AS VARCHAR(2)) || 
-        CAST(LPAD(CAST(EXTRACT(DAY FROM cid.dt_nascimento) AS varchar(2)), 2, '0') AS VARCHAR(2)) AS PRD_DTNASC,
-    CASE
-        WHEN cid.no_sexo = 'FEMININO' THEN 'F'
-        ELSE 'M'
-    END AS PRD_SEXO,
-    CASE 
-        WHEN tb_localidade.co_ibge IS NULL THEN '350390' 
-        ELSE SUBSTRING(tb_localidade.co_ibge, 1, 6) 
-    END AS PRD_IBGE,
-    EXTRACT(YEAR FROM atend.dt_inicial_atendimento) || 
-        CAST(LPAD(CAST(EXTRACT(MONTH FROM atend.dt_inicial_atendimento) AS varchar(2)), 2, '0') AS VARCHAR(2)) || 
-        CAST(LPAD(CAST(EXTRACT(DAY FROM atend.dt_inicial_atendimento) AS varchar(2)), 2, '0') AS VARCHAR(2)) AS PRD_DTATEN,
-    CASE 
-        WHEN procedimento = '0302070036' THEN 'T951'
-        WHEN procedimento = '0302010025' THEN 'N319'
-        WHEN procedimento = '0302070010' THEN 'T302'
-        WHEN procedimento = '0302060057' THEN 'S141'
-        WHEN procedimento = '0302060030' THEN 'G838'
-        WHEN procedimento = '0302060014' THEN 'I694'
-        WHEN procedimento = '0302050027' THEN 'M255'
-        WHEN procedimento = '0302050019' THEN 'T932'
-        WHEN procedimento = '0302040056' THEN 'I988'
-        WHEN procedimento = '0302040030' THEN 'Q048'
-        WHEN procedimento = '0302040021' THEN 'J998'
-        WHEN procedimento = '0302060022' THEN 'I694'       
-        ELSE REPLACE(atend.ds_filtro_cids, '|', '')
-    END AS PRD_CID,
-    CAST(LPAD(CAST(EXTRACT(YEAR FROM age(cid.dt_nascimento)) AS varchar(3)), 3, '0') AS VARCHAR(3)) AS PRD_IDADE,
-    000001 AS PRD_QT_P,
-    '01' AS PRD_CATEN,
-    '' AS PRD_NAUT,
-    'BPI' AS PRD_ORG,
-    EXTRACT(YEAR FROM atend.dt_inicial_atendimento) || 
-        CAST(LPAD(CAST(EXTRACT(MONTH FROM atend.dt_inicial_atendimento) AS varchar(2)), 2, '0') AS VARCHAR(2)) AS PRD_MVM,
-    '0' AS PRD_FLPA,
-    '0' AS PRD_FLCBO,
-    '0' AS PRD_FLCA,
-    '0' AS PRD_FLIDA,
-    '0' AS PRD_FLQT,
-    '0' AS PRD_FLER,
-    '0' AS PRD_FLMUN,
-    '0' AS PRD_FLCID,
-    CASE 
-        WHEN cid.co_raca_cor = '1' THEN '01'
-        WHEN cid.co_raca_cor = '2' THEN '02'           
-        WHEN cid.co_raca_cor = '3' THEN '04'           
-        WHEN cid.co_raca_cor = '4' THEN '03'           
-        WHEN cid.co_raca_cor = '5' THEN '05'           
-        WHEN cid.co_raca_cor = '6' THEN '03'     
-        ELSE LPAD(CAST(cid.co_raca_cor AS VARCHAR(2)), 2, '0')
-    END AS PRD_RACA,
-    '' AS PRD_SERVICO,
-    '' AS PRD_CLASSIFICACAO,
-    '' AS PRD_ETNIA,
-    '010' AS PRD_NAC,
-    '00' AS PRD_ADVQT,
-    '' AS PRD_CNPJ,
-    '' AS PRD_EQP_AREA,
-    '' AS PRD_EQP_SEQ,
-    CASE 
-        WHEN tb_tipo_logradouro.nu_dne IS NULL THEN '081' 
-        ELSE tb_tipo_logradouro.nu_dne 
-    END AS PRD_LOGRAD_PCNTE,
-    CASE 
-        WHEN cid.ds_cep IS NULL THEN '07400970'
-        WHEN cid.ds_cep IN ('07400000') THEN '07400970'
-        ELSE cid.ds_cep 
-    END AS PRD_CEP_PCNTE,
-    CASE
-        WHEN cid.ds_logradouro IS NULL THEN SUBSTRING('Avenida dos Expedicionarios', 1, 30)
-        ELSE SUBSTRING(cid.ds_logradouro, 1, 30) 
-    END AS PRD_END_PCNTE,
-    SUBSTRING(cid.ds_complemento, 1, 10) AS PRD_COMPL_PCNTE,
-    CASE
-        WHEN cid.nu_numero IS NULL THEN  SUBSTRING('S/N', 1, 5) 
-        ELSE SUBSTRING(cid.nu_numero, 1, 5) 
-    END AS PRD_NUM_PCNTE,
-    CASE WHEN cid.no_bairro IS NULL THEN 'Centro' 
-        ELSE SUBSTRING(cid.no_bairro, 1, 30) 
-    END AS PRD_BAIRRO_PCNTE,
-    SUBSTRING(cid.nu_telefone_residencial, 1 , 2) AS PRD_DDTEL_PCNTE,
-    SUBSTRING(cid.nu_telefone_residencial, 3 , 9) AS PRD_TEL_PCNTE,
-    '' AS PRD_EMAIL_PCNTE,
-    '' AS PRD_INE 
-    FROM 
-        tb_fat_atendimento_individual atend
-    INNER JOIN 
-        tb_dim_municipio tb_localidade ON atend.co_dim_municipio = tb_localidade.co_seq_dim_municipio
-    INNER JOIN 
-        tb_dim_uf dimensaouf2_ ON tb_localidade.co_dim_uf = dimensaouf2_.co_seq_dim_uf
-    INNER JOIN 
-        tb_dim_unidade_saude unidade ON atend.co_dim_unidade_saude_1 = unidade.co_seq_dim_unidade_saude
-    INNER JOIN 
-        tb_dim_equipe dimensaoeq4_ ON atend.co_dim_equipe_1 = dimensaoeq4_.co_seq_dim_equipe
-    INNER JOIN 
-        tb_dim_profissional Prof ON atend.co_dim_profissional_1 = Prof.co_seq_dim_profissional
-    INNER JOIN 
-        tb_dim_tipo_atendimento dimtipoate6_ ON atend.co_dim_tipo_atendimento = dimtipoate6_.co_seq_dim_tipo_atendimento
-    INNER JOIN 
-        tb_dim_sexo dimensaose7_ ON atend.co_dim_sexo = dimensaose7_.co_seq_dim_sexo
-    INNER JOIN 
-        tb_dim_tipo_origem dimensaoti8_ ON atend.co_dim_cds_tipo_origem = dimensaoti8_.co_seq_dim_tipo_origem
-    INNER JOIN 
-        tb_dim_turno dimensaotu9_ ON atend.co_dim_turno = dimensaotu9_.co_seq_dim_turno
-    INNER JOIN 
-        tb_dim_cbo cbo ON atend.co_dim_cbo_1 = cbo.co_seq_dim_cbo
-    INNER JOIN 
-        tb_fat_proced_atend fat_proced_atend ON atend.nu_uuid_ficha = fat_proced_atend.nu_uuid_ficha
-    INNER JOIN    
-        tb_fat_cidadao_pec tfcp ON atend.co_fat_cidadao_pec = tfcp.co_seq_fat_cidadao_pec
-    INNER JOIN
-        tb_cidadao cid ON tfcp.co_cidadao = cid.co_seq_cidadao
-    JOIN
-        public.tb_tipo_logradouro ON tb_tipo_logradouro.co_tipo_logradouro = cid.tp_logradouro,
-    REGEXP_SPLIT_TO_TABLE(fat_proced_atend.ds_filtro_procedimento, '\|') AS procedimento -- Divide a coluna em linhas
-    WHERE 
-        unidade.nu_cnes = '9001808' 
-        AND cbo.nu_cbo LIKE '225310'
-        AND TO_CHAR(TO_DATE(atend.co_dim_tempo::text, 'YYYYMMDD'), 'YYYY') = '2024'
-        AND TO_CHAR(TO_DATE(atend.co_dim_tempo::text, 'YYYYMMDD'), 'MM') = '11'
-        AND procedimento IN ('0302070036', '0302010025', '0302070010', '0302060057', '0302060030', '0302060014', '0302050027', '0302050019', '0302040056', '0302040030', '0302040021', '0302060022')
     ORDER BY 9,13'''}
         
     elif tipo =='visitas':

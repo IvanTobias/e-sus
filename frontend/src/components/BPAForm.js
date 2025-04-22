@@ -18,6 +18,8 @@ function BPAForm() {
   const [isButtonLocked, setIsButtonLocked] = useState(() => localStorage.getItem('isButtonLocked') === 'true');
   const [showModal, setShowModal] = useState(false);
   const [bpaFiles, setBpaFiles] = useState([]);
+  const [totalRegistros, setTotalRegistros] = useState(0);
+  const [registrosAtualizados, setRegistrosAtualizados] = useState(0);
 
   useEffect(() => {
     const handleProgressUpdate = (data) => {
@@ -31,6 +33,9 @@ function BPAForm() {
           localStorage.setItem('isFileAvailable', 'true');
           alert('Geração do BPA concluída com sucesso!');
         }
+      } else if (data.type === 'cep') {
+        setTotalRegistros(data.total);
+        setRegistrosAtualizados(data.atualizados);
       }
     };
 
@@ -59,42 +64,41 @@ function BPAForm() {
     }
   };
 
+  const AtualizarCEP = async () => {
+    try {
+      setRegistrosAtualizados(0);
+      setTotalRegistros(0);
+      await axios.get('http://127.0.0.1:5000/api/corrigir-ceps');
+    } catch (error) {
+      console.error('Erro ao Atualizar CEP', error);
+    }
+  };
+
   useEffect(() => {
     const verificarDisponibilidadeArquivo = async () => {
       try {
-        // Chama a API para verificar se o arquivo já existe
         const response = await axios.get('http://127.0.0.1:5000/api/list-bpa-files');
         const arquivos = response.data.files;
-  
-  
-        // Verifica se existe qualquer arquivo que comece com "bpa_"
         const arquivoDisponivel = arquivos.some(arquivo => arquivo.startsWith('bpa_'));
-        
-  
-        // Atualiza o estado baseado na disponibilidade de qualquer arquivo "bpa_"
         setIsFileAvailable(arquivoDisponivel);
         localStorage.setItem('isFileAvailable', arquivoDisponivel.toString());
       } catch (error) {
         console.error('Erro ao verificar disponibilidade do arquivo BPA:', error);
       }
     };
-  
+
     verificarDisponibilidadeArquivo();
   }, []);
-  
-  
+
   const gerarBPA = async () => {
     setProgress(0);
     setIsGenerating(true);
-    setIsButtonLocked(true); // Bloqueia o botão após o clique
+    setIsButtonLocked(true);
     localStorage.setItem('isGeneratingBPA', 'true');
-    localStorage.setItem('isButtonLocked', 'true'); // Armazena o estado do botão bloqueado
+    localStorage.setItem('isButtonLocked', 'true');
 
     const today = new Date();
-    const day = String(today.getDate()).padStart(2, '0');
-    const month = String(today.getMonth() + 1).padStart(2, '0');
-    const year = today.getFullYear();
-    const formattedDate = `${day}-${month}-${year}`;
+    const formattedDate = today.toLocaleDateString('pt-BR').split('/').join('-');
 
     try {
       const response = await axios.post('http://127.0.0.1:5000/api/gerar-bpa', {}, { responseType: 'blob' });
@@ -143,11 +147,10 @@ function BPAForm() {
   };
 
   return (
-    <div className={`config-container ${isGenerating ? 'loading' : ''}`}> {/* Aplica a classe "loading" dinamicamente */}
+    <div className={`config-container ${isGenerating ? 'loading' : ''}`}>
       <form id="bpaForm">
-      <h1>Gerador de BPA</h1>
+        <h1>Gerador de BPA</h1>
 
-        {/* Inputs para a configuração do BPA */}
         <div>
           <label htmlFor="seq7">Nome do Responsável:</label>
           <input type="text" id="seq7" value={bpaConfig.seq7} onChange={handleChange} maxLength="30" size="30" />
@@ -164,7 +167,6 @@ function BPAForm() {
           </select>
         </div>
 
-        {/* Contêiner Flexível para Botões e Barra de Progresso */}
         <div className="flex-container">
           <button
             type="button"
@@ -173,6 +175,14 @@ function BPAForm() {
             disabled={isGenerating}
           >
             Salvar Configurações
+          </button>
+          <button
+            type="button"
+            onClick={AtualizarCEP}
+            className={`btn btn-primary ${isGenerating || isButtonLocked ? 'btn-disabled' : ''}`}
+            disabled={isGenerating || isButtonLocked}
+          >
+            Atualizar CEP
           </button>
           <button
             type="button"
@@ -191,7 +201,6 @@ function BPAForm() {
             Download
           </button>
 
-          {/* Barra de Progresso ao Lado dos Botões */}
           {isGenerating && (
             <div className="progressContainer">
               <div className="progress">
@@ -209,9 +218,14 @@ function BPAForm() {
             </div>
           )}
         </div>
+
+        {registrosAtualizados > 0 && (
+          <div style={{ marginTop: '10px' }}>
+            CEPs atualizados: {registrosAtualizados} de {totalRegistros}
+          </div>
+        )}
       </form>
 
-      {/* Modal para exibir arquivos BPA */}
       {showModal && (
         <div className={`modal modal-bpa ${isGenerating ? 'loading' : ''}`}>
           <div className="modal-content">

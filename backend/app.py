@@ -1211,6 +1211,16 @@ def get_data():
         logging.error(f"Erro inesperado: {str(e)}")
         return jsonify({'error': 'Erro inesperado!'}), 500
 
+@app.route('/api/corrigir-ceps')
+def corrigir_ceps():
+    engine = get_local_engine()
+    try:
+        with engine.begin() as connection:
+            Gerar_BPA.atualizar_enderecos(connection)
+        return jsonify({'mensagem': 'Correção de endereços concluída com sucesso.'})
+    except Exception as e:
+        return jsonify({'erro': str(e)}), 500
+
 if __name__ == '__main__':
     config = importdados.ensure_auto_update_config()
     if config['isAutoUpdateOn']:

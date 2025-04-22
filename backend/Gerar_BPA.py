@@ -3,7 +3,92 @@ from socketio_config import socketio  # Importe o socketio do módulo de configu
 from Conexões import get_local_engine, log_message
 from sqlalchemy import text
 import json
+import requests
 import time
+from sqlalchemy import text
+
+def limpar_logradouro(logradouro):
+    if logradouro:
+        partes = logradouro.split(" ", 1)
+        if len(partes) == 2:
+            return partes[1]
+    return logradouro
+
+def buscar_dados_viacep(cep):
+    url = f'https://viacep.com.br/ws/{cep}/json/'
+    try:
+        print(f"🔁 Tentando ViaCEP para o CEP: {cep}")
+        response = requests.get(url, timeout=2)
+        time.sleep(0.2)  # Limite de requisição
+        if response.status_code == 200:
+            data = response.json()
+            if not data.get('erro'):
+                logradouro_limpo = limpar_logradouro(data.get('logradouro', ''))
+                return {
+                    'logradouro': logradouro_limpo,
+                    'bairro': data.get('bairro', '')
+                }
+            else:
+                print(f"❌ ViaCEP retornou erro para o CEP: {cep}")
+        else:
+            print(f"⚠️ Resposta inesperada da ViaCEP (status {response.status_code}) para o CEP: {cep}")
+    except Exception as e:
+        print(f"❌ Erro ao acessar ViaCEP para o CEP {cep}: {e}")
+    return None
+
+def buscar_dados_cep(cep):
+    cep = ''.join(filter(str.isdigit, str(cep)))
+    if len(cep) != 8:
+        print(f"❌ CEP inválido (formato): {cep}")
+        return None
+
+    url = f'https://brasilapi.com.br/api/cep/v1/{cep}'
+
+    try:
+        print(f"🔍 Tentando buscar dados pela BrasilAPI para o CEP: {cep}")
+        response = requests.get(url, timeout=2)
+        time.sleep(0.2)  # Limite de requisição
+        if response.status_code == 200:
+            data = response.json()
+            logradouro_limpo = limpar_logradouro(data.get('street', ''))
+            return {
+                'logradouro': logradouro_limpo,
+                'bairro': data.get('neighborhood', '')
+            }
+        else:
+            print(f"⚠️ Resposta inesperada da BrasilAPI (status {response.status_code}) para o CEP: {cep}")
+    except Exception as e:
+        print(f"❌ Erro ao acessar BrasilAPI para o CEP {cep}: {e}")
+
+    # Tenta ViaCEP como fallback
+    return buscar_dados_viacep(cep)
+
+def atualizar_enderecos(connection):
+    select_query = text("""
+    SELECT DISTINCT prd_cep_pcnte
+    FROM tb_bpa
+    """)
+    ceps = connection.execute(select_query).fetchall()
+
+    for cep_row in ceps:
+        cep = cep_row[0]
+        info = buscar_dados_cep(cep)
+
+        if info:
+            update_query = text("""
+            UPDATE tb_bpa
+            SET prd_end_pcnte = :logradouro,
+                prd_bairro_pcnte = :bairro
+            WHERE prd_cep_pcnte = :cep_antigo
+            """)
+            connection.execute(update_query, {
+                'logradouro': info.get('logradouro', ''),
+                'bairro': info.get('bairro', ''),
+                'cep_antigo': cep
+            })
+            print(f"✅ CEP {cep} atualizado: {info.get('logradouro', '')}, {info.get('bairro', '')}")
+        else:
+            print(f"❌ Falha ao atualizar CEP {cep}: dados não encontrados nas duas APIs")
 
 def load_db_config(config_path='config.json'):
     with open(config_path, 'r') as config_file:
@@ -307,27 +392,29 @@ def criar_arquivo_bpa():
 def executar_procedure(connection):
     # Defina os IDs dos PA que você deseja incluir no WHERE
     pa_ids = [
-        '0414020243', '0301100012', '0414020146', '0102010498', '0307040151',
-        '0307030032', '0401010066', '0101010036', '0101010010', '0307010031',
-        '0404020674', '0404020577', '0101020074', '0307030040', '0307030059',
+        '0414020243', '0301100012', '0414020146', '0102010498', 
+        '0307030032', '0401010066', '0101010036', '0101010010', 
+        '0404020674', '0404020577', '0101020074', '0307030040', 
         '0301060037', '0307020010', '0301060118', '0301060100',
         '0414020383', '0414020405', '0307020070', '0301060029', 
-        '0307010015', '0414020120', '0101020090', '0414020138', '0414020359',
+        '0307010015', '0414020120', '0101020090', '0414020138', 
         '0301060096', '0101040024', '0102010056', '0201010020',
-        '0201010470', '0211070041', '0211070203', '0211070211', '0214010015',
+        '0201010470', '0211070041', '0211070203', '0211070211',
         '0301040079', '0301100039', '0401010023', '0307010023',
         '0301010153', '0414020278', '0205020100', '0309050049',
-        '0205020186', '0102010293', '0301080399', '0202030776', '0102010501',
-        '0307020118', '0401010031', '0309050022',
+        '0205020186', '0102010293', '0301080399', '0202030776',
+        '0307020118', '0401010031', '0309050022', '0307040151',
         '0102010510', '0211080055', '0102010072', '0102010218',
-        '0301080259', '0301080267', '0102010242', '0414020073', '0102010340',
-        '0102010323', '0301040036', '0101020040', '0102010226', '0101020031',
-        '0101020015', '0101020023', '0102010528', '0101020082', '0307010040',
+        '0301080259', '0301080267', '0102010242', '0414020073',
+        '0102010323', '0301040036', '0101020040', '0102010226',
+        '0101020015', '0101020023', '0102010528', '0101020082',
         '0102010307', '0102010064', '0101020066', '0101020058',
-        '0404020615', '0307040135', '0401010074', '0414020170', '0211060275',
+        '0404020615', '0307040135', '0401010074', '0414020170',
         '0211020036', '0211020052', '0301100101', '0301080160',
-        '0301100152', '0301100179', '0202010473', '0201020041', '0202060446',
-        '0204010071'
+        '0301100152', '0301100179', '0202010473', '0201020041',
+        '0211060275', '0307010040', '0101020031', '0102010340',
+        '0102010501', '0214010015', '0414020359', '0307030059',
+        '0307010031', '0202060446', '0204010071'
     ]
 
     # Primeiro, selecione e agrupe os dados
@@ -379,15 +466,28 @@ def executar_procedure(connection):
 
     log_message("Primeira Procedure Concluída")
 
+    # Primeiro update
+    update_uid_query_1 = text("""
+    UPDATE tb_bpa
+    SET prd_cid = 'G804'
+    WHERE prd_uid = '0491381'
+    """)
+    connection.execute(update_uid_query_1)
+    log_message("Update 1 (CID para UID 0491381) executado")
+
+
+from sqlalchemy.sql import text
+import time  # opcional, para pausas visuais se quiser ver no log
+
 def executar_procedure_segunda(connection):
     # IDs dos PA a serem incluídos no WHERE
     pa_ids = [
         '0301010110', '0301010030', '0301010056',
-        '0301010064', '0301010072', '0301010137'
+        '0301010064', '0301010137'
     ]
 
     # 1. Seleção e agrupamento dos dados
-    query = text(f"""
+    query = text("""
     SELECT s_prd.prd_uid,
            s_prd.prd_pa,
            s_prd.prd_cbo,
@@ -399,10 +499,9 @@ def executar_procedure_segunda(connection):
       AND s_prd.prd_pa IN :pa_ids
     GROUP BY s_prd.prd_uid, s_prd.prd_pa, s_prd.prd_cbo, s_prd.prd_cmp, s_prd.prd_idade
     """)
-
     results = connection.execute(query, {'pa_ids': tuple(pa_ids)})
 
-    # 2. Inserção dos dados agrupados
+    # 2. Inserção dos dados agrupados + exclusão dos originais processados
     for row in results:
         insert_query = text("""
         INSERT INTO tb_bpa (PRD_UID, PRD_CMP, PRD_CNSMED, PRD_CBO, PRD_FLH, PRD_SEQ, PRD_PA, PRD_CNSPAC,
@@ -420,7 +519,6 @@ def executar_procedure_segunda(connection):
             'prd_qt_p': row.prd_qt_p
         })
 
-        # 3. Deletar os registros que já foram processados
         delete_query = text("""
         DELETE FROM tb_bpa
         WHERE prd_org = 'BPI'
@@ -428,48 +526,62 @@ def executar_procedure_segunda(connection):
         """)
         connection.execute(delete_query, {'prd_pa': row.prd_pa})
 
-    # Atualizações específicas do prd_uid
-    update_uid_query_1 = text("""
-    UPDATE tb_bpa
-    SET prd_cid = 'G804'
-    WHERE prd_uid = '0491381'
-    """)
-    connection.execute(update_uid_query_1)
+    log_message("Inserções e exclusões concluídas.")
 
+    # 3. Updates sequenciais com logs
+
+
+    # Segundo update
     update_uid_query_2 = text("""
     UPDATE tb_bpa
-    SET prd_uid = '6896847'
-    WHERE prd_uid = '0000001'
+    SET prd_uid = CASE
+        WHEN prd_uid = '0000001' THEN '6896847'
+        WHEN prd_uid = '0491381' THEN '6430163'                      
+        ELSE prd_uid
+    END
+    WHERE prd_uid IN ('0000001', '0491381')
     """)
     connection.execute(update_uid_query_2)
+    log_message("Update 2 (substituição de UIDs) executado")
 
-        # Atualização do prd_cid com base nas condições de prd_pa
-    update_cid_query = text("""
-    UPDATE tb_bpa
-    SET prd_cid = CASE
-        WHEN prd_pa = '0302070036' THEN 'T951'
-        WHEN prd_pa = '0302010025' THEN 'N319'
-        WHEN prd_pa = '0302070010' THEN 'T302'
-        WHEN prd_pa = '0302060057' THEN 'S141'
-        WHEN prd_pa = '0302060030' THEN 'G838'
-        WHEN prd_pa = '0302060014' THEN 'I694'
-        WHEN prd_pa = '0302050027' THEN 'M255'
-        WHEN prd_pa = '0302050019' THEN 'T932'
-        WHEN prd_pa = '0302040056' THEN 'I988'
-        WHEN prd_pa = '0302040030' THEN 'Q048'
-        WHEN prd_pa = '0302040021' THEN 'J998'
-        WHEN prd_pa = '0302060022' THEN 'I694'
-        ELSE prd_cid
-    END
-    WHERE prd_pa IN (
-        '0302070036', '0302010025', '0302070010', '0302060057',
-        '0302060030', '0302060014', '0302050027', '0302050019',
-        '0302040056', '0302040030', '0302040021', '0302060022'
-    )
-    """)
-    connection.execute(update_cid_query)
+    # 4. Atualização prd_cid individual por PA
+    update_por_pa = {
+        '0302070036': 'T951',
+        '0302010025': 'N319',
+        '0302070010': 'T302',
+        '0302060057': 'S141',
+        '0302060030': 'G838',
+        '0302060014': 'I694',
+        '0302050027': 'M255',
+        '0302050019': 'T932',
+        '0302040056': 'I988',
+        '0302040030': 'Q048',
+        '0302040021': 'J998',
+        '0302060022': 'I694',
+        '0201010046': 'K629'
+    }
 
-    # Log para confirmar a conclusão
+    for pa, cid in update_por_pa.items():
+        individual_update = text("""
+            UPDATE tb_bpa
+            SET prd_cid = :cid
+            WHERE prd_pa = :pa
+        """)
+        connection.execute(individual_update, {'cid': cid, 'pa': pa})
+        log_message(f"Update CID executado para PA {pa} com CID {cid}")
+        # time.sleep(0.5)  # opcional: delay visual
+    
+    # 5. Atualização dos CEPs fora da faixa de Arujá
+    update_cep_query = text("""
+        UPDATE tb_bpa
+        SET prd_cep_pcnte = CONCAT('074', SUBSTRING(prd_cep_pcnte FROM 4 FOR 5))
+        WHERE LENGTH(prd_cep_pcnte) = 8
+        AND SUBSTRING(prd_cep_pcnte FROM 1 FOR 3) != '074'
+        AND prd_ibge = '350390'
+        """)
+    connection.execute(update_cep_query)
+    log_message("Update de CEPs fora da faixa de Arujá concluído")
+
     log_message("Segunda Procedure Concluída")
 
 def executar_procedure_terceira(connection):
@@ -491,7 +603,8 @@ def executar_procedure_terceira(connection):
            s_prd.prd_org
     FROM tb_bpa as s_prd
     WHERE s_prd.prd_org = 'BPA'
-    ORDER BY s_prd.prd_uid, s_prd.prd_pa, s_prd.prd_cbo
+    ORDER BY s_prd.prd_uid, s_prd.prd_pa, s_prd.prd_cbo, s_prd.prd_flh,
+           s_prd.prd_seq
     """)
 
     results = connection.execute(query_select)
@@ -585,7 +698,7 @@ def executar_procedure_quarta(connection):
          COALESCE(s_prd.prd_cid, '') AS prd_cid  -- Tratar CID como vazio se for nulo
     FROM tb_bpa as s_prd
     WHERE s_prd.prd_org = 'BPI'
-    ORDER BY s_prd.prd_uid, s_prd.prd_cnsmed, s_prd.prd_cbo, s_prd.prd_flh, s_prd.prd_seq, prd_dtaten
+    ORDER BY s_prd.prd_uid, s_prd.prd_cnsmed, s_prd.prd_cbo, s_prd.prd_flh, s_prd.prd_seq
     """)
 
     results = connection.execute(query_select)
