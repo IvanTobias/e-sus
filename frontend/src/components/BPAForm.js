@@ -1,8 +1,10 @@
+// BPAForm.js
+
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { io } from 'socket.io-client';
 
-const socket = io('http://127.0.0.1:5000');
+const socket = io(`http://${window.location.hostname}:5000`);
 
 function BPAForm() {
   const [bpaConfig, setBpaConfig] = useState({
@@ -20,7 +22,10 @@ function BPAForm() {
   const [bpaFiles, setBpaFiles] = useState([]);
   const [totalRegistros, setTotalRegistros] = useState(0);
   const [registrosAtualizados, setRegistrosAtualizados] = useState(0);
-
+  const [enderecosCandidatos, setEnderecosCandidatos] = useState([]);
+  const [mostrarEscolhaEndereco, setMostrarEscolhaEndereco] = useState(false);
+  const [cepSelecionado, setCepSelecionado] = useState(null);
+  
   useEffect(() => {
     const handleProgressUpdate = (data) => {
       if (data.type === 'bpa') {
@@ -68,11 +73,53 @@ function BPAForm() {
     try {
       setRegistrosAtualizados(0);
       setTotalRegistros(0);
-      await axios.get('http://127.0.0.1:5000/api/corrigir-ceps');
+  
+      const response = await axios.get('http://127.0.0.1:5000/api/corrigir-ceps');
+      const dados = response.data;
+  
+      if (dados?.multiplo) {
+        setCepSelecionado(dados.cep);
+        setEnderecosCandidatos(dados.candidatos);
+        setMostrarEscolhaEndereco(true);
+      }
+  
     } catch (error) {
       console.error('Erro ao Atualizar CEP', error);
     }
   };
+  
+  const confirmarEndereco = async (endereco) => {
+    try {
+      // Envia a escolha de volta para o backend se necessário ou aplica diretamente
+      await axios.post('http://127.0.0.1:5000/api/atualizar-cep-escolhido', {
+        cep: cepSelecionado,
+        logradouro: endereco.logradouro,
+        bairro: endereco.bairro
+      });
+      setMostrarEscolhaEndereco(false);
+      alert("Endereço escolhido com sucesso!");
+    } catch (error) {
+      console.error("Erro ao confirmar endereço:", error);
+    }
+  };
+  
+  {mostrarEscolhaEndereco && (
+    <div className="modal modal-bpa">
+      <div className="modal-content">
+        <h2>Escolha o Endereço Correto para o CEP: {cepSelecionado}</h2>
+        <ul>
+          {enderecosCandidatos.map((endereco, idx) => (
+            <li key={idx} className="endereco-opcao">
+              <strong>{endereco.logradouro}</strong>, {endereco.bairro} - {endereco.cep}
+              <button onClick={() => confirmarEndereco(endereco)} className="btn btn-primary">Usar este</button>
+            </li>
+          ))}
+        </ul>
+        <button onClick={() => setMostrarEscolhaEndereco(false)} className="btn btn-secondary">Cancelar</button>
+      </div>
+    </div>
+  )}
+  
 
   useEffect(() => {
     const verificarDisponibilidadeArquivo = async () => {

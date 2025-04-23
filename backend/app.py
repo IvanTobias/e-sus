@@ -1221,12 +1221,34 @@ def corrigir_ceps():
     except Exception as e:
         return jsonify({'erro': str(e)}), 500
 
+@app.route('/api/atualizar-cep-escolhido', methods=['POST'])
+def atualizar_cep_escolhido():
+    data = request.json
+    cep = data.get('cep')
+    logradouro = data.get('logradouro')
+    bairro = data.get('bairro')
+
+    with get_local_engine().connect() as conn:
+        update_query = text("""
+            UPDATE tb_bpa
+            SET prd_end_pcnte = :logradouro,
+                prd_bairro_pcnte = :bairro
+            WHERE prd_cep_pcnte = :cep
+        """)
+        conn.execute(update_query, {
+            'logradouro': logradouro,
+            'bairro': bairro,
+            'cep': cep
+        })
+    return jsonify({"status": "Atualizado com sucesso"})
+
+
 if __name__ == '__main__':
     config = importdados.ensure_auto_update_config()
     if config['isAutoUpdateOn']:
         importdados.schedule_auto_import(importdados.scheduler, config['autoUpdateTime'])
 
-    socketio.run(app, host='127.0.0.1', port=5000, debug=True)  # Executando com suporte ao WebSocket
+    socketio.run(app, host='0.0.0.0', port=5000, debug=True)  # Executando com suporte ao WebSocket
     print("Executando importação automática de dados...")
 
 

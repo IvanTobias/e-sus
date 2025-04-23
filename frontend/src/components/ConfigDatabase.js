@@ -13,7 +13,7 @@ function ConfigDatabase() {
 
   // Carrega as configurações iniciais do banco de dados ao montar o componente
   useEffect(() => {
-    axios.get('http://127.0.0.1:5000/api/get-config')
+    axios.get(`http://${window.location.hostname}:5000/api/get-config`)
       .then(response => {
         setConfig(response.data);
       })
@@ -28,14 +28,13 @@ function ConfigDatabase() {
 
   // Função para salvar as configurações
   const saveConfig = () => {
-    axios.post('http://127.0.0.1:5000/api/save-config', config)
+    axios.post(`http://${window.location.hostname}:5000/api/save-config`, config)
       .then(response => alert(response.data.status))
       .catch(error => console.error('Erro ao salvar configuração:', error));
   };
-
-  // Função para testar a conexão
+  
   const testConnection = () => {
-    axios.post('http://127.0.0.1:5000/api/test-connection', config)
+    axios.post(`http://${window.location.hostname}:5000/api/test-connection`, config)
       .then(response => alert(response.data.message))
       .catch(error => console.error('Erro ao testar conexão:', error));
   };

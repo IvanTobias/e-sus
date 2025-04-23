@@ -1,0 +1,997 @@
+2025-04-23 08:18:40,997 - INFO - Scheduler started
+2025-04-23 08:18:41,005 - INFO - Added job "auto_update_imports_wrapper" to job store "default"
+2025-04-23 08:18:41,062 - WARNING -  * Debugger is active!
+2025-04-23 08:18:41,068 - INFO -  * Debugger PIN: 111-947-065
+2025-04-23 08:21:07,900 - INFO -  * Detected change in 'C:\\Users\\ivantp\\Downloads\\flask-react-project\\backend\\Gerar_BPA.py', reloading
+2025-04-23 08:21:11,771 - INFO - Scheduler started
+2025-04-23 08:21:11,774 - INFO - Added job "auto_update_imports_wrapper" to job store "default"
+2025-04-23 08:21:11,824 - WARNING -  * Debugger is active!
+2025-04-23 08:21:11,833 - INFO -  * Debugger PIN: 111-947-065
+2025-04-23 08:29:22,731 - INFO -  * Detected change in 'C:\\Users\\ivantp\\Downloads\\flask-react-project\\backend\\app.py', reloading
+2025-04-23 08:29:27,271 - INFO - Scheduler started
+2025-04-23 08:29:27,277 - INFO - Added job "auto_update_imports_wrapper" to job store "default"
+2025-04-23 08:29:27,347 - WARNING -  * Debugger is active!
+2025-04-23 08:29:27,358 - INFO -  * Debugger PIN: 111-947-065
+2025-04-23 08:31:48,147 - INFO - 2025-04-23 08:31:48.145489: Status da tarefa bpa: running
+2025-04-23 08:32:38,417 - INFO - 2025-04-23 08:32:38.416044: Status da tarefa bpa: completed
+2025-04-23 08:33:34,063 - INFO - ✅ CEP 07404210 atualizado: Serra dos Tinguás, Mirante do Arujá
+2025-04-23 08:33:34,764 - INFO - ✅ CEP 07401355 atualizado: Pedro de Toledo, Vila Riman
+2025-04-23 08:33:35,280 - INFO - ✅ CEP 07428075 atualizado: Coral, Jardim Fazenda Rincão
+2025-04-23 08:33:37,064 - INFO - ✅ CEP 07417360 atualizado: David Rodrigues de Ávila, Parque Rodrigo Barreto
+2025-04-23 08:33:39,519 - INFO - ✅ CEP 07401090 atualizado: Elpidio Ferreira Guimarães, Arujá Center Ville
+2025-04-23 08:33:39,990 - INFO - ✅ CEP 07429310 atualizado: Parque da Chapada dos Guimarães, Residencial Real Park
+2025-04-23 08:33:41,729 - INFO - ✅ CEP 07403065 atualizado: Sebastião Parreira, Arujamérica
+2025-04-23 08:33:43,527 - INFO - ✅ CEP 07438728 atualizado: Genival Ferreira, Estância Pacaembu
+2025-04-23 08:33:45,087 - INFO - ✅ CEP 08580440 atualizado: Pacaembu, Jardim São Armando
+2025-04-23 08:33:46,475 - INFO - ✅ CEP 07402835 atualizado: Belém, Jardim Real
+2025-04-23 08:33:46,945 - INFO - ✅ CEP 07401100 atualizado: Meridiano Pérola, Arujá Center Ville
+2025-04-23 08:33:50,135 - INFO - ✅ CEP 07471779 atualizado: Rogério de Andrade Santos, Parque Rodrigo Barreto
+2025-04-23 08:33:50,657 - INFO - ✅ CEP 07400555 atualizado: Monteiro Lobato, Centro
+2025-04-23 08:33:51,696 - INFO - ✅ CEP 08592190 atualizado: Orlândia, Parque Recanto Mônica
+2025-04-23 08:33:51,946 - INFO - ✅ CEP 07417285 atualizado: Benedito Palmiro Rodrigues, Parque Rodrigo Barreto
+2025-04-23 08:33:52,458 - INFO - ✅ CEP 07428320 atualizado: Serpentina, Jardim Fazenda Rincão
+2025-04-23 08:33:53,300 - INFO - ✅ CEP 07400455 atualizado: Wenceslau Braz, Jardim Rincão
+2025-04-23 08:33:53,540 - INFO - ✅ CEP 07405465 atualizado: Perdizes, Jardim Pinheiro
+2025-04-23 08:33:54,424 - INFO - ✅ CEP 07411440 atualizado: Azaléias, Cidade Nova Arujá
+2025-04-23 08:33:55,988 - INFO - ✅ CEP 07401125 atualizado: Albino Rodrigues Neves, Arujá Center Ville
+2025-04-23 08:33:56,248 - INFO - ✅ CEP 07432470 atualizado: das Mangueiras, Recanto Primavera
+2025-04-23 08:33:56,739 - INFO - ✅ CEP 07176005 atualizado: Velha Guarulhos-Arujá, Jardim Álamo
+2025-04-23 08:33:57,227 - INFO - ✅ CEP 07438520 atualizado: Ravena, Jardim Imperial
+2025-04-23 08:34:00,424 - INFO - ✅ CEP 07457005 atualizado: Pelicano, Jardim Pinheiro
+2025-04-23 08:34:00,942 - INFO - ✅ CEP 07434100 atualizado: Alberto Hinoto, Jardim Limoeiro
+2025-04-23 08:34:02,009 - INFO - ✅ CEP 07230350 atualizado: Tamboriu, Parque Uirapuru
+2025-04-23 08:34:02,895 - INFO - ✅ CEP 07428230 atualizado: Jade, Jardim Fazenda Rincão
+2025-04-23 08:34:03,913 - INFO - ✅ CEP 07418000 atualizado: Coronel José Lourenço de Souza, Chácara Bananal
+2025-04-23 08:34:07,350 - INFO - ✅ CEP 70400460 atualizado: Washington Luiz Pereira de Souza, Vila Flora Regina
+2025-04-23 08:34:09,164 - INFO - ✅ CEP 07437010 atualizado: dos Figueiras, Parque dos Jacarandás
+2025-04-23 08:34:09,402 - INFO - ✅ CEP 07400015 atualizado: Deolinda Nóbrega de Almeida, Centro
+2025-04-23 08:34:09,928 - INFO - ✅ CEP 07403110 atualizado: Eurípedes Antonio do Carmo, Arujamérica
+2025-04-23 08:34:13,116 - WARNING - ❌ Falha ao atualizar CEP 72004000: dados não encontrados
+2025-04-23 08:34:14,804 - INFO - ✅ CEP 07417580 atualizado: Luiz Talarico, Parque Rodrigo Barreto
+2025-04-23 08:34:15,252 - INFO - ✅ CEP 07432455 atualizado: dos Abacateiros, Recanto Primavera
+2025-04-23 08:34:15,752 - INFO - ✅ CEP 07400230 atualizado: Getúlio Vargas, Jardim Ângelo
+2025-04-23 08:34:17,270 - INFO - ✅ CEP 07417125 atualizado: Benjamin de Jesus Rodrigues, Parque Rodrigo Barreto
+2025-04-23 08:34:17,722 - INFO - ✅ CEP 07417370 atualizado: Armando Colangelo, Parque Rodrigo Barreto
+2025-04-23 08:34:18,241 - INFO - ✅ CEP 07402790 atualizado: Rio de Janeiro, Jardim Real
+2025-04-23 08:34:18,685 - INFO - ✅ CEP 07417315 atualizado: Pedro Leme, Parque Rodrigo Barreto
+2025-04-23 08:34:20,282 - INFO - ✅ CEP 08590470 atualizado: das Canavieiras, Jardim Deliy
+2025-04-23 08:34:22,871 - INFO - ✅ CEP 07400665 atualizado: Maria Aparecida Alegri, Arujá Centro Residencial
+2025-04-23 08:34:23,114 - INFO - ✅ CEP 07242430 atualizado: Coração de Jesus, Cidade Parque Alvorada
+2025-04-23 08:34:26,287 - INFO - ✅ CEP 07141736 atualizado: Antonio Armando Justiça, Parque Rodrigo Barreto
+2025-04-23 08:34:26,807 - INFO - ✅ CEP 08671035 atualizado: Senador Roberto Simonsen, Jardim dos Ipês
+2025-04-23 08:34:27,556 - INFO - ✅ CEP 07411400 atualizado: dos Lilazes, Cidade Nova Arujá
+2025-04-23 08:34:30,785 - INFO - ✅ CEP 07088809 atualizado: Serra da Mantiqueira, Mirante do Arujá
+2025-04-23 08:34:32,555 - INFO - ✅ CEP 07434130 atualizado: Limoeiro, Jardim Limoeiro
+2025-04-23 08:34:33,248 - INFO - ✅ CEP 07402120 atualizado: Raposo Tavares, Vila Lima
+2025-04-23 08:34:33,491 - INFO - ✅ CEP 07417280 atualizado: Angelo de Araújo Franco, Parque Rodrigo Barreto
+2025-04-23 08:34:34,410 - INFO - ✅ CEP 07400190 atualizado: Angelina Augusto Fernandes, Jardim Vitória
+2025-04-23 08:34:35,115 - INFO - ✅ CEP 07405450 atualizado: Gaivota, Jardim Pinheiro
+2025-04-23 08:34:36,145 - INFO - ✅ CEP 07434315 atualizado: Plínio Salgado Santangelo, Vila Pedroso
+2025-04-23 08:34:36,382 - INFO - ✅ CEP 07074001 atualizado: Florinda Rosa Teixeira, Vila Rosália
+2025-04-23 08:34:36,818 - INFO - ✅ CEP 07431305 atualizado: Cristal, Jardim Jóia
+2025-04-23 08:34:38,425 - INFO - ✅ CEP 07438620 atualizado: Benedito do Prado, Cachoeira
+2025-04-23 08:34:39,192 - INFO - ✅ CEP 07404095 atualizado: Serra do Jari, Mirante do Arujá
+2025-04-23 08:34:39,504 - INFO - ✅ CEP 07404165 atualizado: dos Fernandes, Mirante do Arujá
+2025-04-23 08:34:41,225 - INFO - ✅ CEP 07428315 atualizado: Rubelita, Jardim Fazenda Rincão
+2025-04-23 08:34:42,956 - INFO - ✅ CEP 07405310 atualizado: José Rodrigues Barbosa, Pedra Fala
+2025-04-23 08:34:46,143 - WARNING - ❌ Falha ao atualizar CEP 07462365: dados não encontrados
+2025-04-23 08:34:46,690 - INFO - ✅ CEP 08585025 atualizado: Lucas Garcez, Jardim Morada Feliz
+2025-04-23 08:34:47,464 - INFO - ✅ CEP 07402295 atualizado: Marina de Lima Santangelo, Chácara São José
+2025-04-23 08:34:49,200 - INFO - ✅ CEP 07401775 atualizado: Expedicionário Carmelino de Jesus, Vila Pilar
+2025-04-23 08:34:49,658 - INFO - ✅ CEP 07428100 atualizado: Água Marinha, Jardim Fazenda Rincão
+2025-04-23 08:34:49,915 - INFO - ✅ CEP 07404090 atualizado: Serra do Jaire, Mirante do Arujá
+2025-04-23 08:34:51,875 - INFO - ✅ CEP 07432690 atualizado: Yoshi Sasaoka, Sítio dos Fernandes
+2025-04-23 08:34:53,361 - INFO - ✅ CEP 07417180 atualizado: José Cícero Soares, Parque Rodrigo Barreto
+2025-04-23 08:34:54,068 - INFO - ✅ CEP 07439040 atualizado: Antimônio, Chácaras Copaco
+2025-04-23 08:34:55,297 - INFO - ✅ CEP 07417185 atualizado: Luiz Paulo Colangelo Nóbrega, Parque Rodrigo Barreto
+2025-04-23 08:34:56,262 - INFO - ✅ CEP 07417430 atualizado: José de Lima, Parque Rodrigo Barreto
+2025-04-23 08:34:56,859 - INFO - ✅ CEP 07439135 atualizado: Coque, Chácaras Copaco
+2025-04-23 08:34:59,457 - INFO - ✅ CEP 07435270 atualizado: das Castanheiras, Arujá Country Club
+2025-04-23 08:35:01,291 - INFO - ✅ CEP 07417415 atualizado: Alfredo Antonio Fernandes, Parque Rodrigo Barreto
+2025-04-23 08:35:02,825 - INFO - ✅ CEP 07432080 atualizado: Haroldo, Jardim Emília
+2025-04-23 08:35:03,777 - INFO - ✅ CEP 07400330 atualizado: Vereador Antonio Frau, Convívio Residencial Santana
+2025-04-23 08:35:05,536 - INFO - ✅ CEP 07432050 atualizado: Dutra, Jardim Emília
+2025-04-23 08:35:07,293 - INFO - ✅ CEP 07439045 atualizado: Petróleo, Chácaras Copaco
+2025-04-23 08:35:08,011 - INFO - ✅ CEP 07400490 atualizado: dos Expedicionários, Vila Flora Regina
+2025-04-23 08:35:08,247 - INFO - ✅ CEP 07401070 atualizado: Armando Colangelo, Arujá Center Ville
+2025-04-23 08:35:09,951 - INFO - ✅ CEP 07414425 atualizado: Benvinda Oliveira Magalhães, Chácaras Colinas Verdes
+2025-04-23 08:35:10,476 - INFO - ✅ CEP 07439130 atualizado: Estanho, Chácaras Copaco
+2025-04-23 08:35:13,664 - INFO - ✅ CEP 07204805 atualizado: Real, Jardim Real
+2025-04-23 08:35:14,244 - INFO - ✅ CEP 07400250 atualizado: Hercélio Mattos de Oliveira, Jardim Ângelo
+2025-04-23 08:35:15,961 - INFO - ✅ CEP 07414790 atualizado: Municipal Espigonal, Fontes
+2025-04-23 08:35:19,121 - INFO - ✅ CEP 07414555 atualizado: Benedito Barbosa de Souza, Parque Rodrigo Barreto
+2025-04-23 08:35:20,643 - INFO - ✅ CEP 07417200 atualizado: Deolinda Rosa dos Santos, Parque Rodrigo Barreto
+2025-04-23 08:35:22,481 - INFO - ✅ CEP 07414180 atualizado: Michio Hatakeyama, Jardim Yamamoto
+2025-04-23 08:35:24,310 - INFO - ✅ CEP 07428205 atualizado: Benedito Manoel dos Santos, Jardim Fazenda Rincão
+2025-04-23 08:35:27,476 - INFO - ✅ CEP 74030000 atualizado: Hans Ossamu Suzuki, Arujamérica
+2025-04-23 08:35:27,730 - INFO - ✅ CEP 08590390 atualizado: Matinhos, Jardim Josely
+2025-04-23 08:35:27,980 - INFO - ✅ CEP 07401300 atualizado: General Porfírio da Paz, Jardim Modelo
+2025-04-23 08:35:29,659 - INFO - ✅ CEP 07417495 atualizado: Antonio Pinheiro, Parque Rodrigo Barreto
+2025-04-23 08:35:30,127 - INFO - ✅ CEP 07417265 atualizado: Railda Alves de Oliveira, Parque Rodrigo Barreto
+2025-04-23 08:35:31,872 - INFO - ✅ CEP 07402280 atualizado: Rio de Janeiro, Chácara São José
+2025-04-23 08:35:32,656 - INFO - ✅ CEP 07432670 atualizado: Tomi Miura, Sítio dos Fernandes
+2025-04-23 08:35:33,564 - INFO - ✅ CEP 07400505 atualizado: José Basílio Alvarenga, Vila Flora Regina
+2025-04-23 08:35:34,305 - INFO - ✅ CEP 07417345 atualizado: José Claudio dos Santos Filho, Parque Rodrigo Barreto
+2025-04-23 08:35:36,048 - INFO - ✅ CEP 07411650 atualizado: Londres, Centro Industrial de Arujá
+2025-04-23 08:35:37,626 - INFO - ✅ CEP 07403005 atualizado: Theófilo Ramos de Andrade, Arujamérica
+2025-04-23 08:35:38,381 - INFO - ✅ CEP 07403090 atualizado: Leocádio Mendonça, Arujamérica
+2025-04-23 08:35:38,628 - INFO - ✅ CEP 07176710 atualizado: José de Souza Abrantes, Jardim Álamo
+2025-04-23 08:35:40,476 - INFO - ✅ CEP 07403115 atualizado: José Menino Ribeiro, Arujamérica
+2025-04-23 08:35:42,141 - INFO - ✅ CEP 07439025 atualizado: Gelna, Chácaras Copaco
+2025-04-23 08:35:43,916 - INFO - ✅ CEP 07401345 atualizado: Armando Sales de Oliveira, Vila Riman
+2025-04-23 08:35:45,046 - INFO - ✅ CEP 07402190 atualizado: São Paulo, Jardim Planalto
+2025-04-23 08:35:45,833 - INFO - ✅ CEP 08570970 atualizado: Padre João Álvares 181/183, Centro
+2025-04-23 08:35:49,012 - WARNING - ❌ Falha ao atualizar CEP 07454975: dados não encontrados
+2025-04-23 08:35:49,253 - INFO - ✅ CEP 07196030 atualizado: João Romano, Vila Flórida
+2025-04-23 08:35:49,724 - INFO - ✅ CEP 07404130 atualizado: Serra do Gil, Mirante do Arujá
+2025-04-23 08:35:50,481 - INFO - ✅ CEP 07401335 atualizado: Lucas Nogueira Garcez, Vila Riman
+2025-04-23 08:35:51,497 - INFO - ✅ CEP 07405445 atualizado: Andorinha, Jardim Pinheiro
+2025-04-23 08:35:54,688 - INFO - ✅ CEP 07407010 atualizado: dos Fernandes, Mirante do Arujá
+2025-04-23 08:35:57,284 - INFO - ✅ CEP 07437090 atualizado: das Figueiras, Parque dos Arantes
+2025-04-23 08:36:00,481 - WARNING - ❌ Falha ao atualizar CEP 16642535: dados não encontrados
+2025-04-23 08:36:02,232 - INFO - ✅ CEP 08590380 atualizado: Paiçandu, Jardim Josely
+2025-04-23 08:36:03,779 - INFO - ✅ CEP 07417550 atualizado: Terezinha de Jesus Monteiro de Castro, Parque Rodrigo Barreto
+2025-04-23 08:36:04,237 - INFO - ✅ CEP 07432055 atualizado: Clementina, Jardim Emília
+2025-04-23 08:36:07,401 - INFO - ✅ CEP 07470040 atualizado: Airton dos Santos Heras Galvez, Jardim Santo Antônio
+2025-04-23 08:36:09,318 - INFO - ✅ CEP 07400420 atualizado: Bogotá, Jardim Rincão
+2025-04-23 08:36:12,567 - INFO - ✅ CEP 04717580 atualizado: Sebastião Martins Guimarães, Parque Rodrigo Barreto
+2025-04-23 08:36:14,105 - INFO - ✅ CEP 07417305 atualizado: Armando Colangelo, Parque Rodrigo Barreto
+2025-04-23 08:36:15,612 - INFO - ✅ CEP 07400400 atualizado: Assunção, Jardim Rincão
+2025-04-23 08:36:16,401 - INFO - ✅ CEP 07400165 atualizado: Major Benjamin Franco, Jardim Vitória
+2025-04-23 08:36:17,346 - INFO - ✅ CEP 07175350 atualizado: Victor Graeff, Jardim do Triunfo
+2025-04-23 08:36:19,032 - INFO - ✅ CEP 07404155 atualizado: Serra de Itaberaba, Mirante do Arujá
+2025-04-23 08:36:21,657 - INFO - ✅ CEP 08581430 atualizado: Quebrângulo, Jardim Viana
+2025-04-23 08:36:24,241 - INFO - ✅ CEP 07401105 atualizado: Sergio Saleh Riman, Arujá Center Ville
+2025-04-23 08:36:24,492 - INFO - ✅ CEP 08730660 atualizado: Jardelina de Almeida Lopes, Chácara Jafet
+2025-04-23 08:36:26,067 - INFO - ✅ CEP 07403100 atualizado: Donato Antonio de Camargo, Arujamérica
+2025-04-23 08:36:28,652 - INFO - ✅ CEP 07411220 atualizado: Santo Antonio do Catigeró, Jordanópolis
+2025-04-23 08:36:29,196 - INFO - ✅ CEP 07400850 atualizado: Maria Gonçalves de Oliveira, Arujá Centro Residencial
+2025-04-23 08:36:32,391 - WARNING - ❌ Falha ao atualizar CEP 07410001: dados não encontrados
+2025-04-23 08:36:32,897 - INFO - ✅ CEP 07407375 atualizado: Paulo Antonio Barbosa, Jardim Arujá
+2025-04-23 08:36:34,605 - INFO - ✅ CEP 07401720 atualizado: Iraci Pinto Ferreira Braz, Vila Pilar
+2025-04-23 08:36:34,846 - INFO - ✅ CEP 07417490 atualizado: Benedito Rodrigues do Prado, Parque Rodrigo Barreto
+2025-04-23 08:36:36,290 - INFO - ✅ CEP 07417295 atualizado: Soldado Edson de Paula e Silva, Parque Rodrigo Barreto
+2025-04-23 08:36:36,753 - INFO - ✅ CEP 07251180 atualizado: Atlas, Água Chata
+2025-04-23 08:36:38,508 - INFO - ✅ CEP 07417390 atualizado: Vicente Antonio Nogueira, Parque Rodrigo Barreto
+2025-04-23 08:36:40,206 - INFO - ✅ CEP 07432675 atualizado: Tiaki Ogaçawara, Sítio dos Fernandes
+2025-04-23 08:36:43,425 - INFO - ✅ CEP 07455550 atualizado: Braz Maiolino, Barbosas
+2025-04-23 08:36:46,615 - INFO - ✅ CEP 07045408 atualizado: Tuím, Jardim Pinheiro
+2025-04-23 08:36:48,392 - INFO - ✅ CEP 07405425 atualizado: Rouxinol, Jardim Pinheiro
+2025-04-23 08:36:48,909 - INFO - ✅ CEP 07417455 atualizado: Padre Atílio Garrone, Parque Rodrigo Barreto
+2025-04-23 08:36:49,764 - INFO - ✅ CEP 08590440 atualizado: Flórida, Jardim Josely
+2025-04-23 08:36:51,519 - INFO - ✅ CEP 07428255 atualizado: Espinélio, Jardim Fazenda Rincão
+2025-04-23 08:36:51,984 - INFO - ✅ CEP 07400700 atualizado: Nair Ribeiro Maiolino, Arujá Centro Residencial
+2025-04-23 08:36:54,624 - INFO - ✅ CEP 07406370 atualizado: Pitta, Vila Arujá
+2025-04-23 08:36:55,414 - INFO - ✅ CEP 07401075 atualizado: Armando Colangelo, Arujá Center Ville
+2025-04-23 08:36:57,540 - INFO - ✅ CEP 08570770 atualizado: Bilac, Jardim Santa Helena
+2025-04-23 08:36:58,270 - INFO - ✅ CEP 07406275 atualizado: Vereador Albino Rodrigues Neves, Pedreira
+2025-04-23 08:36:58,788 - INFO - ✅ CEP 07436770 atualizado: Augustinho Palmezan, Jardim São Jorge
+2025-04-23 08:36:59,263 - INFO - ✅ CEP 07411155 atualizado: Santa Terezinha, Jordanópolis
+2025-04-23 08:37:02,496 - INFO - ✅ CEP 07421790 atualizado: Terezinha de Jesus Monteiro de Castro, Parque Rodrigo Barreto
+2025-04-23 08:37:04,180 - INFO - ✅ CEP 07401725 atualizado: Durval Ferreira de Almeida, Vila Pilar
+2025-04-23 08:37:07,372 - INFO - ✅ CEP 07430005 atualizado: União Paulista, Jardim Josely
+2025-04-23 08:37:09,087 - INFO - ✅ CEP 07440030 atualizado: Ipê, Chácaras Vista Alegre
+2025-04-23 08:37:10,568 - INFO - ✅ CEP 07428015 atualizado: Maria Mãe dos Homens, Nossa Senhora do Carmo
+2025-04-23 08:37:12,238 - INFO - ✅ CEP 07417350 atualizado: Dalila Maria Joaquina Barbosa, Parque Rodrigo Barreto
+2025-04-23 08:37:14,839 - INFO - ✅ CEP 08598100 atualizado: de São Bento, Jardim Odete
+2025-04-23 08:37:15,076 - INFO - ✅ CEP 08673020 atualizado: Sete de Setembro, Parque Suzano
+2025-04-23 08:37:15,649 - INFO - ✅ CEP 07407360 atualizado: Braz Ferreira, Jardim Arujá
+2025-04-23 08:37:18,856 - INFO - ✅ CEP 07443412 atualizado: Benedito Antonio Ribeiro, Jardim Limoeiro
+2025-04-23 08:37:19,581 - INFO - ✅ CEP 07439090 atualizado: Grafite, Chácaras Copaco
+2025-04-23 08:37:22,194 - INFO - ✅ CEP 07440020 atualizado: do Cedro, Chácaras Vista Alegre
+2025-04-23 08:37:22,919 - INFO - ✅ CEP 08587810 atualizado: Rosa de Sharon, Parque Residencial Scaffid II
+2025-04-23 08:37:26,122 - INFO - ✅ CEP 07417035 atualizado: dos Pinheiros, Parque dos Jacarandás
+2025-04-23 08:37:26,636 - INFO - ✅ CEP 07434110 atualizado: Limoeiro, Jardim Limoeiro
+2025-04-23 08:37:27,577 - INFO - ✅ CEP 07402870 atualizado: Cuiabá, Jardim Real
+2025-04-23 08:37:27,821 - INFO - ✅ CEP 07435675 atualizado: Tupã, Arujázinho I, II e III
+2025-04-23 08:37:28,327 - INFO - ✅ CEP 07417435 atualizado: Abdon Ferreira Silva, Parque Rodrigo Barreto
+2025-04-23 08:37:28,561 - INFO - ✅ CEP 07417135 atualizado: Maria Luiza Guimarães de Lima, Parque Rodrigo Barreto
+2025-04-23 08:37:31,733 - INFO - ✅ CEP 07400365 atualizado: Rio de Janeiro, Jardim Real
+2025-04-23 08:37:34,346 - INFO - ✅ CEP 07428010 atualizado: Nossa Senhora do Carmo, Nossa Senhora do Carmo
+2025-04-23 08:37:35,889 - INFO - ✅ CEP 07402800 atualizado: São Paulo, Jardim Real
+2025-04-23 08:37:36,346 - INFO - ✅ CEP 07404135 atualizado: Serra dos Canudos, Mirante do Arujá
+2025-04-23 08:37:36,910 - INFO - ✅ CEP 07405460 atualizado: Arapongas, Jardim Pinheiro
+2025-04-23 08:37:37,870 - INFO - ✅ CEP 07432580 atualizado: Sango Matsuzaki, Jardim das Cerejeiras
+2025-04-23 08:37:38,755 - INFO - ✅ CEP 07404170 atualizado: Serra dos Carajás, Mirante do Arujá
+2025-04-23 08:37:40,476 - INFO - ✅ CEP 07439250 atualizado: dos Guarantãs, Granjas Urupes
+2025-04-23 08:37:41,998 - INFO - ✅ CEP 07403120 atualizado: Leocádio Mendonça, Arujamérica
+2025-04-23 08:37:43,708 - INFO - ✅ CEP 07400395 atualizado: Havana, Jardim Rincão
+2025-04-23 08:37:43,958 - INFO - ✅ CEP 07432465 atualizado: dos Jambeiros, Recanto Primavera
+2025-04-23 08:37:44,195 - INFO - ✅ CEP 07401110 atualizado: Nanci Araki, Arujá Center Ville
+2025-04-23 08:37:45,215 - INFO - ✅ CEP 07435610 atualizado: Maranhão, Arujázinho I, II e III
+2025-04-23 08:37:45,671 - INFO - ✅ CEP 07435570 atualizado: Pernambuco, Arujázinho I, II e III
+2025-04-23 08:37:46,184 - INFO - ✅ CEP 07401085 atualizado: Aires Monteiro, Arujá Center Ville
+2025-04-23 08:37:46,934 - INFO - ✅ CEP 07402185 atualizado: Pará, Jardim Planalto
+2025-04-23 08:37:47,818 - INFO - ✅ CEP 07417140 atualizado: Umbelina Ferreira Barbosa, Parque Rodrigo Barreto
+2025-04-23 08:37:49,852 - INFO - ✅ CEP 07417170 atualizado: Luiza de Faria Martins Guimarães, Parque Rodrigo Barreto
+2025-04-23 08:37:51,573 - INFO - ✅ CEP 07411410 atualizado: Nossa Senhora de Fátima, Cidade Nova Arujá
+2025-04-23 08:37:53,102 - INFO - ✅ CEP 07403010 atualizado: Antonio Francisco de Lima, Arujamérica
+2025-04-23 08:37:55,088 - INFO - ✅ CEP 07438729 atualizado: José de Carvalho, Estância Pacaembu
+2025-04-23 08:37:57,691 - INFO - ✅ CEP 07414440 atualizado: Dona Adília Rodrigues da Silva, Fontes
+2025-04-23 08:37:59,275 - INFO - ✅ CEP 07405440 atualizado: Jacutinga, Jardim Pinheiro
+2025-04-23 08:37:59,983 - INFO - ✅ CEP 07417010 atualizado: Amélia Gomes Barbosa, Fazenda Velha
+2025-04-23 08:38:00,450 - INFO - ✅ CEP 07402005 atualizado: Necy Monteiro D'Aquila, Jardim Renata
+2025-04-23 08:38:00,709 - INFO - ✅ CEP 07401785 atualizado: Maria Helena, Vila Pilar
+2025-04-23 08:38:02,487 - INFO - ✅ CEP 07400795 atualizado: Benjamin de Jesus Rodrigues, Arujá Centro Residencial
+2025-04-23 08:38:04,211 - INFO - ✅ CEP 07414430 atualizado: Fatec, Fontes
+2025-04-23 08:38:07,400 - INFO - ✅ CEP 07432550 atualizado: Clementina, Jardim Emília
+2025-04-23 08:38:07,941 - INFO - ✅ CEP 07435605 atualizado: Ceará, Arujázinho I, II e III
+2025-04-23 08:38:09,428 - INFO - ✅ CEP 07401680 atualizado: Zencuro Tamada, Vila Pilar
+2025-04-23 08:38:11,235 - INFO - ✅ CEP 07417130 atualizado: Benedito Martins Guimarães, Parque Rodrigo Barreto
+2025-04-23 08:38:14,448 - INFO - ✅ CEP 07404455 atualizado: Recife, Jardim Real
+2025-04-23 08:38:14,913 - INFO - ✅ CEP 07417255 atualizado: Maria Helena do Carmo Milanda, Parque Rodrigo Barreto
+2025-04-23 08:38:15,868 - INFO - ✅ CEP 07401360 atualizado: Albuquerque Lins, Vila Riman
+2025-04-23 08:38:17,381 - INFO - ✅ CEP 07400200 atualizado: Luiz Abrahão, Jardim Vitória
+2025-04-23 08:38:18,397 - INFO - ✅ CEP 07417445 atualizado: Sada João Fernandes, Parque Rodrigo Barreto
+2025-04-23 08:38:18,648 - INFO - ✅ CEP 07175130 atualizado: Cordeiros, Vila Nova Bonsucesso
+2025-04-23 08:38:20,173 - INFO - ✅ CEP 07401735 atualizado: Pedro de Alcântara, Vila Pilar
+2025-04-23 08:38:20,836 - INFO - ✅ CEP 07435320 atualizado: das Quaresmeiras, Arujá Country Club
+2025-04-23 08:38:21,095 - INFO - ✅ CEP 07400460 atualizado: dos Expedicionários, Jardim Rincão
+2025-04-23 08:38:21,533 - INFO - ✅ CEP 07428000 atualizado: Nossa Senhora de Lourdes, Nossa Senhora do Carmo
+2025-04-23 08:38:21,799 - INFO - ✅ CEP 07417485 atualizado: Iraci Souza da Rocha, Parque Rodrigo Barreto
+2025-04-23 08:38:22,631 - INFO - ✅ CEP 07407345 atualizado: Comendador José Alcides da Silva, Jardim Arujá
+2025-04-23 08:38:24,651 - INFO - ✅ CEP 07405420 atualizado: Bem-te-vi, Jardim Pinheiro
+2025-04-23 08:38:25,490 - INFO - ✅ CEP 07411145 atualizado: São José, Jordanópolis
+2025-04-23 08:38:26,047 - INFO - ✅ CEP 07417570 atualizado: Benjamin Barbosa, Parque Rodrigo Barreto
+2025-04-23 08:38:29,219 - INFO - ✅ CEP 07406406 atualizado: Arapongas, Jardim Pinheiro
+2025-04-23 08:38:29,728 - INFO - ✅ CEP 07404175 atualizado: Serra da Mata da Corda, Mirante do Arujá
+2025-04-23 08:38:30,186 - INFO - ✅ CEP 07405415 atualizado: Macuco, Jardim Pinheiro
+2025-04-23 08:38:32,003 - INFO - ✅ CEP 07434505 atualizado: Panorâmica, Arujázinho IV
+2025-04-23 08:38:32,903 - INFO - ✅ CEP 07403060 atualizado: Agenor Ferreira de Souza, Arujamérica
+2025-04-23 08:38:36,083 - INFO - ✅ CEP 07460260 atualizado: Serafim Antonio Domingos, Parque Rodrigo Barreto
+2025-04-23 08:38:38,700 - INFO - ✅ CEP 08690190 atualizado: Hélio Guimarães Lanzas, Cidade Miguel Badra
+2025-04-23 08:38:38,943 - INFO - ✅ CEP 07411165 atualizado: São Judas Tadeu, Jordanópolis
+2025-04-23 08:38:39,739 - INFO - ✅ CEP 07437015 atualizado: Jabuticabal, Parque dos Jacarandás
+2025-04-23 08:38:41,506 - INFO - ✅ CEP 07401790 atualizado: dos Expedicionários, Vila Pilar
+2025-04-23 08:38:44,665 - WARNING - ❌ Falha ao atualizar CEP 08550000: dados não encontrados
+2025-04-23 08:38:46,387 - INFO - ✅ CEP 07400280 atualizado: São Bento, Jardim Ângelo
+2025-04-23 08:38:47,368 - INFO - ✅ CEP 07404025 atualizado: Serra Oriental, Mirante do Arujá
+2025-04-23 08:38:49,170 - INFO - ✅ CEP 07436780 atualizado: Francisco Cesário da Silva, Jardim São Jorge
+2025-04-23 08:38:51,001 - INFO - ✅ CEP 07417530 atualizado: Cícera Maria Rodrigues, Parque Rodrigo Barreto
+2025-04-23 08:38:52,082 - INFO - ✅ CEP 07404010 atualizado: Benedito Barbosa Coutinho, Gleba D Arujamérica
+2025-04-23 08:38:52,885 - INFO - ✅ CEP 07432121 atualizado: Regina Célia Gomes Alvarenga, CDHU Fazenda Albor
+2025-04-23 08:38:54,806 - INFO - ✅ CEP 07414750 atualizado: Manuel Tavares da Silva, Fontes
+2025-04-23 08:38:56,484 - INFO - ✅ CEP 08590725 atualizado: da Conquista, Jardim Lucinda
+2025-04-23 08:38:59,722 - INFO - ✅ CEP 07402050 atualizado: Adelino Lopes Gonçalves, Barbosas
+2025-04-23 08:39:03,067 - WARNING - ❌ Falha ao atualizar CEP 07117019: dados não encontrados
+2025-04-23 08:39:03,380 - INFO - ✅ CEP 07417165 atualizado: Adelino Pereira da Silva, Parque Rodrigo Barreto
+2025-04-23 08:39:03,648 - INFO - ✅ CEP 07403000 atualizado: Hans Ossamu Suzuki, Arujamérica
+2025-04-23 08:39:05,413 - INFO - ✅ CEP 07405475 atualizado: Sabiá, Jardim Pinheiro
+2025-04-23 08:39:07,272 - INFO - ✅ CEP 07431285 atualizado: Topázio, Jardim Jóia
+2025-04-23 08:39:08,249 - INFO - ✅ CEP 07404105 atualizado: Serra do Botucatu, Mirante do Arujá
+2025-04-23 08:39:09,240 - INFO - ✅ CEP 07432075 atualizado: Dady, Jardim Emília
+2025-04-23 08:39:09,499 - INFO - ✅ CEP 07401330 atualizado: Prestes Maia, Vila Riman
+2025-04-23 08:39:11,040 - INFO - ✅ CEP 07417105 atualizado: Alexandre Ribeiro, Parque Rodrigo Barreto
+2025-04-23 08:39:12,910 - INFO - ✅ CEP 07401080 atualizado: Othelo Meleckcevisks, Arujá Center Ville
+2025-04-23 08:39:14,658 - INFO - ✅ CEP 07401005 atualizado: Benedito Miguel de Moura, Parque Judith
+2025-04-23 08:39:14,943 - INFO - ✅ CEP 07435720 atualizado: das Camélias, Arujázinho I, II e III
+2025-04-23 08:39:15,000 - INFO -  * Detected change in 'C:\\Users\\ivantp\\Downloads\\flask-react-project\\backend\\Gerar_BPA.py', reloading
+2025-04-23 08:39:21,248 - INFO - Scheduler started
+2025-04-23 08:39:21,249 - INFO - Added job "auto_update_imports_wrapper" to job store "default"
+2025-04-23 08:39:21,317 - WARNING -  * Debugger is active!
+2025-04-23 08:39:21,330 - INFO -  * Debugger PIN: 111-947-065
+2025-04-23 08:39:22,670 - INFO - ✅ CEP 07404210 atualizado: Serra dos Tinguás, Mirante do Arujá
+2025-04-23 08:39:22,938 - INFO - ✅ CEP 07401355 atualizado: Pedro de Toledo, Vila Riman
+2025-04-23 08:39:23,204 - INFO - ✅ CEP 07428075 atualizado: Coral, Jardim Fazenda Rincão
+2025-04-23 08:39:23,447 - INFO - ✅ CEP 07417360 atualizado: David Rodrigues de Ávila, Parque Rodrigo Barreto
+2025-04-23 08:39:23,704 - INFO - ✅ CEP 07401090 atualizado: Elpidio Ferreira Guimarães, Arujá Center Ville
+2025-04-23 08:39:23,952 - INFO - ✅ CEP 07429310 atualizado: Parque da Chapada dos Guimarães, Residencial Real Park
+2025-04-23 08:39:24,212 - INFO - ✅ CEP 07403065 atualizado: Sebastião Parreira, Arujamérica
+2025-04-23 08:39:24,459 - INFO - ✅ CEP 07438728 atualizado: Genival Ferreira, Estância Pacaembu
+2025-04-23 08:39:24,710 - INFO - ✅ CEP 08580440 atualizado: Pacaembu, Jardim São Armando
+2025-04-23 08:39:24,947 - INFO - ✅ CEP 07402835 atualizado: Belém, Jardim Real
+2025-04-23 08:39:25,207 - INFO - ✅ CEP 07401100 atualizado: Meridiano Pérola, Arujá Center Ville
+2025-04-23 08:39:28,361 - INFO - ✅ CEP 07471779 atualizado: Rogério de Andrade Santos, Parque Rodrigo Barreto
+2025-04-23 08:39:28,602 - INFO - ✅ CEP 07400555 atualizado: Monteiro Lobato, Centro
+2025-04-23 08:39:28,840 - INFO - ✅ CEP 08592190 atualizado: Orlândia, Parque Recanto Mônica
+2025-04-23 08:39:29,078 - INFO - ✅ CEP 07417285 atualizado: Benedito Palmiro Rodrigues, Parque Rodrigo Barreto
+2025-04-23 08:39:29,323 - INFO - ✅ CEP 07428320 atualizado: Serpentina, Jardim Fazenda Rincão
+2025-04-23 08:39:29,584 - INFO - ✅ CEP 07400455 atualizado: Wenceslau Braz, Jardim Rincão
+2025-04-23 08:39:29,850 - INFO - ✅ CEP 07405465 atualizado: Perdizes, Jardim Pinheiro
+2025-04-23 08:39:30,104 - INFO - ✅ CEP 07411440 atualizado: Azaléias, Cidade Nova Arujá
+2025-04-23 08:39:30,358 - INFO - ✅ CEP 07401125 atualizado: Albino Rodrigues Neves, Arujá Center Ville
+2025-04-23 08:39:30,608 - INFO - ✅ CEP 07432470 atualizado: das Mangueiras, Recanto Primavera
+2025-04-23 08:39:30,846 - INFO - ✅ CEP 07176005 atualizado: Velha Guarulhos-Arujá, Jardim Álamo
+2025-04-23 08:39:31,113 - INFO - ✅ CEP 07438520 atualizado: Ravena, Jardim Imperial
+2025-04-23 08:39:34,323 - INFO - ✅ CEP 07457005 atualizado: Pelicano, Jardim Pinheiro
+2025-04-23 08:39:34,564 - INFO - ✅ CEP 07434100 atualizado: Alberto Hinoto, Jardim Limoeiro
+2025-04-23 08:39:34,805 - INFO - ✅ CEP 07230350 atualizado: Tamboriu, Parque Uirapuru
+2025-04-23 08:39:35,051 - INFO - ✅ CEP 07428230 atualizado: Jade, Jardim Fazenda Rincão
+2025-04-23 08:39:35,314 - INFO - ✅ CEP 07418000 atualizado: Coronel José Lourenço de Souza, Chácara Bananal
+2025-04-23 08:39:38,485 - INFO - ✅ CEP 70400460 atualizado: Washington Luiz Pereira de Souza, Vila Flora Regina
+2025-04-23 08:39:38,720 - INFO - ✅ CEP 07437010 atualizado: dos Figueiras, Parque dos Jacarandás
+2025-04-23 08:39:38,973 - INFO - ✅ CEP 07400015 atualizado: Deolinda Nóbrega de Almeida, Centro
+2025-04-23 08:39:39,213 - INFO - ✅ CEP 07403110 atualizado: Eurípedes Antonio do Carmo, Arujamérica
+2025-04-23 08:39:42,396 - WARNING - ❌ Falha ao atualizar CEP 72004000: dados não encontrados
+2025-04-23 08:39:42,638 - INFO - ✅ CEP 07417580 atualizado: Luiz Talarico, Parque Rodrigo Barreto
+2025-04-23 08:39:42,875 - INFO - ✅ CEP 07432455 atualizado: dos Abacateiros, Recanto Primavera
+2025-04-23 08:39:43,139 - INFO - ✅ CEP 07400230 atualizado: Getúlio Vargas, Jardim Ângelo
+2025-04-23 08:39:43,378 - INFO - ✅ CEP 07417125 atualizado: Benjamin de Jesus Rodrigues, Parque Rodrigo Barreto
+2025-04-23 08:39:43,622 - INFO - ✅ CEP 07417370 atualizado: Armando Colangelo, Parque Rodrigo Barreto
+2025-04-23 08:39:43,872 - INFO - ✅ CEP 07402790 atualizado: Rio de Janeiro, Jardim Real
+2025-04-23 08:39:44,106 - INFO - ✅ CEP 07417315 atualizado: Pedro Leme, Parque Rodrigo Barreto
+2025-04-23 08:39:44,361 - INFO - ✅ CEP 08590470 atualizado: das Canavieiras, Jardim Deliy
+2025-04-23 08:39:44,619 - INFO - ✅ CEP 07400665 atualizado: Maria Aparecida Alegri, Arujá Centro Residencial
+2025-04-23 08:39:44,865 - INFO - ✅ CEP 07242430 atualizado: Coração de Jesus, Cidade Parque Alvorada
+2025-04-23 08:39:48,054 - INFO - ✅ CEP 07141736 atualizado: Antonio Armando Justiça, Parque Rodrigo Barreto
+2025-04-23 08:39:48,288 - INFO - ✅ CEP 08671035 atualizado: Senador Roberto Simonsen, Jardim dos Ipês
+2025-04-23 08:39:48,526 - INFO - ✅ CEP 07411400 atualizado: dos Lilazes, Cidade Nova Arujá
+2025-04-23 08:39:52,126 - INFO - ✅ CEP 07088809 atualizado: Serra da Mantiqueira, Mirante do Arujá
+2025-04-23 08:39:52,384 - INFO - ✅ CEP 07434130 atualizado: Limoeiro, Jardim Limoeiro
+2025-04-23 08:39:52,656 - INFO - ✅ CEP 07402120 atualizado: Raposo Tavares, Vila Lima
+2025-04-23 08:39:52,921 - INFO - ✅ CEP 07417280 atualizado: Angelo de Araújo Franco, Parque Rodrigo Barreto
+2025-04-23 08:39:53,177 - INFO - ✅ CEP 07400190 atualizado: Angelina Augusto Fernandes, Jardim Vitória
+2025-04-23 08:39:53,440 - INFO - ✅ CEP 07405450 atualizado: Gaivota, Jardim Pinheiro
+2025-04-23 08:39:53,688 - INFO - ✅ CEP 07434315 atualizado: Plínio Salgado Santangelo, Vila Pedroso
+2025-04-23 08:39:53,934 - INFO - ✅ CEP 07074001 atualizado: Florinda Rosa Teixeira, Vila Rosália
+2025-04-23 08:39:54,193 - INFO - ✅ CEP 07431305 atualizado: Cristal, Jardim Jóia
+2025-04-23 08:39:54,455 - INFO - ✅ CEP 07438620 atualizado: Benedito do Prado, Cachoeira
+2025-04-23 08:39:54,700 - INFO - ✅ CEP 07404095 atualizado: Serra do Jari, Mirante do Arujá
+2025-04-23 08:39:54,937 - INFO - ✅ CEP 07404165 atualizado: dos Fernandes, Mirante do Arujá
+2025-04-23 08:39:55,173 - INFO - ✅ CEP 07428315 atualizado: Rubelita, Jardim Fazenda Rincão
+2025-04-23 08:39:55,423 - INFO - ✅ CEP 07405310 atualizado: José Rodrigues Barbosa, Pedra Fala
+2025-04-23 08:39:59,053 - WARNING - ❌ Falha ao atualizar CEP 07462365: dados não encontrados
+2025-04-23 08:39:59,309 - INFO - ✅ CEP 08585025 atualizado: Lucas Garcez, Jardim Morada Feliz
+2025-04-23 08:39:59,594 - INFO - ✅ CEP 07402295 atualizado: Marina de Lima Santangelo, Chácara São José
+2025-04-23 08:39:59,847 - INFO - ✅ CEP 07401775 atualizado: Expedicionário Carmelino de Jesus, Vila Pilar
+2025-04-23 08:40:00,119 - INFO - ✅ CEP 07428100 atualizado: Água Marinha, Jardim Fazenda Rincão
+2025-04-23 08:40:00,378 - INFO - ✅ CEP 07404090 atualizado: Serra do Jaire, Mirante do Arujá
+2025-04-23 08:40:00,724 - INFO - ✅ CEP 07432690 atualizado: Yoshi Sasaoka, Sítio dos Fernandes
+2025-04-23 08:40:01,000 - INFO - ✅ CEP 07417180 atualizado: José Cícero Soares, Parque Rodrigo Barreto
+2025-04-23 08:40:01,310 - INFO - ✅ CEP 07439040 atualizado: Antimônio, Chácaras Copaco
+2025-04-23 08:40:01,549 - INFO - ✅ CEP 07417185 atualizado: Luiz Paulo Colangelo Nóbrega, Parque Rodrigo Barreto
+2025-04-23 08:40:01,808 - INFO - ✅ CEP 07417430 atualizado: José de Lima, Parque Rodrigo Barreto
+2025-04-23 08:40:02,063 - INFO - ✅ CEP 07439135 atualizado: Coque, Chácaras Copaco
+2025-04-23 08:40:02,300 - INFO - ✅ CEP 07435270 atualizado: das Castanheiras, Arujá Country Club
+2025-04-23 08:40:02,556 - INFO - ✅ CEP 07417415 atualizado: Alfredo Antonio Fernandes, Parque Rodrigo Barreto
+2025-04-23 08:40:02,792 - INFO - ✅ CEP 07432080 atualizado: Haroldo, Jardim Emília
+2025-04-23 08:40:03,038 - INFO - ✅ CEP 07400330 atualizado: Vereador Antonio Frau, Convívio Residencial Santana
+2025-04-23 08:40:03,284 - INFO - ✅ CEP 07432050 atualizado: Dutra, Jardim Emília
+2025-04-23 08:40:03,526 - INFO - ✅ CEP 07439045 atualizado: Petróleo, Chácaras Copaco
+2025-04-23 08:40:03,774 - INFO - ✅ CEP 07400490 atualizado: dos Expedicionários, Vila Flora Regina
+2025-04-23 08:40:04,393 - INFO - ✅ CEP 07401070 atualizado: Armando Colangelo, Arujá Center Ville
+2025-04-23 08:40:05,648 - INFO - ✅ CEP 07414425 atualizado: Benvinda Oliveira Magalhães, Chácaras Colinas Verdes
+2025-04-23 08:40:05,892 - INFO - ✅ CEP 07439130 atualizado: Estanho, Chácaras Copaco
+2025-04-23 08:40:09,048 - INFO - ✅ CEP 07204805 atualizado: Real, Jardim Real
+2025-04-23 08:40:09,306 - INFO - ✅ CEP 07400250 atualizado: Hercélio Mattos de Oliveira, Jardim Ângelo
+2025-04-23 08:40:09,552 - INFO - ✅ CEP 07414790 atualizado: Municipal Espigonal, Fontes
+2025-04-23 08:40:12,714 - INFO - ✅ CEP 07414555 atualizado: Benedito Barbosa de Souza, Parque Rodrigo Barreto
+2025-04-23 08:40:12,976 - INFO - ✅ CEP 07417200 atualizado: Deolinda Rosa dos Santos, Parque Rodrigo Barreto
+2025-04-23 08:40:13,222 - INFO - ✅ CEP 07414180 atualizado: Michio Hatakeyama, Jardim Yamamoto
+2025-04-23 08:40:13,455 - INFO - ✅ CEP 07428205 atualizado: Benedito Manoel dos Santos, Jardim Fazenda Rincão
+2025-04-23 08:40:16,618 - INFO - ✅ CEP 74030000 atualizado: Hans Ossamu Suzuki, Arujamérica
+2025-04-23 08:40:16,874 - INFO - ✅ CEP 08590390 atualizado: Matinhos, Jardim Josely
+2025-04-23 08:40:17,111 - INFO - ✅ CEP 07401300 atualizado: General Porfírio da Paz, Jardim Modelo
+2025-04-23 08:40:17,351 - INFO - ✅ CEP 07417495 atualizado: Antonio Pinheiro, Parque Rodrigo Barreto
+2025-04-23 08:40:17,589 - INFO - ✅ CEP 07417265 atualizado: Railda Alves de Oliveira, Parque Rodrigo Barreto
+2025-04-23 08:40:17,825 - INFO - ✅ CEP 07402280 atualizado: Rio de Janeiro, Chácara São José
+2025-04-23 08:40:18,063 - INFO - ✅ CEP 07432670 atualizado: Tomi Miura, Sítio dos Fernandes
+2025-04-23 08:40:18,316 - INFO - ✅ CEP 07400505 atualizado: José Basílio Alvarenga, Vila Flora Regina
+2025-04-23 08:40:18,574 - INFO - ✅ CEP 07417345 atualizado: José Claudio dos Santos Filho, Parque Rodrigo Barreto
+2025-04-23 08:40:18,814 - INFO - ✅ CEP 07411650 atualizado: Londres, Centro Industrial de Arujá
+2025-04-23 08:40:19,072 - INFO - ✅ CEP 07403005 atualizado: Theófilo Ramos de Andrade, Arujamérica
+2025-04-23 08:40:19,307 - INFO - ✅ CEP 07403090 atualizado: Leocádio Mendonça, Arujamérica
+2025-04-23 08:40:19,549 - INFO - ✅ CEP 07176710 atualizado: José de Souza Abrantes, Jardim Álamo
+2025-04-23 08:40:19,797 - INFO - ✅ CEP 07403115 atualizado: José Menino Ribeiro, Arujamérica
+2025-04-23 08:40:20,055 - INFO - ✅ CEP 07439025 atualizado: Gelna, Chácaras Copaco
+2025-04-23 08:40:20,290 - INFO - ✅ CEP 07401345 atualizado: Armando Sales de Oliveira, Vila Riman
+2025-04-23 08:40:20,525 - INFO - ✅ CEP 07402190 atualizado: São Paulo, Jardim Planalto
+2025-04-23 08:40:20,786 - INFO - ✅ CEP 08570970 atualizado: Padre João Álvares 181/183, Centro
+2025-04-23 08:40:23,960 - WARNING - ❌ Falha ao atualizar CEP 07454975: dados não encontrados
+2025-04-23 08:40:24,200 - INFO - ✅ CEP 07196030 atualizado: João Romano, Vila Flórida
+2025-04-23 08:40:24,469 - INFO - ✅ CEP 07404130 atualizado: Serra do Gil, Mirante do Arujá
+2025-04-23 08:40:24,716 - INFO - ✅ CEP 07401335 atualizado: Lucas Nogueira Garcez, Vila Riman
+2025-04-23 08:40:24,977 - INFO - ✅ CEP 07405445 atualizado: Andorinha, Jardim Pinheiro
+2025-04-23 08:40:28,181 - INFO - ✅ CEP 07407010 atualizado: dos Fernandes, Mirante do Arujá
+2025-04-23 08:40:28,424 - INFO - ✅ CEP 07437090 atualizado: das Figueiras, Parque dos Arantes
+2025-04-23 08:40:29,842 - WARNING - ❌ Falha ao atualizar CEP 16642535: dados não encontrados
+2025-04-23 08:40:30,081 - INFO - ✅ CEP 08590380 atualizado: Paiçandu, Jardim Josely
+2025-04-23 08:40:30,340 - INFO - ✅ CEP 07417550 atualizado: Terezinha de Jesus Monteiro de Castro, Parque Rodrigo Barreto
+2025-04-23 08:40:30,587 - INFO - ✅ CEP 07432055 atualizado: Clementina, Jardim Emília
+2025-04-23 08:40:33,756 - INFO - ✅ CEP 07470040 atualizado: Airton dos Santos Heras Galvez, Jardim Santo Antônio
+2025-04-23 08:40:33,997 - INFO - ✅ CEP 07400420 atualizado: Bogotá, Jardim Rincão
+2025-04-23 08:40:37,164 - INFO - ✅ CEP 04717580 atualizado: Sebastião Martins Guimarães, Parque Rodrigo Barreto
+2025-04-23 08:40:37,410 - INFO - ✅ CEP 07417305 atualizado: Armando Colangelo, Parque Rodrigo Barreto
+2025-04-23 08:40:37,657 - INFO - ✅ CEP 07400400 atualizado: Assunção, Jardim Rincão
+2025-04-23 08:40:37,906 - INFO - ✅ CEP 07400165 atualizado: Major Benjamin Franco, Jardim Vitória
+2025-04-23 08:40:38,145 - INFO - ✅ CEP 07175350 atualizado: Victor Graeff, Jardim do Triunfo
+2025-04-23 08:40:38,409 - INFO - ✅ CEP 07404155 atualizado: Serra de Itaberaba, Mirante do Arujá
+2025-04-23 08:40:38,651 - INFO - ✅ CEP 08581430 atualizado: Quebrângulo, Jardim Viana
+2025-04-23 08:40:38,892 - INFO - ✅ CEP 07401105 atualizado: Sergio Saleh Riman, Arujá Center Ville
+2025-04-23 08:40:39,131 - INFO - ✅ CEP 08730660 atualizado: Jardelina de Almeida Lopes, Chácara Jafet
+2025-04-23 08:40:39,366 - INFO - ✅ CEP 07403100 atualizado: Donato Antonio de Camargo, Arujamérica
+2025-04-23 08:40:39,612 - INFO - ✅ CEP 07411220 atualizado: Santo Antonio do Catigeró, Jordanópolis
+2025-04-23 08:40:39,851 - INFO - ✅ CEP 07400850 atualizado: Maria Gonçalves de Oliveira, Arujá Centro Residencial
+2025-04-23 08:40:43,000 - WARNING - ❌ Falha ao atualizar CEP 07410001: dados não encontrados
+2025-04-23 08:40:43,258 - INFO - ✅ CEP 07407375 atualizado: Paulo Antonio Barbosa, Jardim Arujá
+2025-04-23 08:40:43,498 - INFO - ✅ CEP 07401720 atualizado: Iraci Pinto Ferreira Braz, Vila Pilar
+2025-04-23 08:40:43,755 - INFO - ✅ CEP 07417490 atualizado: Benedito Rodrigues do Prado, Parque Rodrigo Barreto
+2025-04-23 08:40:43,992 - INFO - ✅ CEP 07417295 atualizado: Soldado Edson de Paula e Silva, Parque Rodrigo Barreto
+2025-04-23 08:40:44,231 - INFO - ✅ CEP 07251180 atualizado: Atlas, Água Chata
+2025-04-23 08:40:44,482 - INFO - ✅ CEP 07417390 atualizado: Vicente Antonio Nogueira, Parque Rodrigo Barreto
+2025-04-23 08:40:44,723 - INFO - ✅ CEP 07432675 atualizado: Tiaki Ogaçawara, Sítio dos Fernandes
+2025-04-23 08:40:47,898 - INFO - ✅ CEP 07455550 atualizado: Braz Maiolino, Barbosas
+2025-04-23 08:40:51,074 - INFO - ✅ CEP 07045408 atualizado: Tuím, Jardim Pinheiro
+2025-04-23 08:40:51,327 - INFO - ✅ CEP 07405425 atualizado: Rouxinol, Jardim Pinheiro
+2025-04-23 08:40:51,581 - INFO - ✅ CEP 07417455 atualizado: Padre Atílio Garrone, Parque Rodrigo Barreto
+2025-04-23 08:40:51,839 - INFO - ✅ CEP 08590440 atualizado: Flórida, Jardim Josely
+2025-04-23 08:40:52,090 - INFO - ✅ CEP 07428255 atualizado: Espinélio, Jardim Fazenda Rincão
+2025-04-23 08:40:52,407 - INFO - ✅ CEP 07400700 atualizado: Nair Ribeiro Maiolino, Arujá Centro Residencial
+2025-04-23 08:40:52,651 - INFO - ✅ CEP 07406370 atualizado: Pitta, Vila Arujá
+2025-04-23 08:40:52,902 - INFO - ✅ CEP 07401075 atualizado: Armando Colangelo, Arujá Center Ville
+2025-04-23 08:40:53,147 - INFO - ✅ CEP 08570770 atualizado: Bilac, Jardim Santa Helena
+2025-04-23 08:40:53,387 - INFO - ✅ CEP 07406275 atualizado: Vereador Albino Rodrigues Neves, Pedreira
+2025-04-23 08:40:53,632 - INFO - ✅ CEP 07436770 atualizado: Augustinho Palmezan, Jardim São Jorge
+2025-04-23 08:40:53,890 - INFO - ✅ CEP 07411155 atualizado: Santa Terezinha, Jordanópolis
+2025-04-23 08:40:57,071 - INFO - ✅ CEP 07421790 atualizado: Terezinha de Jesus Monteiro de Castro, Parque Rodrigo Barreto
+2025-04-23 08:40:57,325 - INFO - ✅ CEP 07401725 atualizado: Durval Ferreira de Almeida, Vila Pilar
+2025-04-23 08:41:00,503 - INFO - ✅ CEP 07430005 atualizado: União Paulista, Jardim Josely
+2025-04-23 08:41:00,754 - INFO - ✅ CEP 07440030 atualizado: Ipê, Chácaras Vista Alegre
+2025-04-23 08:41:01,005 - INFO - ✅ CEP 07428015 atualizado: Maria Mãe dos Homens, Nossa Senhora do Carmo
+2025-04-23 08:41:01,271 - INFO - ✅ CEP 07417350 atualizado: Dalila Maria Joaquina Barbosa, Parque Rodrigo Barreto
+2025-04-23 08:41:01,505 - INFO - ✅ CEP 08598100 atualizado: de São Bento, Jardim Odete
+2025-04-23 08:41:01,754 - INFO - ✅ CEP 08673020 atualizado: Sete de Setembro, Parque Suzano
+2025-04-23 08:41:01,992 - INFO - ✅ CEP 07407360 atualizado: Braz Ferreira, Jardim Arujá
+2025-04-23 08:41:05,167 - INFO - ✅ CEP 07443412 atualizado: Benedito Antonio Ribeiro, Jardim Limoeiro
+2025-04-23 08:41:05,430 - INFO - ✅ CEP 07439090 atualizado: Grafite, Chácaras Copaco
+2025-04-23 08:41:05,668 - INFO - ✅ CEP 07440020 atualizado: do Cedro, Chácaras Vista Alegre
+2025-04-23 08:41:05,911 - INFO - ✅ CEP 08587810 atualizado: Rosa de Sharon, Parque Residencial Scaffid II
+2025-04-23 08:41:09,080 - INFO - ✅ CEP 07417035 atualizado: dos Pinheiros, Parque dos Jacarandás
+2025-04-23 08:41:09,329 - INFO - ✅ CEP 07434110 atualizado: Limoeiro, Jardim Limoeiro
+2025-04-23 08:41:09,602 - INFO - ✅ CEP 07402870 atualizado: Cuiabá, Jardim Real
+2025-04-23 08:41:10,246 - INFO - ✅ CEP 07435675 atualizado: Tupã, Arujázinho I, II e III
+2025-04-23 08:41:12,005 - INFO - ✅ CEP 07417435 atualizado: Abdon Ferreira Silva, Parque Rodrigo Barreto
+2025-04-23 08:41:12,298 - INFO - ✅ CEP 07417135 atualizado: Maria Luiza Guimarães de Lima, Parque Rodrigo Barreto
+2025-04-23 08:41:15,518 - INFO - ✅ CEP 07400365 atualizado: Rio de Janeiro, Jardim Real
+2025-04-23 08:41:18,047 - INFO - ✅ CEP 07428010 atualizado: Nossa Senhora do Carmo, Nossa Senhora do Carmo
+2025-04-23 08:41:18,751 - INFO - ✅ CEP 07402800 atualizado: São Paulo, Jardim Real
+2025-04-23 08:41:20,746 - INFO - ✅ CEP 07404135 atualizado: Serra dos Canudos, Mirante do Arujá
+2025-04-23 08:41:21,063 - INFO - ✅ CEP 07405460 atualizado: Arapongas, Jardim Pinheiro
+2025-04-23 08:41:21,318 - INFO - ✅ CEP 07432580 atualizado: Sango Matsuzaki, Jardim das Cerejeiras
+2025-04-23 08:41:21,571 - INFO - ✅ CEP 07404170 atualizado: Serra dos Carajás, Mirante do Arujá
+2025-04-23 08:41:21,818 - INFO - ✅ CEP 07439250 atualizado: dos Guarantãs, Granjas Urupes
+2025-04-23 08:41:22,081 - INFO - ✅ CEP 07403120 atualizado: Leocádio Mendonça, Arujamérica
+2025-04-23 08:41:22,330 - INFO - ✅ CEP 07400395 atualizado: Havana, Jardim Rincão
+2025-04-23 08:41:22,578 - INFO - ✅ CEP 07432465 atualizado: dos Jambeiros, Recanto Primavera
+2025-04-23 08:41:22,827 - INFO - ✅ CEP 07401110 atualizado: Nanci Araki, Arujá Center Ville
+2025-04-23 08:41:23,073 - INFO - ✅ CEP 07435610 atualizado: Maranhão, Arujázinho I, II e III
+2025-04-23 08:41:23,343 - INFO - ✅ CEP 07435570 atualizado: Pernambuco, Arujázinho I, II e III
+2025-04-23 08:41:23,592 - INFO - ✅ CEP 07401085 atualizado: Aires Monteiro, Arujá Center Ville
+2025-04-23 08:41:23,867 - INFO - ✅ CEP 07402185 atualizado: Pará, Jardim Planalto
+2025-04-23 08:41:24,116 - INFO - ✅ CEP 07417140 atualizado: Umbelina Ferreira Barbosa, Parque Rodrigo Barreto
+2025-04-23 08:41:24,367 - INFO - ✅ CEP 07417170 atualizado: Luiza de Faria Martins Guimarães, Parque Rodrigo Barreto
+2025-04-23 08:41:24,634 - INFO - ✅ CEP 07411410 atualizado: Nossa Senhora de Fátima, Cidade Nova Arujá
+2025-04-23 08:41:24,893 - INFO - ✅ CEP 07403010 atualizado: Antonio Francisco de Lima, Arujamérica
+2025-04-23 08:41:25,135 - INFO - ✅ CEP 07438729 atualizado: José de Carvalho, Estância Pacaembu
+2025-04-23 08:41:25,388 - INFO - ✅ CEP 07414440 atualizado: Dona Adília Rodrigues da Silva, Fontes
+2025-04-23 08:41:25,661 - INFO - ✅ CEP 07405440 atualizado: Jacutinga, Jardim Pinheiro
+2025-04-23 08:41:26,402 - INFO - ✅ CEP 07417010 atualizado: Amélia Gomes Barbosa, Fazenda Velha
+2025-04-23 08:41:30,178 - INFO - ✅ CEP 07402005 atualizado: Necy Monteiro D'Aquila, Jardim Renata
+2025-04-23 08:41:30,449 - INFO - ✅ CEP 07401785 atualizado: Maria Helena, Vila Pilar
+2025-04-23 08:41:30,704 - INFO - ✅ CEP 07400795 atualizado: Benjamin de Jesus Rodrigues, Arujá Centro Residencial
+2025-04-23 08:41:31,047 - INFO - ✅ CEP 07414430 atualizado: Fatec, Fontes
+2025-04-23 08:41:34,224 - INFO - ✅ CEP 07432550 atualizado: Clementina, Jardim Emília
+2025-04-23 08:41:34,469 - INFO - ✅ CEP 07435605 atualizado: Ceará, Arujázinho I, II e III
+2025-04-23 08:41:34,709 - INFO - ✅ CEP 07401680 atualizado: Zencuro Tamada, Vila Pilar
+2025-04-23 08:41:34,977 - INFO - ✅ CEP 07417130 atualizado: Benedito Martins Guimarães, Parque Rodrigo Barreto
+2025-04-23 08:41:38,193 - INFO - ✅ CEP 07404455 atualizado: Recife, Jardim Real
+2025-04-23 08:41:38,434 - INFO - ✅ CEP 07417255 atualizado: Maria Helena do Carmo Milanda, Parque Rodrigo Barreto
+2025-04-23 08:41:38,669 - INFO - ✅ CEP 07401360 atualizado: Albuquerque Lins, Vila Riman
+2025-04-23 08:41:38,905 - INFO - ✅ CEP 07400200 atualizado: Luiz Abrahão, Jardim Vitória
+2025-04-23 08:41:39,145 - INFO - ✅ CEP 07417445 atualizado: Sada João Fernandes, Parque Rodrigo Barreto
+2025-04-23 08:41:39,388 - INFO - ✅ CEP 07175130 atualizado: Cordeiros, Vila Nova Bonsucesso
+2025-04-23 08:41:39,628 - INFO - ✅ CEP 07401735 atualizado: Pedro de Alcântara, Vila Pilar
+2025-04-23 08:41:39,891 - INFO - ✅ CEP 07435320 atualizado: das Quaresmeiras, Arujá Country Club
+2025-04-23 08:41:40,132 - INFO - ✅ CEP 07400460 atualizado: dos Expedicionários, Jardim Rincão
+2025-04-23 08:41:40,391 - INFO - ✅ CEP 07428000 atualizado: Nossa Senhora de Lourdes, Nossa Senhora do Carmo
+2025-04-23 08:41:40,628 - INFO - ✅ CEP 07417485 atualizado: Iraci Souza da Rocha, Parque Rodrigo Barreto
+2025-04-23 08:41:40,868 - INFO - ✅ CEP 07407345 atualizado: Comendador José Alcides da Silva, Jardim Arujá
+2025-04-23 08:41:41,120 - INFO - ✅ CEP 07405420 atualizado: Bem-te-vi, Jardim Pinheiro
+2025-04-23 08:41:41,358 - INFO - ✅ CEP 07411145 atualizado: São José, Jordanópolis
+2025-04-23 08:41:41,603 - INFO - ✅ CEP 07417570 atualizado: Benjamin Barbosa, Parque Rodrigo Barreto
+2025-04-23 08:41:44,793 - INFO - ✅ CEP 07406406 atualizado: Arapongas, Jardim Pinheiro
+2025-04-23 08:41:45,049 - INFO - ✅ CEP 07404175 atualizado: Serra da Mata da Corda, Mirante do Arujá
+2025-04-23 08:41:45,310 - INFO - ✅ CEP 07405415 atualizado: Macuco, Jardim Pinheiro
+2025-04-23 08:41:45,546 - INFO - ✅ CEP 07434505 atualizado: Panorâmica, Arujázinho IV
+2025-04-23 08:41:45,789 - INFO - ✅ CEP 07403060 atualizado: Agenor Ferreira de Souza, Arujamérica
+2025-04-23 08:41:48,969 - INFO - ✅ CEP 07460260 atualizado: Serafim Antonio Domingos, Parque Rodrigo Barreto
+2025-04-23 08:41:49,210 - INFO - ✅ CEP 08690190 atualizado: Hélio Guimarães Lanzas, Cidade Miguel Badra
+2025-04-23 08:41:49,450 - INFO - ✅ CEP 07411165 atualizado: São Judas Tadeu, Jordanópolis
+2025-04-23 08:41:49,692 - INFO - ✅ CEP 07437015 atualizado: Jabuticabal, Parque dos Jacarandás
+2025-04-23 08:41:49,937 - INFO - ✅ CEP 07401790 atualizado: dos Expedicionários, Vila Pilar
+2025-04-23 08:41:53,122 - WARNING - ❌ Falha ao atualizar CEP 08550000: dados não encontrados
+2025-04-23 08:41:53,361 - INFO - ✅ CEP 07400280 atualizado: São Bento, Jardim Ângelo
+2025-04-23 08:41:53,606 - INFO - ✅ CEP 07404025 atualizado: Serra Oriental, Mirante do Arujá
+2025-04-23 08:41:53,844 - INFO - ✅ CEP 07436780 atualizado: Francisco Cesário da Silva, Jardim São Jorge
+2025-04-23 08:41:54,080 - INFO - ✅ CEP 07417530 atualizado: Cícera Maria Rodrigues, Parque Rodrigo Barreto
+2025-04-23 08:41:54,318 - INFO - ✅ CEP 07404010 atualizado: Benedito Barbosa Coutinho, Gleba D Arujamérica
+2025-04-23 08:41:54,558 - INFO - ✅ CEP 07432121 atualizado: Regina Célia Gomes Alvarenga, CDHU Fazenda Albor
+2025-04-23 08:41:54,828 - INFO - ✅ CEP 07414750 atualizado: Manuel Tavares da Silva, Fontes
+2025-04-23 08:41:55,094 - INFO - ✅ CEP 08590725 atualizado: da Conquista, Jardim Lucinda
+2025-04-23 08:41:55,334 - INFO - ✅ CEP 07402050 atualizado: Adelino Lopes Gonçalves, Barbosas
+2025-04-23 08:41:58,508 - WARNING - ❌ Falha ao atualizar CEP 07117019: dados não encontrados
+2025-04-23 08:41:58,768 - INFO - ✅ CEP 07417165 atualizado: Adelino Pereira da Silva, Parque Rodrigo Barreto
+2025-04-23 08:41:59,005 - INFO - ✅ CEP 07403000 atualizado: Hans Ossamu Suzuki, Arujamérica
+2025-04-23 08:41:59,237 - INFO - ✅ CEP 07405475 atualizado: Sabiá, Jardim Pinheiro
+2025-04-23 08:41:59,492 - INFO - ✅ CEP 07431285 atualizado: Topázio, Jardim Jóia
+2025-04-23 08:41:59,754 - INFO - ✅ CEP 07404105 atualizado: Serra do Botucatu, Mirante do Arujá
+2025-04-23 08:42:00,020 - INFO - ✅ CEP 07432075 atualizado: Dady, Jardim Emília
+2025-04-23 08:42:00,264 - INFO - ✅ CEP 07401330 atualizado: Prestes Maia, Vila Riman
+2025-04-23 08:42:00,518 - INFO - ✅ CEP 07417105 atualizado: Alexandre Ribeiro, Parque Rodrigo Barreto
+2025-04-23 08:42:00,771 - INFO - ✅ CEP 07401080 atualizado: Othelo Meleckcevisks, Arujá Center Ville
+2025-04-23 08:42:01,026 - INFO - ✅ CEP 07401005 atualizado: Benedito Miguel de Moura, Parque Judith
+2025-04-23 08:42:01,268 - INFO - ✅ CEP 07435720 atualizado: das Camélias, Arujázinho I, II e III
+2025-04-23 08:42:01,505 - INFO - ✅ CEP 07417525 atualizado: Benedita Leopoldina de Almeida, Parque Rodrigo Barreto
+2025-04-23 08:42:04,717 - INFO - ✅ CEP 07400797 atualizado: Benjamin de Jesus Rodrigues, Parque Rodrigo Barreto
+2025-04-23 08:42:05,434 - INFO - ✅ CEP 07401115 atualizado: Guilherme Marchini, Arujá Center Ville
+2025-04-23 08:42:05,902 - INFO - ✅ CEP 07404020 atualizado: dos Fernandes, Mirante do Arujá
+2025-04-23 08:42:06,627 - INFO - ✅ CEP 07417585 atualizado: Joaquim Ferreira Rodrigues, Parque Rodrigo Barreto
+2025-04-23 08:42:08,413 - INFO - ✅ CEP 07401695 atualizado: Firmina Maiolino Ribeiro, Vila Pilar
+2025-04-23 08:42:08,916 - INFO - ✅ CEP 07412010 atualizado: P.L. do Brasil, Portão
+2025-04-23 08:42:10,630 - INFO - ✅ CEP 07114170 atualizado: Maria José Bellegarde Santoni, Parque Renato Maia
+2025-04-23 08:42:13,824 - INFO - ✅ CEP 07451013 atualizado: Manuel Tavares da Silva, Fontes
+2025-04-23 08:42:14,549 - INFO - ✅ CEP 07405470 atualizado: Pelicano, Jardim Pinheiro
+2025-04-23 08:42:15,061 - INFO - ✅ CEP 07400575 atualizado: Rodrigues Alves, Centro
+2025-04-23 08:42:16,011 - INFO - ✅ CEP 07439000 atualizado: Linhita, Chácaras Copaco
+2025-04-23 08:42:16,256 - INFO - ✅ CEP 07417450 atualizado: Rodrigo Mendes Barreto, Parque Rodrigo Barreto
+2025-04-23 08:42:18,850 - INFO - ✅ CEP 07400445 atualizado: Marechal Castelo Branco, Jardim Rincão
+2025-04-23 08:42:19,363 - INFO - ✅ CEP 07432595 atualizado: Keitome Hosoe, Jardim das Cerejeiras
+2025-04-23 08:42:19,602 - INFO - ✅ CEP 07411355 atualizado: Crisântemos, Cidade Nova Arujá
+2025-04-23 08:42:20,310 - INFO - ✅ CEP 07417240 atualizado: Benedito Norte, Parque Rodrigo Barreto
+2025-04-23 08:42:20,970 - INFO - ✅ CEP 07400990 atualizado: Esmera Maria Rodrigues, 1369 - Bairro do Correia, 
+2025-04-23 08:42:22,594 - INFO - ✅ CEP 07411430 atualizado: São Lucas, Cidade Nova Arujá
+2025-04-23 08:42:23,058 - INFO - ✅ CEP 07432450 atualizado: dos Coqueiros, Recanto Primavera
+2025-04-23 08:42:23,827 - INFO - ✅ CEP 07411170 atualizado: Santo Antonio, Jordanópolis
+2025-04-23 08:42:24,323 - INFO - ✅ CEP 07402180 atualizado: Mato Grosso, Jardim Planalto
+2025-04-23 08:42:25,010 - INFO - ✅ CEP 07403055 atualizado: Benedito Branco de Moraes, Arujamérica
+2025-04-23 08:42:25,753 - INFO - ✅ CEP 07417155 atualizado: Pedro Nolasco Coutinho, Parque Rodrigo Barreto
+2025-04-23 08:42:26,750 - INFO - ✅ CEP 07416000 atualizado: P.L. do Brasil, Fontes
+2025-04-23 08:42:27,003 - INFO - ✅ CEP 07261040 atualizado: João Pessoa, Parque Jandaia
+2025-04-23 08:42:28,827 - INFO - ✅ CEP 07439060 atualizado: dos Índios, Chácaras Copaco
+2025-04-23 08:42:29,313 - INFO - ✅ CEP 07404000 atualizado: João Domingos Ribeiro, Gleba D Arujamérica
+2025-04-23 08:42:29,823 - INFO - ✅ CEP 07435235 atualizado: das Tangerinas, Arujá Country Club
+2025-04-23 08:42:32,431 - INFO - ✅ CEP 07411140 atualizado: Nossa Senhora da Penha, Jordanópolis
+2025-04-23 08:42:33,228 - INFO - ✅ CEP 02326130 atualizado: Monte Negro, Jardim Felicidade (Zona Norte)
+2025-04-23 08:42:34,997 - INFO - ✅ CEP 07406385 atualizado: dos Milagres, Vila Arujá
+2025-04-23 08:42:35,447 - INFO - ✅ CEP 08584160 atualizado: Petrônio Portela, Jardim Patrícia
+2025-04-23 08:42:38,631 - INFO - ✅ CEP 07404750 atualizado: Serra do Mar, Mirante do Arujá
+2025-04-23 08:42:38,868 - INFO - ✅ CEP 07434120 atualizado: Benedito Antonio Ribeiro, Jardim Limoeiro
+2025-04-23 08:42:39,107 - INFO - ✅ CEP 05093000 atualizado: Fortunato Ferraz, Vila Anastácio
+2025-04-23 08:42:42,282 - INFO - ✅ CEP 07320400 atualizado: Alice, Jardim Emília
+2025-04-23 08:42:43,233 - INFO - ✅ CEP 07417235 atualizado: Isaura Maria Batista Garcia, Parque Rodrigo Barreto
+2025-04-23 08:42:43,684 - INFO - ✅ CEP 07400885 atualizado: Armando Tenório de Araújo, Arujá Centro Residencial
+2025-04-23 08:42:44,577 - INFO - ✅ CEP 07406360 atualizado: Juscelino Kubitschek, Vila Arujá
+2025-04-23 08:42:44,837 - INFO - ✅ CEP 07500000 atualizado: , 
+2025-04-23 08:42:48,014 - WARNING - ❌ Falha ao atualizar CEP 07100830: dados não encontrados
+2025-04-23 08:42:49,915 - INFO - ✅ CEP 07439015 atualizado: Amianto, Chácaras Copaco
+2025-04-23 08:42:50,700 - INFO - ✅ CEP 07443015 atualizado: Abatiá, Jardim Josely
+2025-04-23 08:42:53,935 - INFO - ✅ CEP 27417255 atualizado: Maria Helena do Carmo Milanda, Parque Rodrigo Barreto
+2025-04-23 08:42:55,405 - INFO - ✅ CEP 07435260 atualizado: dos Pereiras, Arujá Country Club
+2025-04-23 08:42:58,042 - INFO - ✅ CEP 07432120 atualizado: Marlene Paiva dos Santos, CDHU Fazenda Albor
+2025-04-23 08:42:58,793 - INFO - ✅ CEP 07429825 atualizado: Marília, Parque Maringá
+2025-04-23 08:42:59,766 - INFO - ✅ CEP 07400970 atualizado: dos Expedicionários 290, Jardim Rincão
+2025-04-23 08:43:00,661 - INFO - ✅ CEP 07402080 atualizado: Atilio Tinucci, Barbosas
+2025-04-23 08:43:03,266 - INFO - ✅ CEP 07438015 atualizado: Santo Anastácio, Jardim Via Dutra
+2025-04-23 08:43:04,799 - INFO - ✅ CEP 07400770 atualizado: Pedro Severino Martins, Arujá Centro Residencial
+2025-04-23 08:43:06,318 - INFO - ✅ CEP 07402205 atualizado: Minas Gerais, Jardim Planalto
+2025-04-23 08:43:07,150 - INFO - ✅ CEP 07432060 atualizado: Nicolau, Jardim Emília
+2025-04-23 08:43:08,939 - INFO - ✅ CEP 07417385 atualizado: Quitéria Alves Ferreira, Parque Rodrigo Barreto
+2025-04-23 08:43:09,739 - INFO - ✅ CEP 07401755 atualizado: Benedita Maria Barbosa Souza, Vila Pilar
+2025-04-23 08:43:10,193 - INFO - ✅ CEP 07411210 atualizado: Nossa Senhora de Fátima, Jordanópolis
+2025-04-23 08:43:10,708 - INFO - ✅ CEP 07432085 atualizado: Nick, Jardim Emília
+2025-04-23 08:43:12,290 - INFO - ✅ CEP 07405430 atualizado: Prefeito Julio Barbosa de Souza, Jardim Pinheiro
+2025-04-23 08:43:13,984 - INFO - ✅ CEP 07400175 atualizado: Geraldo Barbosa de Almeida, Jardim Vitória
+2025-04-23 08:43:17,153 - WARNING - ❌ Falha ao atualizar CEP 07499999: dados não encontrados
+2025-04-23 08:43:17,895 - INFO - ✅ CEP 12235580 atualizado: Crato, Parque Industrial
+2025-04-23 08:43:18,575 - INFO - ✅ CEP 07417250 atualizado: Sebastiana Barbosa, Parque Rodrigo Barreto
+2025-04-23 08:43:19,026 - INFO - ✅ CEP 07417605 atualizado: Antonio Pedroso Barbosa, Parque Rodrigo Barreto
+2025-04-23 08:43:19,693 - INFO - ✅ CEP 07432435 atualizado: Perimetral, Recanto Primavera
+2025-04-23 08:43:19,941 - INFO - ✅ CEP 07417290 atualizado: Sebastião Martins Guimarães, Parque Rodrigo Barreto
+2025-04-23 08:43:21,663 - INFO - ✅ CEP 07417470 atualizado: José Eduardo da Silva, Parque Rodrigo Barreto
+2025-04-23 08:43:23,445 - INFO - ✅ CEP 07417145 atualizado: Antonio Pedroso de Almeida, Parque Rodrigo Barreto
+2025-04-23 08:43:23,965 - INFO - ✅ CEP 07403020 atualizado: Benedita Maria Augusta, Arujamérica
+2025-04-23 08:43:25,808 - INFO - ✅ CEP 07414170 atualizado: Francisco Beirão, Jardim Yamamoto
+2025-04-23 08:43:26,305 - INFO - ✅ CEP 07400245 atualizado: Doutor Astélio de Toledo Fernandes, Jardim Ângelo
+2025-04-23 08:43:29,477 - INFO - ✅ CEP 07006030 atualizado: Hans Ossamu Suzuki, Arujamérica
+2025-04-23 08:43:30,271 - INFO - ✅ CEP 07438550 atualizado: Monza, Jardim Imperial
+2025-04-23 08:43:32,104 - INFO - ✅ CEP 07414270 atualizado: dos Vados, Fontes
+2025-04-23 08:43:32,585 - INFO - ✅ CEP 07161545 atualizado: José Brumatti, Jardim IV Centenário
+2025-04-23 08:43:33,328 - INFO - ✅ CEP 07404055 atualizado: Serra da Mantiqueira, Mirante do Arujá
+2025-04-23 08:43:34,816 - INFO - ✅ CEP 07400260 atualizado: Juiz Antonio Meira Neto, Jardim Ângelo
+2025-04-23 08:43:35,947 - INFO - ✅ CEP 07406375 atualizado: Paulistinha, Vila Arujá
+2025-04-23 08:43:37,880 - INFO - ✅ CEP 07436000 atualizado: Sol, Novo Horizonte Hills I e II
+2025-04-23 08:43:38,612 - INFO - ✅ CEP 07417335 atualizado: Raymundo Fernandes, Parque Rodrigo Barreto
+2025-04-23 08:43:40,171 - INFO - ✅ CEP 07401365 atualizado: Carlos de Campos, Vila Riman
+2025-04-23 08:43:43,471 - INFO - ✅ CEP 07461695 atualizado: Firmina Maiolino Ribeiro, Vila Pilar
+2025-04-23 08:43:44,390 - INFO - ✅ CEP 07401745 atualizado: Francisco Muraca, Vila Pilar
+2025-04-23 08:43:44,863 - INFO - ✅ CEP 07413000 atualizado: Adília Barbosa Neves, Portão
+2025-04-23 08:43:46,644 - INFO - ✅ CEP 07404125 atualizado: Serra das Vertentes, Mirante do Arujá
+2025-04-23 08:43:48,117 - INFO - ✅ CEP 07432070 atualizado: Alice, Jardim Emília
+2025-04-23 08:43:49,128 - INFO - ✅ CEP 07405410 atualizado: Juriti, Jardim Pinheiro
+2025-04-23 08:43:50,039 - INFO - ✅ CEP 08587300 atualizado: Serra dos Cristais, Jardim Amaral
+2025-04-23 08:43:50,291 - INFO - ✅ CEP 07434500 atualizado: dos Eucaliptos, Arujázinho IV
+2025-04-23 08:43:51,844 - INFO - ✅ CEP 07417245 atualizado: Douglas dos Reis Santos, Parque Rodrigo Barreto
+2025-04-23 08:43:52,283 - INFO - ✅ CEP 07400295 atualizado: Perfeita Liberdade, Jardim Ângelo
+2025-04-23 08:43:52,787 - INFO - ✅ CEP 07400830 atualizado: João Cirilo da Silva, Arujá Centro Residencial
+2025-04-23 08:43:54,501 - INFO - ✅ CEP 07402060 atualizado: Onozor Maiolino Marchini, Barbosas
+2025-04-23 08:43:55,525 - INFO - ✅ CEP 07432460 atualizado: das Jaqueiras, Recanto Primavera
+2025-04-23 08:43:55,762 - INFO - ✅ CEP 07404035 atualizado: Serra da Cantareira, Mirante do Arujá
+2025-04-23 08:43:56,548 - INFO - ✅ CEP 07405010 atualizado: Vicente Matheus, Pedreira
+2025-04-23 08:43:57,296 - INFO - ✅ CEP 07411415 atualizado: das Tulipas, Cidade Nova Arujá
+2025-04-23 08:43:57,805 - INFO - ✅ CEP 07403045 atualizado: João de Lima, Arujamérica
+2025-04-23 08:44:00,396 - INFO - ✅ CEP 08588510 atualizado: Salmorão, Jardim Caiubi
+2025-04-23 08:44:02,976 - INFO - ✅ CEP 07176230 atualizado: Bocaina de Minas, Vila Nova Bonsucesso
+2025-04-23 08:44:03,650 - INFO - ✅ CEP 07403025 atualizado: Amaro Franco, Arujamérica
+2025-04-23 08:44:05,363 - INFO - ✅ CEP 07402125 atualizado: Borba Gato, Vila Lima
+2025-04-23 08:44:06,396 - INFO - ✅ CEP 07131280 atualizado: Santa Rita das Caldas, Jardim Nova Guarulhos
+2025-04-23 08:44:06,865 - INFO - ✅ CEP 07400550 atualizado: Martins Fontes, Centro
+2025-04-23 08:44:07,314 - INFO - ✅ CEP 07435455 atualizado: Arujazinho, Arujázinho I, II e III
+2025-04-23 08:44:09,017 - INFO - ✅ CEP 07432590 atualizado: Takeji Shimmyo, Jardim das Cerejeiras
+2025-04-23 08:44:10,849 - INFO - ✅ CEP 07404195 atualizado: Serra do Guaraú, Mirante do Arujá
+2025-04-23 08:44:13,439 - INFO - ✅ CEP 07417540 atualizado: Luiz Gonzaga Colangelo Nóbrega, Parque Rodrigo Barreto
+2025-04-23 08:44:13,908 - INFO - ✅ CEP 07400530 atualizado: Antonio Afonso de Lima, Vila Flora Regina
+2025-04-23 08:44:17,070 - INFO - ✅ CEP 07440420 atualizado: Fatec, Fontes
+2025-04-23 08:44:20,245 - INFO - ✅ CEP 07402028 atualizado: Gentile Pezzoli Santangelo, Jardim Renata
+2025-04-23 08:44:20,924 - INFO - ✅ CEP 07431310 atualizado: Pérola, Jardim Jóia
+2025-04-23 08:44:22,408 - INFO - ✅ CEP 07411205 atualizado: Nossa Senhora da Pompéia, Jordanópolis
+2025-04-23 08:44:24,121 - INFO - ✅ CEP 07405405 atualizado: Pintassilgo, Jardim Pinheiro
+2025-04-23 08:44:25,067 - INFO - ✅ CEP 07402845 atualizado: Manaus, Jardim Real
+2025-04-23 08:44:25,963 - INFO - ✅ CEP 07417120 atualizado: Doutor Mário Napolitano, Parque Rodrigo Barreto
+2025-04-23 08:44:27,704 - INFO - ✅ CEP 07417225 atualizado: Adomiro Rodrigues dos Passos, Parque Rodrigo Barreto
+2025-04-23 08:44:28,144 - INFO - ✅ CEP 07417395 atualizado: Alice Ramos Barbosa, Parque Rodrigo Barreto
+2025-04-23 08:44:28,701 - INFO - ✅ CEP 07411190 atualizado: Santa Cecília, Jordanópolis
+2025-04-23 08:44:30,535 - INFO - ✅ CEP 07431280 atualizado: Armando Pereira, Jardim Jóia
+2025-04-23 08:44:32,354 - INFO - ✅ CEP 07432000 atualizado: Negrão, Jardim Leika
+2025-04-23 08:44:34,155 - INFO - ✅ CEP 07431315 atualizado: Diamante, Jardim Jóia
+2025-04-23 08:44:36,762 - INFO - ✅ CEP 07402175 atualizado: Pernambuco, Jardim Planalto
+2025-04-23 08:44:37,639 - INFO - ✅ CEP 08587800 atualizado: Demerval Lobão, Parque Residencial Scaffid II
+2025-04-23 08:44:39,375 - INFO - ✅ CEP 07428160 atualizado: Apatita, Jardim Fazenda Rincão
+2025-04-23 08:44:40,043 - INFO - ✅ CEP 08588020 atualizado: das Amoreiras, Jardim Mossapyra
+2025-04-23 08:44:40,851 - INFO - ✅ CEP 07438010 atualizado: Ribeirão dos Índios, Jardim Via Dutra
+2025-04-23 08:44:41,086 - INFO - ✅ CEP 07424000 atualizado: dos Correas, Canjicas
+2025-04-23 08:44:43,693 - INFO - ✅ CEP 07417460 atualizado: Jorge Cruz, Parque Rodrigo Barreto
+2025-04-23 08:44:44,158 - INFO - ✅ CEP 07422000 atualizado: P.L. do Brasil, Jaguari
+2025-04-23 08:44:44,398 - INFO - ✅ CEP 07176000 atualizado: Tamotsu Iwasse, Vila Nova Bonsucesso
+2025-04-23 08:44:46,198 - INFO - ✅ CEP 07402075 atualizado: João da Silva Ferraz, Barbosas
+2025-04-23 08:44:47,090 - INFO - ✅ CEP 07402315 atualizado: Sebastião Demétrio Rodrigues, Chácara São José
+2025-04-23 08:44:48,824 - INFO - ✅ CEP 07417440 atualizado: Benedito de Maggio, Parque Rodrigo Barreto
+2025-04-23 08:44:52,004 - INFO - ✅ CEP 56374628 atualizado: Serra do Itapeti, Mirante do Arujá
+2025-04-23 08:44:52,793 - INFO - ✅ CEP 07417565 atualizado: José Barbosa de Souza, Parque Rodrigo Barreto
+2025-04-23 08:44:53,606 - INFO - ✅ CEP 07417190 atualizado: Julio Felipe da Silva, Parque Rodrigo Barreto
+2025-04-23 08:44:54,063 - INFO - ✅ CEP 07432575 atualizado: Tomi Saburo Yamamoto, Jardim das Cerejeiras
+2025-04-23 08:44:54,994 - INFO - ✅ CEP 07400385 atualizado: Buenos Aires, Jardim Rincão
+2025-04-23 08:44:56,755 - INFO - ✅ CEP 07406380 atualizado: Tangará, Vila Arujá
+2025-04-23 08:44:56,993 - INFO - ✅ CEP 07417510 atualizado: José Maria Leandro da Silva, Parque Rodrigo Barreto
+2025-04-23 08:44:57,529 - INFO - ✅ CEP 07402170 atualizado: Bahia, Jardim Planalto
+2025-04-23 08:45:00,678 - INFO - ✅ CEP 04717245 atualizado: Douglas dos Reis Santos, Parque Rodrigo Barreto
+2025-04-23 08:45:02,224 - INFO - ✅ CEP 07415000 atualizado: P.L. do Brasil, Fontes
+2025-04-23 08:45:02,478 - INFO - ✅ CEP 07744020 atualizado: Joaquim Cerca, Laranjeiras
+2025-04-23 08:45:04,071 - INFO - ✅ CEP 07417100 atualizado: Alice Sanches Ribeiro, Parque Rodrigo Barreto
+2025-04-23 08:45:04,577 - INFO - ✅ CEP 07402805 atualizado: Real, Jardim Real
+2025-04-23 08:45:06,279 - INFO - ✅ CEP 07417260 atualizado: Serafim Antonio Domingos, Parque Rodrigo Barreto
+2025-04-23 08:45:09,526 - INFO - ✅ CEP 20040369 atualizado: Sebastiana Barbosa, Parque Rodrigo Barreto
+2025-04-23 08:45:10,262 - INFO - ✅ CEP 07417425 atualizado: Nelson Mastropasqua, Parque Rodrigo Barreto
+2025-04-23 08:45:11,993 - INFO - ✅ CEP 07403030 atualizado: Glória Maria Nasser, Arujamérica
+2025-04-23 08:45:12,663 - INFO - ✅ CEP 07402040 atualizado: Zeferino Barbosa de Souza, Barbosas
+2025-04-23 08:45:13,699 - INFO - ✅ CEP 07400655 atualizado: Fausto Morais R. Fonseca, Arujá Centro Residencial
+2025-04-23 08:45:16,842 - INFO - ✅ CEP 07001600 atualizado: Milton Ferreira Franco, Parque Rodrigo Barreto
+2025-04-23 08:45:17,374 - INFO - ✅ CEP 07402310 atualizado: Virgílio Antonio dos Ouros, Chácara São José
+2025-04-23 08:45:19,160 - INFO - ✅ CEP 07431295 atualizado: Safira, Jardim Jóia
+2025-04-23 08:45:20,859 - INFO - ✅ CEP 07405400 atualizado: Tuím, Jardim Pinheiro
+2025-04-23 08:45:21,569 - INFO - ✅ CEP 07438630 atualizado: Benedita Maria do Espírito Santo, Cachoeira
+2025-04-23 08:45:22,534 - INFO - ✅ CEP 07432445 atualizado: das Pitangueiras, Recanto Primavera
+2025-04-23 08:45:23,334 - INFO - ✅ CEP 07435195 atualizado: dos Manacás, Arujá Country Club
+2025-04-23 08:45:24,838 - INFO - ✅ CEP 07260140 atualizado: João Assunção, Parque São Miguel
+2025-04-23 08:45:25,570 - INFO - ✅ CEP 07417590 atualizado: Pedro José de Morais, Parque Rodrigo Barreto
+2025-04-23 08:45:27,341 - INFO - ✅ CEP 07414160 atualizado: Katsuzo Yamamoto, Jardim Yamamoto
+2025-04-23 08:45:27,805 - INFO - ✅ CEP 07438000 atualizado: Presidente Bernardes, Jardim Via Dutra
+2025-04-23 08:45:28,268 - INFO - ✅ CEP 07403040 atualizado: Amazonas, Arujamérica
+2025-04-23 08:45:29,060 - INFO - ✅ CEP 07443005 atualizado: União Paulista, Jardim Josely
+2025-04-23 08:45:29,924 - INFO - ✅ CEP 07417480 atualizado: João Feliciano de Melo, Parque Rodrigo Barreto
+2025-04-23 08:45:31,668 - INFO - ✅ CEP 07432122 atualizado: Nicolas Barbosa da Silva, CDHU Fazenda Albor
+2025-04-23 08:45:31,906 - INFO - ✅ CEP 07403075 atualizado: Licínio Rodrigues Paiva, Arujamérica
+2025-04-23 08:45:33,611 - INFO - ✅ CEP 07400370 atualizado: La Paz, Jardim Rincão
+2025-04-23 08:45:34,156 - INFO - ✅ CEP 07400410 atualizado: Espanha, Jardim Rincão
+2025-04-23 08:45:35,714 - INFO - ✅ CEP 07436700 atualizado: Calógero Rapé, Jardim São Jorge
+2025-04-23 08:45:36,426 - INFO - ✅ CEP 07411375 atualizado: das Violetas, Cidade Nova Arujá
+2025-04-23 08:45:36,922 - INFO - ✅ CEP 07428270 atualizado: Renova, Jardim Fazenda Rincão
+2025-04-23 08:45:37,439 - INFO - ✅ CEP 07435485 atualizado: Taba, Arujázinho I, II e III
+2025-04-23 08:45:38,314 - INFO - ✅ CEP 07436740 atualizado: dos Girassóis, Jardim São Jorge
+2025-04-23 08:45:39,799 - INFO - ✅ CEP 07435005 atualizado: das Siriemas, Arujá Lagos Residencial
+2025-04-23 08:45:40,282 - INFO - ✅ CEP 07176600 atualizado: Maria Jorge Lombardi, Jardim Álamo
+2025-04-23 08:45:41,845 - INFO - ✅ CEP 07400815 atualizado: Arnaldo Candela, Arujá Centro Residencial
+2025-04-23 08:45:42,729 - INFO - ✅ CEP 07417400 atualizado: Prestes Maia, Parque Rodrigo Barreto
+2025-04-23 08:45:44,355 - INFO - ✅ CEP 08485200 atualizado: Dom Marcos Barbosa, Conjunto Habitacional Santa Etelvina II
+2025-04-23 08:45:45,195 - INFO - ✅ CEP 07402090 atualizado: Amazonas, Barbosas
+2025-04-23 08:45:46,677 - INFO - ✅ CEP 07402305 atualizado: Silvino Rodrigues de Ávila, Chácara São José
+2025-04-23 08:45:47,561 - INFO - ✅ CEP 07402830 atualizado: Salvador, Jardim Real
+2025-04-23 08:45:48,020 - INFO - ✅ CEP 07431370 atualizado: Armando Pereira, Jardim Cury
+2025-04-23 08:45:48,669 - INFO - ✅ CEP 07400440 atualizado: Quito, Jardim Rincão
+2025-04-23 08:45:51,846 - INFO - ✅ CEP 03588345 atualizado: Railda Alves de Oliveira, Parque Rodrigo Barreto
+2025-04-23 08:45:53,402 - INFO - ✅ CEP 07420880 atualizado: Velha do Pirituba, Pirituba
+2025-04-23 08:45:55,203 - INFO - ✅ CEP 07400380 atualizado: Carácas, Jardim Rincão
+2025-04-23 08:45:55,677 - INFO - ✅ CEP 07417575 atualizado: Anadir Coutinho de Ávila, Parque Rodrigo Barreto
+2025-04-23 08:45:57,165 - INFO - ✅ CEP 07404065 atualizado: Serra do Baturité, Mirante do Arujá
+2025-04-23 08:45:57,917 - INFO - ✅ CEP 07403050 atualizado: Francisco Baltazar de Araújo, Arujamérica
+2025-04-23 08:45:58,819 - INFO - ✅ CEP 07438555 atualizado: Turim, Jardim Imperial
+2025-04-23 08:46:00,514 - INFO - ✅ CEP 07402200 atualizado: Guanabara, Jardim Planalto
+2025-04-23 08:46:01,001 - INFO - ✅ CEP 07402085 atualizado: Amazonas, Barbosas
+2025-04-23 08:46:01,952 - INFO - ✅ CEP 07403080 atualizado: Inocêncio José Rodrigues, Arujamérica
+2025-04-23 08:46:04,113 - INFO - ✅ CEP 07411160 atualizado: Nossa Senhora Aparecida, Jordanópolis
+2025-04-23 08:46:06,721 - INFO - ✅ CEP 07432700 atualizado: Julia Serikawa, Sítio dos Fernandes
+2025-04-23 08:46:08,461 - INFO - ✅ CEP 07402015 atualizado: Maria de Lourdes Máximo, Jardim Renata
+2025-04-23 08:46:09,551 - INFO - ✅ CEP 07443000 atualizado: Três Fronteiras, Jardim Josely
+2025-04-23 08:46:11,358 - INFO - ✅ CEP 07404060 atualizado: Serra do Maranguape, Mirante do Arujá
+2025-04-23 08:46:13,955 - INFO - ✅ CEP 07428190 atualizado: Olivina, Arujá 5
+2025-04-23 08:46:14,487 - INFO - ✅ CEP 07434125 atualizado: José Araújo de Lima, Jardim Limoeiro
+2025-04-23 08:46:15,284 - INFO - ✅ CEP 07404150 atualizado: Serra do Espinhaço, Mirante do Arujá
+2025-04-23 08:46:16,508 - INFO - ✅ CEP 07403105 atualizado: João Leite de Camargo, Arujamérica
+2025-04-23 08:46:18,259 - INFO - ✅ CEP 58887000 atualizado: , 
+2025-04-23 08:46:21,492 - WARNING - ❌ Falha ao atualizar CEP 07818609: dados não encontrados
+2025-04-23 08:46:23,214 - INFO - ✅ CEP 08590710 atualizado: do Pêssego, Jardim Lucinda
+2025-04-23 08:46:23,486 - INFO - ✅ CEP 07402195 atualizado: Goiás, Jardim Planalto
+2025-04-23 08:46:25,262 - INFO - ✅ CEP 07404030 atualizado: Serra do Japi, Mirante do Arujá
+2025-04-23 08:46:26,196 - INFO - ✅ CEP 07400185 atualizado: Hugo Takahashi, Jardim Vitória
+2025-04-23 08:46:28,023 - INFO - ✅ CEP 07435300 atualizado: dos Jacarandás, Arujá Country Club
+2025-04-23 08:46:28,487 - INFO - ✅ CEP 07440005 atualizado: dos Lagos, Chácaras Vista Alegre
+2025-04-23 08:46:28,995 - INFO - ✅ CEP 08588310 atualizado: da Promissão, Jardim Carolina
+2025-04-23 08:46:29,971 - INFO - ✅ CEP 07411365 atualizado: Santa Cecília, Cidade Nova Arujá
+2025-04-23 08:46:31,538 - INFO - ✅ CEP 07400595 atualizado: Arthur Melchiades Batista, Centro
+2025-04-23 08:46:32,288 - INFO - ✅ CEP 07401120 atualizado: Vanderley Nasser do Prado, Arujá Center Ville
+2025-04-23 08:46:32,782 - INFO - ✅ CEP 07420350 atualizado: Botucatu, Pirituba
+2025-04-23 08:46:33,298 - INFO - ✅ CEP 07402290 atualizado: Urias Pithon Barreto, Chácara São José
+2025-04-23 08:46:34,816 - INFO - ✅ CEP 08576320 atualizado: Castilho, Vila Virgínia
+2025-04-23 08:46:35,547 - INFO - ✅ CEP 07417560 atualizado: José Lino de Souza, Parque Rodrigo Barreto
+2025-04-23 08:46:38,708 - WARNING - ❌ Falha ao atualizar CEP 07417293: dados não encontrados
+2025-04-23 08:46:40,167 - INFO - ✅ CEP 07417275 atualizado: José Sanches Ricardo, Parque Rodrigo Barreto
+2025-04-23 08:46:41,042 - INFO - ✅ CEP 07417320 atualizado: Claudino Antonio Barbosa, Parque Rodrigo Barreto
+2025-04-23 08:46:41,286 - INFO - ✅ CEP 07404180 atualizado: Serra do Caiapó, Mirante do Arujá
+2025-04-23 08:46:41,784 - INFO - ✅ CEP 07428145 atualizado: Opala, Jardim Fazenda Rincão
+2025-04-23 08:46:42,489 - INFO - ✅ CEP 08725625 atualizado: Ubirajara de Barros Gomes Martins, Vila Caputera
+2025-04-23 08:46:43,974 - INFO - ✅ CEP 07400805 atualizado: Lourdes Barbosa Sanches, Arujá Centro Residencial
+2025-04-23 08:46:44,210 - INFO - ✅ CEP 07400605 atualizado: João Manoel, Centro
+2025-04-23 08:46:44,669 - INFO - ✅ CEP 07438005 atualizado: Presidente Wenceslau, Jardim Via Dutra
+2025-04-23 08:46:46,338 - INFO - ✅ CEP 07432020 atualizado: Dutra, Jardim Leika
+2025-04-23 08:46:48,118 - INFO - ✅ CEP 07411175 atualizado: São Miguel, Jordanópolis
+2025-04-23 08:46:48,797 - INFO - ✅ CEP 07401000 atualizado: Juventina Maiolino Sanches, Parque Judith
+2025-04-23 08:46:50,571 - INFO - ✅ CEP 07417365 atualizado: Armando Colangelo, Parque Rodrigo Barreto
+2025-04-23 08:46:51,473 - INFO - ✅ CEP 07438726 atualizado: Osmar Soares de Carvalho, Estância Pacaembu
+2025-04-23 08:46:53,272 - INFO - ✅ CEP 07404070 atualizado: Serra do Pacatuba, Mirante do Arujá
+2025-04-23 08:46:55,032 - INFO - ✅ CEP 07417505 atualizado: Giuseppe Antonio Maiolino, Parque Rodrigo Barreto
+2025-04-23 08:46:55,481 - INFO - ✅ CEP 07435445 atualizado: Bela Vista, Arujázinho I, II e III
+2025-04-23 08:46:56,366 - INFO - ✅ CEP 07400240 atualizado: Marina Lourenço, Jardim Ângelo
+2025-04-23 08:46:58,126 - INFO - ✅ CEP 07439100 atualizado: Bauxita, Chácaras Copaco
+2025-04-23 08:46:59,851 - INFO - ✅ CEP 07418085 atualizado: da Peinha, Chácara Bananal
+2025-04-23 08:47:03,054 - WARNING - ❌ Falha ao atualizar CEP 11958467: dados não encontrados
+2025-04-23 08:47:05,217 - INFO - ✅ CEP 07401740 atualizado: Francisco Rodrigues da Silva, Vila Pilar
+2025-04-23 08:47:06,737 - INFO - ✅ CEP 07400870 atualizado: Dulce Ferreira S Quatrochi, Arujá Centro Residencial
+2025-04-23 08:47:07,808 - INFO - ✅ CEP 07417175 atualizado: Arnaldo Afonso de Lima, Parque Rodrigo Barreto
+2025-04-23 08:47:09,580 - INFO - ✅ CEP 07401290 atualizado: Adhemar de Barros, Jardim Modelo
+2025-04-23 08:47:11,328 - INFO - ✅ CEP 07404100 atualizado: dos Fernandes, Mirante do Arujá
+2025-04-23 08:47:13,072 - INFO - ✅ CEP 07400820 atualizado: Mamede Barbosa, Arujá Centro Residencial
+2025-04-23 08:47:13,354 - INFO - ✅ CEP 07417340 atualizado: Claudino Gomes, Parque Rodrigo Barreto
+2025-04-23 08:47:13,649 - INFO - ✅ CEP 07432005 atualizado: Pedro Pereira da Silva, Jardim Leika
+2025-04-23 08:47:15,287 - INFO - ✅ CEP 07242000 atualizado: Fernando de Noronha, Jardim Maria Dirce
+2025-04-23 08:47:16,933 - INFO - ✅ CEP 07043060 atualizado: Espanhola, Vila Endres
+2025-04-23 08:47:18,682 - INFO - ✅ CEP 07428020 atualizado: Nossa Senhora do Perpétuo Socorro, Nossa Senhora do Carmo
+2025-04-23 08:47:19,731 - INFO - ✅ CEP 07435185 atualizado: dos Ipês, Arujá Country Club
+2025-04-23 08:47:21,264 - INFO - ✅ CEP 07417520 atualizado: Cipriana Maria do Rosário, Parque Rodrigo Barreto
+2025-04-23 08:47:22,144 - INFO - ✅ CEP 07400680 atualizado: João Godoy, Arujá Centro Residencial
+2025-04-23 08:47:23,695 - INFO - ✅ CEP 08573510 atualizado: Joaquim Gonçalves Ferreira da Silva, Jardim Gonçalves
+2025-04-23 08:47:25,414 - INFO - ✅ CEP 07439080 atualizado: Mercúrio, Chácaras Copaco
+2025-04-23 08:47:27,246 - INFO - ✅ CEP 07439020 atualizado: Granito, Chácaras Copaco
+2025-04-23 08:47:28,819 - INFO - ✅ CEP 07400875 atualizado: João Mariano, Arujá Centro Residencial
+2025-04-23 08:47:31,994 - INFO - ✅ CEP 07407048 atualizado: Sebastião Cubas dos Santos, Jardim Santo Antônio
+2025-04-23 08:47:33,495 - INFO - ✅ CEP 07402135 atualizado: Silvina de Camargo, Vila Lima
+2025-04-23 08:47:34,992 - INFO - ✅ CEP 07400610 atualizado: João Manoel, Centro
+2025-04-23 08:47:36,533 - INFO - ✅ CEP 07400600 atualizado: Albino Rodrigues Neves, Centro
+2025-04-23 08:47:38,385 - INFO - ✅ CEP 07411215 atualizado: São Luiz, Jordanópolis
+2025-04-23 08:47:39,043 - INFO - ✅ CEP 07400630 atualizado: P.L. do Brasil, Centro
+2025-04-23 08:47:40,045 - INFO - ✅ CEP 07404115 atualizado: Serra da Bocaina, Mirante do Arujá
+2025-04-23 08:47:40,557 - INFO - ✅ CEP 08774030 atualizado: Zacarias, Jardim Piatã A
+2025-04-23 08:47:41,041 - INFO - ✅ CEP 07178330 atualizado: Brasília, Vila Carmela I
+2025-04-23 08:47:41,511 - INFO - ✅ CEP 07417600 atualizado: Eleazar Machado, Parque Rodrigo Barreto
+2025-04-23 08:47:43,248 - INFO - ✅ CEP 07411425 atualizado: das Orquídeas, Cidade Nova Arujá
+2025-04-23 08:47:43,502 - INFO - ✅ CEP 07140380 atualizado: Guaraton, Jardim Marilena
+2025-04-23 08:47:44,293 - INFO - ✅ CEP 07417420 atualizado: Tailor do Nascimento, Parque Rodrigo Barreto
+2025-04-23 08:47:47,481 - WARNING - ❌ Falha ao atualizar CEP 06439130: dados não encontrados
+2025-04-23 08:47:48,485 - INFO - ✅ CEP 07403015 atualizado: Francisco Antonio Pedro Paulo, Arujamérica
+2025-04-23 08:47:51,658 - WARNING - ❌ Falha ao atualizar CEP 07471470: dados não encontrados
+2025-04-23 08:47:53,914 - INFO - ✅ CEP 07465670 atualizado: Tomi Miura, Sítio dos Fernandes
+2025-04-23 08:47:55,753 - INFO - ✅ CEP 07402025 atualizado: Gentile Pezzoli Santangelo, Jardim Renata
+2025-04-23 08:47:57,292 - INFO - ✅ CEP 07417410 atualizado: Zulmira Isabel de Moura, Parque Rodrigo Barreto
+2025-04-23 08:47:59,900 - INFO - ✅ CEP 07400390 atualizado: Caiena, Jardim Rincão
+2025-04-23 08:48:00,426 - INFO - ✅ CEP 07411200 atualizado: São Vicente, Jordanópolis
+2025-04-23 08:48:03,634 - WARNING - ❌ Falha ao atualizar CEP 01774575: dados não encontrados
+2025-04-23 08:48:05,472 - INFO - ✅ CEP 07411350 atualizado: Adília Barbosa Neves, Cidade Nova Arujá
+2025-04-23 08:48:07,225 - INFO - ✅ CEP 07250040 atualizado: Jaicos, Cidade Aracilia
+2025-04-23 08:48:08,739 - INFO - ✅ CEP 07440050 atualizado: Acácias, Chácaras Vista Alegre
+2025-04-23 08:48:10,422 - INFO - ✅ CEP 07435215 atualizado: das Pitangueiras, Arujá Country Club
+2025-04-23 08:48:10,870 - INFO - ✅ CEP 07438560 atualizado: Capri, Jardim Imperial
+2025-04-23 08:48:11,420 - INFO - ✅ CEP 07404075 atualizado: Serra do Mar, Mirante do Arujá
+2025-04-23 08:48:12,937 - INFO - ✅ CEP 07417500 atualizado: Antão Bernardo da Silva, Parque Rodrigo Barreto
+2025-04-23 08:48:14,021 - INFO - ✅ CEP 07401730 atualizado: Carime Buissa, Vila Pilar
+2025-04-23 08:48:14,929 - INFO - ✅ CEP 07434475 atualizado: das Cerejeiras, Arujázinho IV
+2025-04-23 08:48:15,612 - INFO - ✅ CEP 07402840 atualizado: Natal, Jardim Real
+2025-04-23 08:48:16,499 - INFO - ✅ CEP 07411405 atualizado: Santo Antonio, Cidade Nova Arujá
+2025-04-23 08:48:18,065 - INFO - ✅ CEP 07428305 atualizado: Fenacita, Jardim Fazenda Rincão
+2025-04-23 08:48:18,546 - INFO - ✅ CEP 08587319 atualizado: Pico do Jaraguá, Condomínio Vilage
+2025-04-23 08:48:20,055 - INFO - ✅ CEP 07417475 atualizado: Manoel João de Souza, Parque Rodrigo Barreto
+2025-04-23 08:48:22,635 - INFO - ✅ CEP 07438470 atualizado: Milão, Jardim Imperial
+2025-04-23 08:48:23,106 - INFO - ✅ CEP 07411445 atualizado: das Camélias, Cidade Nova Arujá
+2025-04-23 08:48:26,246 - INFO - ✅ CEP 07407047 atualizado: Airton dos Santos Heras Galvez, Jardim Santo Antônio
+2025-04-23 08:48:27,268 - INFO - ✅ CEP 07439125 atualizado: Cobre, Chácaras Copaco
+2025-04-23 08:48:29,123 - INFO - ✅ CEP 07443010 atualizado: Tupã, Jardim Josely
+2025-04-23 08:48:30,936 - INFO - ✅ CEP 07401760 atualizado: Pedro Paschoal, Vila Pilar
+2025-04-23 08:48:31,176 - INFO - ✅ CEP 07404145 atualizado: Serra Geral, Mirante do Arujá
+2025-04-23 08:48:32,764 - INFO - ✅ CEP 07400375 atualizado: Georgetow, Jardim Rincão
+2025-04-23 08:48:34,498 - INFO - ✅ CEP 08588324 atualizado: Padre Cícero, Jardim Carolina
+2025-04-23 08:48:35,508 - INFO - ✅ CEP 07429805 atualizado: dos Jacintos, Parque Maringá
+2025-04-23 08:48:36,213 - INFO - ✅ CEP 07411195 atualizado: Adília Barbosa Neves, Jordanópolis
+2025-04-23 08:48:38,018 - INFO - ✅ CEP 07429205 atualizado: Parque do Ibirapuera, Residencial Real Park
+2025-04-23 08:48:39,720 - INFO - ✅ CEP 07401340 atualizado: Fernando Costa, Vila Riman
+2025-04-23 08:48:39,983 - INFO - ✅ CEP 08465090 atualizado: Rubens Borba Alves de Moraes, Conjunto Habitacional Juscelino Kubitschek
+2025-04-23 08:48:41,785 - INFO - ✅ CEP 07442200 atualizado: Waldomiro Luis Coutinho, São Bento
+2025-04-23 08:48:43,524 - INFO - ✅ CEP 07435030 atualizado: dos Tucanos, Arujá Lagos Residencial
+2025-04-23 08:48:45,163 - INFO - ✅ CEP 07428325 atualizado: Turquesa, Jardim Fazenda Rincão
+2025-04-23 08:48:46,698 - INFO - ✅ CEP 07499899 atualizado: Rural, Área Rural de Arujá
+2025-04-23 08:48:47,416 - INFO - ✅ CEP 07428175 atualizado: Andaluzita, Jardim Fazenda Rincão
+2025-04-23 08:48:47,892 - INFO - ✅ CEP 07417405 atualizado: Marcos Aurélio de Castro, Parque Rodrigo Barreto
+2025-04-23 08:48:49,578 - INFO - ✅ CEP 07431215 atualizado: Tupi, Jardim Tupi
+2025-04-23 08:48:52,763 - INFO - ✅ CEP 07432865 atualizado: Hirayoshi Amano, Sítio dos Fernandes
+2025-04-23 08:48:53,236 - INFO - ✅ CEP 07435525 atualizado: Mato Grosso, Arujázinho I, II e III
+2025-04-23 08:48:54,952 - INFO - ✅ CEP 02752170 atualizado: Amélia Gonçalves, Vila Carbone
+2025-04-23 08:48:56,526 - INFO - ✅ CEP 07411390 atualizado: das Rosas, Cidade Nova Arujá
+2025-04-23 08:48:58,240 - INFO - ✅ CEP 07440015 atualizado: Jatobá, Chácaras Vista Alegre
+2025-04-23 08:48:59,265 - INFO - ✅ CEP 07437080 atualizado: das Palmeiras, Parque dos Arantes
+2025-04-23 08:49:00,977 - INFO - ✅ CEP 07429330 atualizado: Parque da Chapada Diamantina, Residencial Real Park
+2025-04-23 08:49:01,246 - INFO - ✅ CEP 08710500 atualizado: Voluntário Fernando Pinheiro Franco, Centro
+2025-04-23 08:49:02,810 - INFO - ✅ CEP 07400545 atualizado: Duque de Caxias, Vila Flora Regina
+2025-04-23 08:49:04,568 - INFO - ✅ CEP 07402810 atualizado: Belo Horizonte, Jardim Real
+2025-04-23 08:49:04,805 - INFO - ✅ CEP 07420400 atualizado: P.L. do Brasil, Pirituba
+2025-04-23 08:49:06,567 - INFO - ✅ CEP 07400560 atualizado: Antonio Afonso de Lima, Centro
+2025-04-23 08:49:08,648 - INFO - ✅ CEP 07400425 atualizado: Paramaribo, Jardim Rincão
+2025-04-23 08:49:10,207 - INFO - ✅ CEP 07439065 atualizado: Mica, Chácaras Copaco
+2025-04-23 08:49:11,064 - INFO - ✅ CEP 07400285 atualizado: Antonio Rodrigues Barbosa, Jardim Ângelo
+2025-04-23 08:49:12,880 - INFO - ✅ CEP 07428105 atualizado: Melanita, Jardim Fazenda Rincão
+2025-04-23 08:49:14,570 - INFO - ✅ CEP 07435245 atualizado: dos Limoeiros, Arujá Country Club
+2025-04-23 08:49:15,032 - INFO - ✅ CEP 07428005 atualizado: Nossa Senhora da Conceição, Nossa Senhora do Carmo
+2025-04-23 08:49:16,789 - INFO - ✅ CEP 07401705 atualizado: Guido Reginato, Vila Pilar
+2025-04-23 08:49:17,790 - INFO - ✅ CEP 07411385 atualizado: Presidente Dutra, Cidade Nova Arujá
+2025-04-23 08:49:18,622 - INFO - ✅ CEP 07404085 atualizado: Serra de Bragança, Mirante do Arujá
+2025-04-23 08:49:19,431 - INFO - ✅ CEP 07407040 atualizado: Airton dos Santos Heras Galvez, Jardim Santo Antônio
+2025-04-23 08:49:20,237 - INFO - ✅ CEP 07420120 atualizado: das Flores, Pirituba
+2025-04-23 08:49:21,073 - INFO - ✅ CEP 07438515 atualizado: Roma, Jardim Imperial
+2025-04-23 08:49:21,880 - INFO - ✅ CEP 07428275 atualizado: Arutec, Jardim Fazenda Rincão
+2025-04-23 08:49:22,685 - INFO - ✅ CEP 07404160 atualizado: Jovens da Verdade, Mirante do Arujá
+2025-04-23 08:49:23,526 - INFO - ✅ CEP 07432065 atualizado: Oscar Schiavon, Jardim Emília
+2025-04-23 08:49:24,357 - INFO - ✅ CEP 04211001 atualizado: Xavier de Almeida, Ipiranga
+2025-04-23 08:49:25,207 - INFO - ✅ CEP 07400825 atualizado: José Faustino da Silva, Arujá Centro Residencial
+2025-04-23 08:49:26,010 - INFO - ✅ CEP 02187040 atualizado: Subtenente-Aviador Francisco Hierro, Parque Novo Mundo
+2025-04-23 08:49:26,808 - INFO - ✅ CEP 07400470 atualizado: Siqueira Campos, Jardim Rincão
+2025-04-23 08:49:27,653 - INFO - ✅ CEP 07434535 atualizado: das Palmeiras, Arujázinho IV
+2025-04-23 08:49:28,445 - INFO - ✅ CEP 07435560 atualizado: Paraná, Arujázinho I, II e III
+2025-04-23 08:49:29,236 - INFO - ✅ CEP 07417160 atualizado: Milton Ferreira Franco, Parque Rodrigo Barreto
+2025-04-23 08:49:30,030 - INFO - ✅ CEP 07400180 atualizado: Márcia Poli, Jardim Vitória
+2025-04-23 08:49:30,841 - INFO - ✅ CEP 07417215 atualizado: José Pereira de Aquino, Parque Rodrigo Barreto
+2025-04-23 08:49:31,665 - INFO - ✅ CEP 07403070 atualizado: Higino Rodrigues de Ávila, Arujamérica
+2025-04-23 08:49:32,480 - INFO - ✅ CEP 07402165 atualizado: Maranhão, Jardim Planalto
+2025-04-23 08:49:33,274 - INFO - ✅ CEP 07410000 atualizado: José Evangelista de Morais, Núcleo dos Correas
+2025-04-23 08:49:34,085 - INFO - ✅ CEP 07417325 atualizado: Antonio Armando Justiça, Parque Rodrigo Barreto
+2025-04-23 08:49:35,469 - WARNING - ❌ Falha ao atualizar CEP 07410745: dados não encontrados
+2025-04-23 08:49:36,976 - INFO - ✅ CEP 07400590 atualizado: Major Benjamin Franco, Centro
+2025-04-23 08:49:37,832 - INFO - ✅ CEP 07407020 atualizado: Galdino Antonio de Almeida, Jardim Santo Antônio
+2025-04-23 08:49:38,089 - INFO - ✅ CEP 07401135 atualizado: Silmar Montoni, Arujá Center Ville
+2025-04-23 08:49:38,336 - INFO - ✅ CEP 07401370 atualizado: dos Expedicionários, Vila Riman
+2025-04-23 08:49:40,652 - WARNING - ❌ Falha ao atualizar CEP 07489999: dados não encontrados
+2025-04-23 08:49:43,828 - INFO - ✅ CEP 01741070 atualizado: Armando Colangelo, Parque Rodrigo Barreto
+2025-04-23 08:49:44,314 - INFO - ✅ CEP 07438720 atualizado: Internacional, Estância Pacaembu
+2025-04-23 08:49:44,549 - INFO - ✅ CEP 07404110 atualizado: Serra da Lua, Mirante do Arujá
+2025-04-23 08:49:46,349 - INFO - ✅ CEP 07435725 atualizado: das Orquídeas, Arujázinho I, II e III
+2025-04-23 08:49:47,100 - INFO - ✅ CEP 07402260 atualizado: Rio Branco, Jardim São José
+2025-04-23 08:49:50,280 - INFO - ✅ CEP 11997980 atualizado: Luiz Gonzaga Colangelo Nóbrega, Parque Rodrigo Barreto
+2025-04-23 08:49:52,384 - INFO - ✅ CEP 07402150 atualizado: Piauí, Jardim Planalto
+2025-04-23 08:49:54,985 - INFO - ✅ CEP 07400170 atualizado: Shiguetoshi Takahashi, Jardim Vitória
+2025-04-23 08:49:57,582 - INFO - ✅ CEP 07432585 atualizado: F, Jardim das Cerejeiras
+2025-04-23 08:49:57,818 - INFO - ✅ CEP 05323002 atualizado: Presidente Altino, Jaguaré
+2025-04-23 08:49:58,058 - INFO - ✅ CEP 07402010 atualizado: Judite Rodrigues Norte, Jardim Renata
+2025-04-23 08:49:59,735 - INFO - ✅ CEP 07417555 atualizado: Benedito Barbosa de Souza, Parque Rodrigo Barreto
+2025-04-23 08:50:01,282 - INFO - ✅ CEP 07411185 atualizado: São João, Jordanópolis
+2025-04-23 08:50:03,062 - INFO - ✅ CEP 07439070 atualizado: Mármore, Chácaras Copaco
+2025-04-23 08:50:05,662 - INFO - ✅ CEP 08599530 atualizado: Chavantes, Vila São Carlos
+2025-04-23 08:50:07,171 - INFO - ✅ CEP 07402055 atualizado: Braz Maiolino, Barbosas
+2025-04-23 08:50:08,714 - INFO - ✅ CEP 07417195 atualizado: Rogério de Andrade Santos, Parque Rodrigo Barreto
+2025-04-23 08:50:10,183 - INFO - ✅ CEP 07404200 atualizado: Serra do Taquari, Mirante do Arujá
+2025-04-23 08:50:11,883 - INFO - ✅ CEP 07417270 atualizado: Paulina Maria da Conceição Maiolino, Parque Rodrigo Barreto
+2025-04-23 08:50:12,367 - INFO - ✅ CEP 07402850 atualizado: Recife, Jardim Real
+2025-04-23 08:50:14,087 - INFO - ✅ CEP 07437050 atualizado: dos Cedros, Parque dos Jacarandás
+2025-04-23 08:50:14,562 - INFO - ✅ CEP 07428235 atualizado: Pedra da Lua, Jardim Fazenda Rincão
+2025-04-23 08:50:16,137 - INFO - ✅ CEP 07402070 atualizado: João Nepomuceno, Barbosas
+2025-04-23 08:50:19,332 - INFO - ✅ CEP 74054606 atualizado: Arapongas, Jardim Pinheiro
+2025-04-23 08:50:19,784 - INFO - ✅ CEP 07402265 atualizado: Guaporé, Jardim São José
+2025-04-23 08:50:20,265 - INFO - ✅ CEP 07404215 atualizado: Serra Pelada, Mirante do Arujá
+2025-04-23 08:50:21,820 - INFO - ✅ CEP 07411150 atualizado: Santa Luzia, Jordanópolis
+2025-04-23 08:50:23,202 - INFO - ✅ CEP 07147200 atualizado: Deolinda Rosa dos Santos, Parque Rodrigo Barreto
+2025-04-23 08:50:24,017 - INFO - ✅ CEP 07417595 atualizado: Margarida Maiolino, Parque Rodrigo Barreto
+2025-04-23 08:50:24,801 - INFO - ✅ CEP 07400405 atualizado: São José, Jardim Rincão
+2025-04-23 08:50:25,633 - INFO - ✅ CEP 07440055 atualizado: da Paineira, Chácaras Vista Alegre
+2025-04-23 08:50:26,455 - INFO - ✅ CEP 07400450 atualizado: Montevidéo, Jardim Rincão
+2025-04-23 08:50:27,268 - INFO - ✅ CEP 07417465 atualizado: Antonia Manoel Fernandes, Parque Rodrigo Barreto
+2025-04-23 08:50:28,081 - INFO - ✅ CEP 07428070 atualizado: Almandina, Arujá 5
+2025-04-23 08:50:28,908 - INFO - ✅ CEP 07417380 atualizado: José Severino Filho, Parque Rodrigo Barreto
+2025-04-23 08:50:29,731 - INFO - ✅ CEP 07417110 atualizado: José Roberto Tariffe de Oliveira, Parque Rodrigo Barreto
+2025-04-23 08:50:30,533 - INFO - ✅ CEP 08588179 atualizado: Capinzal, Jardim Nascente
+2025-04-23 08:50:31,347 - INFO - ✅ CEP 07402255 atualizado: Amapá, Jardim São José
+2025-04-23 08:50:32,143 - INFO - ✅ CEP 07411395 atualizado: Nossa Senhora da Pompéia, Cidade Nova Arujá
+2025-04-23 08:50:32,934 - INFO - ✅ CEP 07414050 atualizado: dos Vados, Fontes
+2025-04-23 08:50:33,727 - INFO - ✅ CEP 07405435 atualizado: João de Barro, Jardim Pinheiro
+2025-04-23 08:50:34,537 - INFO - ✅ CEP 07404080 atualizado: Serra da Canastra, Mirante do Arujá
+2025-04-23 08:50:35,326 - INFO - ✅ CEP 07435465 atualizado: Capelinha, Arujázinho I, II e III
+2025-04-23 08:50:36,178 - INFO - ✅ CEP 07428330 atualizado: Granada, Jardim Fazenda Rincão
+2025-04-23 08:50:37,904 - INFO - ✅ CEP 08586010 atualizado: Cardeal, Parque São Pedro
+2025-04-23 08:50:41,110 - WARNING - ❌ Falha ao atualizar CEP 07000750: dados não encontrados
+2025-04-23 08:50:42,850 - INFO - ✅ CEP 07440400 atualizado: São Bento, São Bento
+2025-04-23 08:50:44,731 - INFO - ✅ CEP 08587240 atualizado: Serra do Ouro Branco, Jardim Amaral
+2025-04-23 08:50:46,276 - INFO - ✅ CEP 07411180 atualizado: São Benedito, Jordanópolis
+2025-04-23 08:50:48,027 - INFO - ✅ CEP 07404185 atualizado: Serra do Araripe, Mirante do Arujá
+2025-04-23 08:50:50,647 - INFO - ✅ CEP 07402065 atualizado: Julio Antonio dos Santos, Barbosas
+2025-04-23 08:50:51,139 - INFO - ✅ CEP 07435650 atualizado: Bartyra, Arujázinho I, II e III
+2025-04-23 08:50:52,687 - INFO - ✅ CEP 07402795 atualizado: Porto Alegre, Jardim Real
+2025-04-23 08:50:54,478 - INFO - ✅ CEP 07440650 atualizado: José Antonio Manoel, São Bento
+2025-04-23 08:50:57,690 - WARNING - ❌ Falha ao atualizar CEP 07489080: dados não encontrados
+2025-04-23 08:50:58,197 - INFO - ✅ CEP 07400320 atualizado: Vereador Eli Diniz, Convívio Residencial Santana
+2025-04-23 08:50:58,651 - INFO - ✅ CEP 07417210 atualizado: Corpus Christi, Parque Rodrigo Barreto
+2025-04-23 08:51:00,231 - INFO - ✅ CEP 11271265 atualizado: Elaine, Boraceia
+2025-04-23 08:51:01,166 - INFO - ✅ CEP 08586515 atualizado: Nanci Midori Cato, Residencial Promissão
+2025-04-23 08:51:01,683 - INFO - ✅ CEP 07404120 atualizado: Serra de Paranapiacaba, Mirante do Arujá
+2025-04-23 08:51:02,240 - INFO - ✅ CEP 07432685 atualizado: Hirayoshi Amano, Sítio dos Fernandes
+2025-04-23 08:51:03,851 - INFO - ✅ CEP 07407015 atualizado: Sebastião Cubas dos Santos, Jardim Santo Antônio
+2025-04-23 08:51:04,387 - INFO - ✅ CEP 07400500 atualizado: Prudente de Moraes, Vila Flora Regina
+2025-04-23 08:51:04,945 - INFO - ✅ CEP 07417355 atualizado: Raimundo Pedro da Silva, Parque Rodrigo Barreto
+2025-04-23 08:51:06,802 - INFO - ✅ CEP 07401770 atualizado: Justino de Jesus Gomes, Vila Pilar
+2025-04-23 08:51:07,274 - INFO - ✅ CEP 07414195 atualizado: Jujiro Nakayama, Jardim Yamamoto
+2025-04-23 08:51:08,087 - INFO - ✅ CEP 07402820 atualizado: Curitiba, Jardim Real
+2025-04-23 08:51:09,077 - INFO - ✅ CEP 38055500 atualizado: Nenê Sabino, Olinda
+2025-04-23 08:51:09,983 - INFO - ✅ CEP 07401715 atualizado: Reinaldo Santangelo, Vila Pilar
+2025-04-23 08:51:13,167 - INFO - ✅ CEP 07142517 atualizado: Railda Alves de Oliveira, Parque Rodrigo Barreto
+2025-04-23 08:51:14,719 - INFO - ✅ CEP 07428210 atualizado: Andulária, Jardim Fazenda Rincão
+2025-04-23 08:51:17,886 - INFO - ✅ CEP 07442052 atualizado: dos Limoeiros, Arujá Country Club
+2025-04-23 08:51:18,349 - INFO - ✅ CEP 07417150 atualizado: Gilberto Mendes, Parque Rodrigo Barreto
+2025-04-23 08:51:19,904 - INFO - ✅ CEP 07407000 atualizado: João Antonio de Oliveira, Jardim Santo Antônio
+2025-04-23 08:51:20,715 - INFO - ✅ CEP 07443025 atualizado: Boa Esperança, Jardim Josely
+2025-04-23 08:51:21,544 - INFO - ✅ CEP 07414380 atualizado: Papoula, Chácaras Colinas Verdes
+2025-04-23 08:51:22,345 - INFO - ✅ CEP 07404040 atualizado: Serra do Itapeti, Mirante do Arujá
+2025-04-23 08:51:23,143 - INFO - ✅ CEP 07406365 atualizado: Agá, Vila Arujá
+2025-04-23 08:51:23,939 - INFO - ✅ CEP 07439050 atualizado: Molibidênio, Chácaras Copaco
+2025-04-23 08:51:24,758 - INFO - ✅ CEP 07417220 atualizado: Bento Antonio dos Santos, Parque Rodrigo Barreto
+2025-04-23 08:51:26,161 - INFO - ✅ CEP 07000000 atualizado: dos Correas, Canjicas
+2025-04-23 08:51:26,978 - INFO - ✅ CEP 07434445 atualizado: dos Pinheiros, Arujázinho IV
+2025-04-23 08:51:27,800 - INFO - ✅ CEP 07176620 atualizado: Manuel de Freitas, Jardim Álamo
+2025-04-23 08:51:28,608 - INFO - ✅ CEP 07430000 atualizado: Laranja Azeda, Laranja Azeda
+2025-04-23 08:51:29,417 - INFO - ✅ CEP 07405500 atualizado: Vereador Albino Rodrigues Neves, Pedreira
+2025-04-23 08:51:30,223 - INFO - ✅ CEP 07400880 atualizado: Angelina Nicoletti do Carmo, Arujá Centro Residencial
+2025-04-23 08:51:31,037 - INFO - ✅ CEP 07417230 atualizado: José Rodrigues de Ávila, Parque Rodrigo Barreto
+2025-04-23 08:51:31,835 - INFO - ✅ CEP 07401350 atualizado: Julio Prestes, Vila Riman
+2025-04-23 08:51:33,232 - INFO - ✅ CEP 07485440 atualizado: Jacutinga, Jardim Pinheiro
+2025-04-23 08:51:34,024 - INFO - ✅ CEP 07432010 atualizado: Gabriel Paschoal, Jardim Leika
+2025-04-23 08:51:35,508 - INFO - ✅ CEP 07407165 atualizado: dos Fernandes, Mirante do Arujá
+2025-04-23 08:51:36,305 - INFO - ✅ CEP 07417515 atualizado: Leonardo Switzar, Parque Rodrigo Barreto
+2025-04-23 08:51:38,147 - INFO - ✅ CEP 07403085 atualizado: Anacleto de Jesus Ferreira, Arujamérica
+2025-04-23 08:51:38,637 - INFO - ✅ CEP 07400855 atualizado: Ana Maria Moreira Coronado, Arujá Centro Residencial
+2025-04-23 08:51:40,262 - INFO - ✅ CEP 07439120 atualizado: Caolim, Chácaras Copaco
+2025-04-23 08:51:42,365 - INFO - ✅ CEP 07431210 atualizado: Tibiriçá, Jardim Tupi
+2025-04-23 08:51:44,217 - INFO - ✅ CEP 07439030 atualizado: Argila, Chácaras Copaco
+2025-04-23 08:51:45,789 - INFO - ✅ CEP 07428290 atualizado: Rubi, Jardim Fazenda Rincão
+2025-04-23 08:51:47,601 - INFO - ✅ CEP 07402000 atualizado: Diomar Fernandes Negretti, Jardim Renata
+2025-04-23 08:51:49,185 - INFO - ✅ CEP 07405455 atualizado: Canário, Jardim Pinheiro
+2025-04-23 08:51:50,828 - INFO - ✅ CEP 07417115 atualizado: Belmira de Lima Simões, Parque Rodrigo Barreto
+2025-04-23 08:51:53,022 - INFO - ✅ CEP 07443020 atualizado: Atalaia, Jardim Josely
+2025-04-23 08:51:54,723 - INFO - ✅ CEP 07412000 atualizado: Governador Mario Covas Junior, Portão
+2025-04-23 08:51:56,469 - INFO - ✅ CEP 07132580 atualizado: Pacule, Jardim Jovaia
+2025-04-23 08:51:59,679 - INFO - ✅ CEP 36693933 atualizado: Adelino Pereira da Silva, Parque Rodrigo Barreto
+2025-04-23 08:52:00,198 - INFO - ✅ CEP 07428300 atualizado: Rodonita, Jardim Fazenda Rincão
+2025-04-23 08:52:02,245 - INFO - ✅ CEP 07420885 atualizado: Municipal do Jaguari, Jaguari
+2025-04-23 08:52:03,432 - INFO - ✅ CEP 07417375 atualizado: José Veloso da Silva, Parque Rodrigo Barreto
+2025-04-23 08:52:05,189 - INFO - ✅ CEP 02311020 atualizado: Carlos Olivares, Vila Mazzei
+2025-04-23 08:52:05,191 - INFO - 🔚 Total: 723 | Atualizados: 704 | Substituídos: 0 | Falhas: 19
+2025-04-23 08:55:58,966 - INFO -  * Detected change in 'C:\\Users\\ivantp\\Downloads\\flask-react-project\\backend\\app.py', reloading

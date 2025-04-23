@@ -3,9 +3,21 @@ from socketio_config import socketio  # Importe o socketio do módulo de configu
 from Conexões import get_local_engine, log_message
 from sqlalchemy import text
 import json
+import logging
+import json
 import requests
 import time
 from sqlalchemy import text
+from Conexões import get_local_engine, log_message
+from socketio_config import socketio
+
+# Configuração do log
+logging.basicConfig(
+    filename='logs_ceps.txt',
+    level=logging.INFO,
+    format='%(asctime)s - %(levelname)s - %(message)s',
+    encoding='utf-8'
+)
 
 def limpar_logradouro(logradouro):
     if logradouro:
@@ -19,76 +31,135 @@ def buscar_dados_viacep(cep):
     try:
         print(f"🔁 Tentando ViaCEP para o CEP: {cep}")
         response = requests.get(url, timeout=2)
-        time.sleep(0.2)  # Limite de requisição
+        time.sleep(0.2)
         if response.status_code == 200:
             data = response.json()
             if not data.get('erro'):
-                logradouro_limpo = limpar_logradouro(data.get('logradouro', ''))
                 return {
-                    'logradouro': logradouro_limpo,
-                    'bairro': data.get('bairro', '')
+                    'logradouro': limpar_logradouro(data.get('logradouro', '')),
+                    'bairro': data.get('bairro', ''),
+                    'cep': cep
                 }
-            else:
-                print(f"❌ ViaCEP retornou erro para o CEP: {cep}")
-        else:
-            print(f"⚠️ Resposta inesperada da ViaCEP (status {response.status_code}) para o CEP: {cep}")
     except Exception as e:
-        print(f"❌ Erro ao acessar ViaCEP para o CEP {cep}: {e}")
+        print(f"❌ Erro ViaCEP: {e}")
     return None
 
-def buscar_dados_cep(cep):
+def buscar_por_logradouro_estado_cidade_rua(uf, cidade, logradouro, bairro=None, cod_ibge_prefix=None):
+    if not logradouro:
+        return []
+    url = f'https://viacep.com.br/ws/{uf}/{cidade}/{logradouro}/json/'
+    try:
+        response = requests.get(url, timeout=2)
+        time.sleep(0.2)
+        if response.status_code == 200:
+            dados = response.json()
+            if isinstance(dados, list) and dados:
+                if bairro or cod_ibge_prefix:
+                    return [
+                        d for d in dados if
+                        (bairro and bairro.lower() in d.get('bairro', '').lower()) or
+                        (cod_ibge_prefix and d.get('ibge', '').startswith(cod_ibge_prefix))
+                    ] or dados
+                return dados
+    except Exception as e:
+        print(f"❌ Erro na busca por logradouro: {e}")
+    return []
+
+def buscar_dados_cep(cep, connection=None):
     cep = ''.join(filter(str.isdigit, str(cep)))
     if len(cep) != 8:
-        print(f"❌ CEP inválido (formato): {cep}")
         return None
 
-    url = f'https://brasilapi.com.br/api/cep/v1/{cep}'
-
     try:
-        print(f"🔍 Tentando buscar dados pela BrasilAPI para o CEP: {cep}")
-        response = requests.get(url, timeout=2)
-        time.sleep(0.2)  # Limite de requisição
+        response = requests.get(f'https://brasilapi.com.br/api/cep/v1/{cep}', timeout=2)
+        time.sleep(0.2)
         if response.status_code == 200:
             data = response.json()
-            logradouro_limpo = limpar_logradouro(data.get('street', ''))
             return {
-                'logradouro': logradouro_limpo,
-                'bairro': data.get('neighborhood', '')
+                'logradouro': limpar_logradouro(data.get('street', '')),
+                'bairro': data.get('neighborhood', ''),
+                'cep': cep
             }
-        else:
-            print(f"⚠️ Resposta inesperada da BrasilAPI (status {response.status_code}) para o CEP: {cep}")
-    except Exception as e:
-        print(f"❌ Erro ao acessar BrasilAPI para o CEP {cep}: {e}")
+    except Exception:
+        pass
 
-    # Tenta ViaCEP como fallback
-    return buscar_dados_viacep(cep)
+    info = buscar_dados_viacep(cep)
+    if info:
+        return info
+
+    if connection:
+        result = connection.execute(
+            text("SELECT prd_end_pcnte, prd_bairro_pcnte FROM tb_bpa WHERE prd_cep_pcnte = :cep LIMIT 1"),
+            {"cep": cep}
+        ).fetchone()
+        if result:
+            logradouro, bairro = result
+            candidatos = buscar_por_logradouro_estado_cidade_rua(
+                uf="SP", cidade="Aruja", logradouro=logradouro,
+                bairro=bairro, cod_ibge_prefix="350390"
+            )
+            if candidatos:
+                escolhido = candidatos[0]
+                novo_cep = escolhido.get('cep')
+                if not novo_cep or len(novo_cep) != 8:
+                    novo_cep = cep
+                return {
+                    'logradouro': limpar_logradouro(escolhido.get('logradouro', '')),
+                    'bairro': escolhido.get('bairro', ''),
+                    'cep': novo_cep
+                }
+    return None
 
 def atualizar_enderecos(connection):
-    select_query = text("""
-    SELECT DISTINCT prd_cep_pcnte
-    FROM tb_bpa
-    """)
-    ceps = connection.execute(select_query).fetchall()
+    ceps = connection.execute(text("SELECT DISTINCT prd_cep_pcnte FROM tb_bpa")).fetchall()
 
-    for cep_row in ceps:
-        cep = cep_row[0]
-        info = buscar_dados_cep(cep)
+    total = len(ceps)
+    atualizados, substituidos, falhas = 0, 0, 0
+
+    for index, row in enumerate(ceps, 1):
+        cep_original = row[0]
+        info = buscar_dados_cep(cep_original, connection=connection)
 
         if info:
-            update_query = text("""
-            UPDATE tb_bpa
-            SET prd_end_pcnte = :logradouro,
-                prd_bairro_pcnte = :bairro
-            WHERE prd_cep_pcnte = :cep_antigo
-            """)
-            connection.execute(update_query, {
+            novo_cep = info.get('cep', cep_original)
+            if not novo_cep or len(novo_cep) != 8:
+                novo_cep = cep_original
+
+            connection.execute(text("""
+                UPDATE tb_bpa
+                SET prd_end_pcnte = :logradouro,
+                    prd_bairro_pcnte = :bairro,
+                    prd_cep_pcnte = :novo_cep
+                WHERE prd_cep_pcnte = :cep_antigo
+            """), {
                 'logradouro': info.get('logradouro', ''),
                 'bairro': info.get('bairro', ''),
-                'cep_antigo': cep
+                'cep_antigo': cep_original,
+                'novo_cep': novo_cep
             })
-            print(f"✅ CEP {cep} atualizado: {info.get('logradouro', '')}, {info.get('bairro', '')}")
+
+            if novo_cep != cep_original:
+                substituidos += 1
+                msg = f"🔁 CEP {cep_original} atualizado para {novo_cep}: {info.get('logradouro')}, {info.get('bairro')}"
+            else:
+                atualizados += 1
+                msg = f"✅ CEP {cep_original} atualizado: {info.get('logradouro')}, {info.get('bairro')}"
+            print(msg)
+            logging.info(msg)
         else:
-            print(f"❌ Falha ao atualizar CEP {cep}: dados não encontrados nas duas APIs")
+            falhas += 1
+            msg = f"❌ Falha ao atualizar CEP {cep_original}: dados não encontrados"
+            print(msg)
+            logging.warning(msg)
+
+        progresso = (index / total) * 100
+        print(f"📊 Progresso: {index}/{total} ({progresso:.2f}%)")
+        socketio.emit('progress_update', {'type': 'cep', 'progress': int(progresso)})
+
+    resumo = f"🔚 Total: {total} | Atualizados: {atualizados} | Substituídos: {substituidos} | Falhas: {falhas}"
+    print(resumo)
+    logging.info(resumo)
+    socketio.emit('progress_update', {'type': 'cep', 'progress': 100})
 
 def load_db_config(config_path='config.json'):
     with open(config_path, 'r') as config_file:
@@ -459,7 +530,7 @@ def executar_procedure(connection):
               '0101020104', '0101030010', '0214010201', '0301010269', '0309010063', 
               '0301040141', '0301050139', '0301050147', '0301010277', '0309010047',
               '0301100195', '0301100209', '0301100217', '0301100225', '0301100233',
-              '0301100241', '0301100276', '0301100284', '0307010155'
+              '0301100241', '0301100276', '0301100284', '0307010155', '0214010082'
           ))
     """)
     connection.execute(delete_query, {'pa_ids': tuple(pa_ids)})
@@ -474,6 +545,20 @@ def executar_procedure(connection):
     """)
     connection.execute(update_uid_query_1)
     log_message("Update 1 (CID para UID 0491381) executado")
+    
+    # Segundo update
+    update_uid_query_2 = text("""
+    UPDATE tb_bpa
+    SET prd_cep_pcnte = '07400959',
+        prd_end_pcnte = 'dos Expedicionários',
+        prd_num_pcnte = '290',
+        prd_bairro_pcnte = 'Jardim Rincão',
+        prd_ibge = '350390'
+    WHERE prd_cep_pcnte = '07400000' or 
+        prd_ibge <> '350390'
+    """)
+    connection.execute(update_uid_query_2)
+    log_message("Update 2 (CEP 07400000) executado")
 
 
 from sqlalchemy.sql import text

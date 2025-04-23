@@ -4,16 +4,17 @@ import { io } from 'socket.io-client';
 import Switch from 'react-switch'; // Switch para autoatualização
 
 // Pegando a URL da API do arquivo .env
-const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://127.0.0.1:5000';
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || `http://${window.location.hostname}:5000`;
 
 // Configuração global do axios para usar UTF-8
 axios.defaults.headers.common['Content-Type'] = 'application/json; charset=utf-8';
 
 const socket = io(API_BASE_URL, {
-  path: '/socket.io',  // Certifique-se de que este caminho está correto para o seu backend
-  transports: ['websocket'],  // Evita o fallback para outras opções, como polling
+  path: '/socket.io',
+  transports: ['websocket'],
   reconnection: true,
 });
+
 
 socket.on('progress_update', (data) => {
   console.log('Evento progress_update recebido:', data);

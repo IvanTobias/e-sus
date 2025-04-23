@@ -11,7 +11,7 @@ import {
 
 Modal.setAppElement('#root');
 
-const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://127.0.0.1:5000'; // Atualiza para centralizar as URLs
+const API_BASE_URL = `http://${window.location.hostname}:5000`;
 
 function CadastrosPage() {
   const [currentPage, setCurrentPage] = useState(1);
