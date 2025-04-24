@@ -1213,14 +1213,16 @@ def get_data():
 
 @app.route('/api/corrigir-ceps')
 def corrigir_ceps():
-    engine = get_local_engine()
     try:
-        with engine.begin() as connection:
+        engine = get_local_engine()
+        with engine.connect() as connection:
             Gerar_BPA.atualizar_enderecos(connection)
-        return jsonify({'mensagem': 'Correção de endereços concluída com sucesso.'})
+        return jsonify({"status": "ok"})
     except Exception as e:
-        return jsonify({'erro': str(e)}), 500
-
+        import traceback
+        traceback.print_exc()
+        return jsonify({"error": str(e)}), 500
+    
 @app.route('/api/atualizar-cep-escolhido', methods=['POST'])
 def atualizar_cep_escolhido():
     data = request.json

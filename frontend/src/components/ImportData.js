@@ -1,24 +1,11 @@
 import React, { useReducer, useEffect, useRef, useState, useCallback } from 'react';
 import axios from 'axios';
-import { io } from 'socket.io-client';
-import Switch from 'react-switch'; // Switch para autoatualização
+import Switch from 'react-switch';
+import socket from '../components/socket';
 
-// Pegando a URL da API do arquivo .env
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || `http://${window.location.hostname}:5000`;
 
-// Configuração global do axios para usar UTF-8
 axios.defaults.headers.common['Content-Type'] = 'application/json; charset=utf-8';
-
-const socket = io(API_BASE_URL, {
-  path: '/socket.io',
-  transports: ['websocket'],
-  reconnection: true,
-});
-
-
-socket.on('progress_update', (data) => {
-  console.log('Evento progress_update recebido:', data);
-});
 
 // Função auxiliar para chamadas de API
 const apiCall = async (url, method = 'GET', data = {}) => {
@@ -31,21 +18,17 @@ const apiCall = async (url, method = 'GET', data = {}) => {
   }
 };
 
-// Função para calcular o ano atual e o mês anterior
 const getInitialDateValues = () => {
   const currentDate = new Date();
   const currentYear = currentDate.getFullYear();
-  let currentMonth = currentDate.getMonth(); // Mês atual (0 - Janeiro, 11 - Dezembro)
-
+  let currentMonth = currentDate.getMonth();
   if (currentMonth === 0) {
     currentMonth = 12;
     return { ano: currentYear - 1, competencia: `${currentMonth}`.padStart(2, '0') };
   }
-
   return { ano: currentYear, competencia: `${currentMonth}`.padStart(2, '0') };
 };
 
-// Estado inicial para o reducer
 const initialDateValues = getInitialDateValues();
 const initialState = {
   ano: initialDateValues.ano,
@@ -56,10 +39,9 @@ const initialState = {
   isExtracting: { cadastro: false, domiciliofcd: false, bpa: false, visitas: false, iaf: false, pse: false, pse_prof: false },
   isRunning: { cadastro: false, domiciliofcd: false, bpa: false, visitas: false, iaf: false, pse: false, pse_prof: false },
   isFileAvailable: { cadastro: false, domiciliofcd: false, bpa: false, visitas: false, iaf: false, pse: false, pse_prof: false },
-  lastImport: { cadastro: '', domiciliofcd: '', bpa: '', visitas: '', iaf: '', pse: '', pse_prof: '' }, // Adiciona lastImport para os novos tipos
+  lastImport: { cadastro: '', domiciliofcd: '', bpa: '', visitas: '', iaf: '', pse: '', pse_prof: '' },
 };
 
-// Funções de ação para o reducer
 const reducer = (state, action) => {
   switch (action.type) {
     case 'SET_PROGRESS':
@@ -85,32 +67,19 @@ const reducer = (state, action) => {
   }
 };
 
-// Hook customizado para WebSocket
 const useWebSocketProgress = (dispatch) => {
   useEffect(() => {
-    // Garante que a URL está definida corretamente (importante para evitar o erro ERR_ADDRESS_INVALID)
     if (!API_BASE_URL) {
       console.error('API_BASE_URL não definida. Verifique suas variáveis de ambiente.');
       return;
     }
 
-    // Inicializa o socket
-    const socket = io(API_BASE_URL, {
-      reconnectionAttempts: 5,         // Tentativas de reconexão
-      reconnectionDelay: 2000,         // Tempo entre as tentativas de reconexão
-      transports: ['websocket'],       // Força o WebSocket como único transporte, evita fallback para polling
-    });
-
-    // Evento para atualizar o progresso recebido via WebSocket
     socket.on('progress_update', (data) => {
-      console.log('Progresso recebido:', data); // Log para depuração
+      console.log('Progresso recebido:', data);
       dispatch({ type: 'SET_PROGRESS', payload: { type: data.type, value: data.progress } });
-
-      // Quando o progresso atinge 100% ou ocorre um erro, desativa o botão
       if (data.progress === 100 || data.error) {
         dispatch({ type: 'SET_RUNNING', payload: { type: data.type, value: false } });
         dispatch({ type: 'SET_BUTTON_DISABLED', payload: { type: data.type, value: false } });
-
         if (data.type === 'bpa') {
           dispatch({ type: 'SET_FILE_AVAILABLE', payload: { type: 'bpa', value: true } });
           localStorage.setItem('isFileAvailable', 'true');
@@ -118,17 +87,14 @@ const useWebSocketProgress = (dispatch) => {
       }
     });
 
-    // Lida com erros de conexão
     socket.on('connect_error', (error) => {
       console.error('Erro de conexão com o WebSocket:', error);
     });
 
-    // Lida com desconexão e tentativa de reconexão
     socket.on('disconnect', () => {
       console.log('Desconectado. Tentando reconectar...');
     });
 
-    // Adiciona eventos de reconexão para melhor acompanhamento
     socket.on('reconnect_attempt', (attempt) => {
       console.log(`Tentativa de reconexão #${attempt}`);
     });
@@ -137,13 +103,11 @@ const useWebSocketProgress = (dispatch) => {
       console.error('Falha ao reconectar após múltiplas tentativas.');
     });
 
-    // Limpeza ao desmontar o componente
     return () => {
       socket.disconnect();
     };
   }, [dispatch]);
 };
-
 
 // Componente reutilizável para seções de dados
 const DataSection = ({ type, title, state, importData, extractData }) => (

@@ -1,4 +1,4 @@
-const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://127.0.0.1:5000/';
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || `http://${window.location.hostname}:5000`;
 
 export const fetchUnidadesSaude = async () => {
   try {
@@ -9,5 +9,3 @@ export const fetchUnidadesSaude = async () => {
     console.error('Erro ao buscar unidades de saúde:', error);
   }
 };
-
-

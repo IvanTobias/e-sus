@@ -7,6 +7,7 @@ import logging
 import json
 import requests
 import time
+import logging
 from sqlalchemy import text
 from Conexões import get_local_engine, log_message
 from socketio_config import socketio
@@ -31,14 +32,15 @@ def buscar_dados_viacep(cep):
     try:
         print(f"🔁 Tentando ViaCEP para o CEP: {cep}")
         response = requests.get(url, timeout=2)
-        time.sleep(0.2)
+        time.sleep(0.5)
         if response.status_code == 200:
             data = response.json()
             if not data.get('erro'):
                 return {
                     'logradouro': limpar_logradouro(data.get('logradouro', '')),
                     'bairro': data.get('bairro', ''),
-                    'cep': cep
+                    'cep': cep,
+                    'ibge': data.get('ibge', '')[:6] if data.get('ibge') else ''
                 }
     except Exception as e:
         print(f"❌ Erro ViaCEP: {e}")
@@ -49,17 +51,23 @@ def buscar_por_logradouro_estado_cidade_rua(uf, cidade, logradouro, bairro=None,
         return []
     url = f'https://viacep.com.br/ws/{uf}/{cidade}/{logradouro}/json/'
     try:
+        print(f"🔁 Tentando busca por logradouro: {logradouro}, Cidade: {cidade}, UF: {uf}")
         response = requests.get(url, timeout=2)
-        time.sleep(0.2)
+        time.sleep(0.5)
         if response.status_code == 200:
             dados = response.json()
             if isinstance(dados, list) and dados:
-                if bairro or cod_ibge_prefix:
-                    return [
-                        d for d in dados if
-                        (bairro and bairro.lower() in d.get('bairro', '').lower()) or
-                        (cod_ibge_prefix and d.get('ibge', '').startswith(cod_ibge_prefix))
-                    ] or dados
+                if bairro:
+                    bairro_lower = bairro.lower().strip()
+                    for d in dados:
+                        if bairro_lower == d.get('bairro', '').lower().strip():
+                            return [d]
+
+                if cod_ibge_prefix:
+                    for d in dados:
+                        if d.get('ibge', '').startswith(cod_ibge_prefix):
+                            return [d]
+
                 return dados
     except Exception as e:
         print(f"❌ Erro na busca por logradouro: {e}")
@@ -69,10 +77,17 @@ def buscar_dados_cep(cep, connection=None):
     cep = ''.join(filter(str.isdigit, str(cep)))
     if len(cep) != 8:
         return None
+    
+    # Primeiro: ViaCEP
+    info = buscar_dados_viacep(cep)
+    if info:
+        return info
+
+    # Segundo: BrasilAPI
 
     try:
         response = requests.get(f'https://brasilapi.com.br/api/cep/v1/{cep}', timeout=2)
-        time.sleep(0.2)
+        time.sleep(0.5)
         if response.status_code == 200:
             data = response.json()
             return {
@@ -83,31 +98,39 @@ def buscar_dados_cep(cep, connection=None):
     except Exception:
         pass
 
-    info = buscar_dados_viacep(cep)
-    if info:
-        return info
-
+    # Terceiro: Buscar via logradouro, bairro e IBGE
     if connection:
         result = connection.execute(
-            text("SELECT prd_end_pcnte, prd_bairro_pcnte FROM tb_bpa WHERE prd_cep_pcnte = :cep LIMIT 1"),
+            text("SELECT prd_end_pcnte, prd_bairro_pcnte, prd_ibge FROM tb_bpa WHERE prd_cep_pcnte = :cep LIMIT 1"),
             {"cep": cep}
         ).fetchone()
+
         if result:
-            logradouro, bairro = result
-            candidatos = buscar_por_logradouro_estado_cidade_rua(
-                uf="SP", cidade="Aruja", logradouro=logradouro,
-                bairro=bairro, cod_ibge_prefix="350390"
-            )
-            if candidatos:
-                escolhido = candidatos[0]
-                novo_cep = escolhido.get('cep')
-                if not novo_cep or len(novo_cep) != 8:
-                    novo_cep = cep
-                return {
-                    'logradouro': limpar_logradouro(escolhido.get('logradouro', '')),
-                    'bairro': escolhido.get('bairro', ''),
-                    'cep': novo_cep
-                }
+            logradouro, bairro, prd_ibge = result
+
+            # Pegar UF e cidade com base no código IBGE
+            ibge_info = connection.execute(
+                text("SELECT uf, municipio FROM tb_ibge WHERE ibge LIKE :prefixo LIMIT 1"),
+                {"prefixo": f"{prd_ibge[:6]}%"}
+            ).fetchone()
+
+            if ibge_info:
+                uf, cidade = ibge_info
+                candidatos = buscar_por_logradouro_estado_cidade_rua(
+                    uf=uf, cidade=cidade, logradouro=logradouro,
+                    bairro=bairro, cod_ibge_prefix=prd_ibge[:6]
+                )
+                if candidatos:
+                    escolhido = candidatos[0]
+                    novo_cep = escolhido.get('cep', cep).replace('-', '')
+                    if len(novo_cep) != 8:
+                        novo_cep = cep
+                    return {
+                        'logradouro': limpar_logradouro(escolhido.get('logradouro', '')),
+                        'bairro': escolhido.get('bairro', ''),
+                        'cep': novo_cep,
+                        'ibge': escolhido.get('ibge', '')[:6] if escolhido.get('ibge') else ''
+                    }
     return None
 
 def atualizar_enderecos(connection):
@@ -121,29 +144,31 @@ def atualizar_enderecos(connection):
         info = buscar_dados_cep(cep_original, connection=connection)
 
         if info:
-            novo_cep = info.get('cep', cep_original)
-            if not novo_cep or len(novo_cep) != 8:
+            novo_cep = info.get('cep', cep_original).replace('-', '')
+            if len(novo_cep) != 8:
                 novo_cep = cep_original
 
             connection.execute(text("""
                 UPDATE tb_bpa
                 SET prd_end_pcnte = :logradouro,
                     prd_bairro_pcnte = :bairro,
-                    prd_cep_pcnte = :novo_cep
+                    prd_cep_pcnte = :novo_cep,
+                    prd_ibge = :ibge
                 WHERE prd_cep_pcnte = :cep_antigo
             """), {
                 'logradouro': info.get('logradouro', ''),
                 'bairro': info.get('bairro', ''),
                 'cep_antigo': cep_original,
-                'novo_cep': novo_cep
+                'novo_cep': novo_cep,
+                'ibge': info.get('ibge', '')
             })
 
             if novo_cep != cep_original:
                 substituidos += 1
-                msg = f"🔁 CEP {cep_original} atualizado para {novo_cep}: {info.get('logradouro')}, {info.get('bairro')}"
+                msg = f"✅ CEP {cep_original} atualizado para {novo_cep}: {info.get('logradouro')}, {info.get('bairro')} (IBGE: {info.get('ibge', '')})"
             else:
                 atualizados += 1
-                msg = f"✅ CEP {cep_original} atualizado: {info.get('logradouro')}, {info.get('bairro')}"
+                msg = f"✅ CEP {cep_original} atualizado: {info.get('logradouro')}, {info.get('bairro')} (IBGE: {info.get('ibge', '')})"
             print(msg)
             logging.info(msg)
         else:
