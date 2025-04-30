@@ -1,6 +1,6 @@
 import threading
 import pandas as pd
-from socketio_config import socketio
+from socketio_config import socketio, emit_start_task, emit_progress, emit_end_task
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import text
 from Conexões import get_external_engine, get_local_engine, log_message
@@ -9,6 +9,7 @@ import logging
 import traceback
 from Common import task_event, update_task_status, update_last_import
 from contextlib import contextmanager
+import unicodedata
 
 progress = {}  # Variável global para rastreamento de progresso
 cancel_requests = {}  # Variável global para rastreamento de pedidos de cancelamento
@@ -17,6 +18,7 @@ progress_lock = threading.Lock()  # Lock para proteger acesso concorrente ao pro
 # Função que executa a tarefa e atualiza o status
 def execute_long_task(config_data, tipo):
     try:
+        emit_start_task(tipo)  # <<< NOVO: Emitir início da tarefa
         update_task_status(tipo, "running")
         log_message(f"Iniciando tarefa de importação para {tipo}. Dados de configuração: {config_data}")
 
@@ -38,6 +40,7 @@ def execute_long_task(config_data, tipo):
 
     finally:
         task_event.set()  # Libera o evento
+        emit_end_task(tipo)  # <<< NOVO: Emitir fim da tarefa
         log_message(f"Tarefa de importação para {tipo} finalizada.")
 
 def update_progress_safely(tipo, progress_value):
@@ -46,10 +49,10 @@ def update_progress_safely(tipo, progress_value):
         send_progress_update(tipo, progress_value)
 
 def send_progress_update(tipo, progress_value, error=None):
-    payload = {'type': tipo, 'progress': progress_value}
+    payload = {'tipo': tipo, 'percentual': progress_value}
     if error:
         payload['error'] = error
-    socketio.emit('progress_update', payload, namespace='/', to=None)
+    socketio.emit('progress_update', payload, namespace='/')
     logging.debug(f"Progresso emitido para {tipo}: {progress_value}%")
 
 def get_progress(tipo):
@@ -76,6 +79,11 @@ def session_scope(Session):
         raise
     finally:
         session.close()
+
+def normalize_text(text):
+    if isinstance(text, str):
+        return unicodedata.normalize('NFC', text).strip()
+    return text
 
 def execute_query(query_name, query, external_engine, local_engine, step_size, tipo, params=None, update_progress=None):
     global progress, cancel_requests
@@ -114,6 +122,7 @@ def execute_query(query_name, query, external_engine, local_engine, step_size, t
                     break
 
                 df = pd.DataFrame(rows, columns=result.keys())
+                df = df.apply(lambda col: col.map(normalize_text) if col.dtype == 'object' else col)
                 df = clean_dataframe(df)
                 log_message(f"{len(df)} linhas processadas para {query_name} no tipo {tipo}.")
 

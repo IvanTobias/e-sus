@@ -7,6 +7,8 @@ const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || `http://${window.loca
 
 axios.defaults.headers.common['Content-Type'] = 'application/json; charset=utf-8';
 
+
+
 // Função auxiliar para chamadas de API
 const apiCall = async (url, method = 'GET', data = {}) => {
   try {
@@ -74,17 +76,29 @@ const useWebSocketProgress = (dispatch) => {
       return;
     }
 
-    socket.on('progress_update', (data) => {
-      console.log('Progresso recebido:', data);
-      dispatch({ type: 'SET_PROGRESS', payload: { type: data.type, value: data.progress } });
-      if (data.progress === 100 || data.error) {
-        dispatch({ type: 'SET_RUNNING', payload: { type: data.type, value: false } });
-        dispatch({ type: 'SET_BUTTON_DISABLED', payload: { type: data.type, value: false } });
-        if (data.type === 'bpa') {
-          dispatch({ type: 'SET_FILE_AVAILABLE', payload: { type: 'bpa', value: true } });
-          localStorage.setItem('isFileAvailable', 'true');
-        }
+    socket.on('start-task', ({ task }) => {
+      console.log(`[SOCKET] start-task: ${task}`);
+      dispatch({ type: 'SET_BUTTON_DISABLED', payload: { type: task, value: true } });
+      dispatch({ type: 'SET_PROGRESS', payload: { type: task, value: 0 } });
+    });
+
+    socket.on('progress_update', ({ tipo, percentual }) => {
+      console.log(`[SOCKET] progress_update: ${tipo} - ${percentual}%`);
+      dispatch({ type: 'SET_PROGRESS', payload: { type: tipo, value: percentual } });
+    
+      if (percentual === 100) {
+        dispatch({ type: 'SET_BUTTON_DISABLED', payload: { type: tipo, value: false } });
+        dispatch({ type: 'SET_RUNNING', payload: { type: tipo, value: false } });
+        dispatch({ type: 'SET_FILE_AVAILABLE', payload: { type: tipo, value: true } });
       }
+    });
+    
+
+    socket.on('end-task', ({ task }) => {
+      console.log(`[SOCKET] end-task: ${task}`);
+      dispatch({ type: 'SET_BUTTON_DISABLED', payload: { type: task, value: false } });
+      dispatch({ type: 'SET_RUNNING', payload: { type: task, value: false }});
+      dispatch({ type: 'SET_PROGRESS', payload: { type: task, value: 100 } });
     });
 
     socket.on('connect_error', (error) => {
@@ -104,10 +118,13 @@ const useWebSocketProgress = (dispatch) => {
     });
 
     return () => {
-      socket.disconnect();
+      socket.off('start-task');
+      socket.off('progress_update');
+      socket.off('end-task');
     };
   }, [dispatch]);
 };
+
 
 // Componente reutilizável para seções de dados
 const DataSection = ({ type, title, state, importData, extractData }) => (
@@ -130,8 +147,8 @@ const DataSection = ({ type, title, state, importData, extractData }) => (
       >
         Extrair
       </button>
-      <div className="progressContainer" style={{ display: state.progress[type] > 0 ? 'flex' : 'none', flex: 1 }}>
-        <div className="progress">
+      <div className="progressContainer" style={{ display: state.isRunning[type] ? 'flex' : 'none', flex: 1 }}>
+      <div className="progress">
           <div
             className="progressBar"
             role="progressbar"

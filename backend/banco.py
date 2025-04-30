@@ -1,7 +1,8 @@
+#backend/banco.py
 import pandas as pd
 from pandas.api.types import is_object_dtype
 from Conexões import get_external_engine, log_message
-
+import unicodedata
 # As outras funções do banco.py ficam aqui
 
 
@@ -25,9 +26,20 @@ def rename_duplicate_columns(df):
 
 def clean_dataframe(df):
     df.columns = [col.replace(' ', '_').replace('-', '_').lower() for col in df.columns]
+    
+    def clean_text(x):
+        if isinstance(x, str):
+            # Normaliza para formato Unicode NFC (padrão de acentuação correto)
+            x = unicodedata.normalize('NFC', x)
+            # Remove espaços duplicados
+            x = ' '.join(x.split())
+        return x
+
+    # Aplica limpeza apenas nos textos (colunas object)
     for col in df.columns:
         if is_object_dtype(df[col]):
-            df[col] = df[col].apply(lambda x: x.encode('latin1', 'ignore').decode('utf-8', 'ignore') if isinstance(x, str) else x)
+            df[col] = df[col].apply(clean_text)
+
     df = rename_duplicate_columns(df)
     return df
 

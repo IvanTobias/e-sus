@@ -1,0 +1,2 @@
+[console_scripts]
+edne-correios-loader = edne_correios_loader.cli:edne_correios_loader

@@ -139,7 +139,7 @@ async def auto_update_imports():
 
             # Simula progresso e envia atualização via WebSocket
             for progress in range(0, 101, 10):
-                socketio.emit('progress_update', {'type': 'auto_update', 'progress': progress})
+                socketio.emit('progress_update', {'tipo': import_type, 'percentual': progress})
                 print(f"Progresso {progress}% emitido para {import_type}")
                 await asyncio.sleep(1)  # Espera não-bloqueante
 
