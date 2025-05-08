@@ -1,0 +1,128 @@
+/* /home/ubuntu/esus_project/frontend/src/components/GerarSenha.css */
+
+.gerar-senha-container {
+    max-width: 600px;
+    margin: 40px auto;
+    padding: 30px;
+    background-color: var(--white);
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.gerar-senha-container h1 {
+    color: var(--dark);
+    margin-bottom: 30px;
+    font-size: 1.8em;
+    font-weight: 600;
+}
+
+.botoes-tipo {
+    display: flex;
+    justify-content: center;
+    gap: 20px; /* Space between buttons */
+    margin-bottom: 30px;
+}
+
+.botoes-tipo button {
+    padding: 15px 30px;
+    font-size: 1.1em;
+    font-weight: 600;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+    min-width: 200px; /* Ensure buttons have a good size */
+}
+
+.botoes-tipo button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.botoes-tipo button:active:not(:disabled) {
+    transform: scale(0.98);
+}
+
+.botao-normal {
+    background-color: var(--primary); /* Blue */
+    color: white;
+}
+
+.botao-normal:hover:not(:disabled) {
+    background-color: #0056b3; /* Darker blue */
+}
+
+.botao-prioritario {
+    background-color: #ff9500; /* Orange for priority */
+    color: white;
+}
+
+.botao-prioritario:hover:not(:disabled) {
+    background-color: #cc7a00; /* Darker orange */
+}
+
+.gerar-senha-error {
+    color: var(--danger);
+    background-color: rgba(255, 59, 48, 0.1);
+    padding: 10px;
+    border-radius: 6px;
+    margin-bottom: 20px;
+    font-weight: 500;
+}
+
+.senha-gerada-info {
+    margin-top: 30px;
+    padding: 25px;
+    background-color: var(--light-grey);
+    border-radius: 10px;
+    border: 1px solid #e5e5ea;
+    animation: fadeIn 0.5s ease-out;
+}
+
+.senha-gerada-info h2 {
+    font-size: 1.4em;
+    color: var(--dark);
+    margin-bottom: 15px;
+}
+
+.numero-senha-grande {
+    font-size: 4em;
+    font-weight: bold;
+    color: var(--primary);
+    margin-bottom: 10px;
+}
+
+.senha-gerada-info p {
+    font-size: 1.1em;
+    color: #636366; /* Secondary text color */
+    margin-bottom: 8px;
+}
+
+.botao-limpar {
+    margin-top: 20px;
+    padding: 8px 16px;
+    font-size: 0.9em;
+    background-color: #6c757d; /* Grey */
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.botao-limpar:hover {
+    background-color: #5a6268;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+

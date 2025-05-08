@@ -1,52 +1,124 @@
-# backend/app.py
-from init import app, CORS  # Importa o app e o CORS do módulo init.py
-from socketio_config import socketio  # Importa o socketio da configuração
+#app.py
+# Chame o monkey_patch do eventlet antes de qualquer importação
+import eventlet
+eventlet.monkey_patch()
+
+# Agora podemos importar os outros módulos
+from init import app, CORS
+from socketio_config import socketio,task_clients, emit_end_task,emit_progress,emit_start_task
 import Gerar_BPA
 import pandas as pd
 import threading
 import os
+os.environ.setdefault("ENV", "instalador")
 import importdados
 from Common import task_status, update_task_status
 from Conexões import get_local_engine
-from Consultas import send_progress_update, execute_long_task, get_progress, execute_and_store_queries
+from Consultas import send_progress_update, execute_long_task, get_progress, execute_and_store_queries, progress, progress_lock, update_progress_safely, log_message
 import json
 from flask import make_response, request, jsonify, send_file, send_from_directory
 from sqlalchemy import create_engine, text
 from sqlalchemy.exc import SQLAlchemyError
 import logging
+import traceback
 from flask_caching import Cache
-from apscheduler.schedulers.background import BackgroundScheduler
 from datetime import datetime
+import sys
+
+# Import Blueprints from current project
+from routes.senhas_routes import senhas_bp
+from routes.powerbi_reports_routes import reports_bp
+
+# Import Blueprints from Fiocruz project (now under src/)
+try:
+    from src.main.routes.diabetes_routes import diabetes_bp
+    from src.main.routes.children_routes import children_bp
+    from src.main.routes.city_informations_route import city_informations_bp
+    from src.main.routes.demographics_info_route import demographics_info_bp
+    from src.main.routes.elderly_routes import elderly_bp
+    from src.main.routes.hypertension_routes import hypertension_bp
+    from src.main.routes.oral_health import oral_health_bp
+    from src.main.routes.records_routes import records_bp
+    from src.main.routes.smoking import smoking_bp
+    from src.main.routes.units_route import units_bp
+    fiocruz_blueprints_available = True
+except ImportError as e:
+    print(f"Error importing Fiocruz blueprints: {e}. Fiocruz dashboards might not work.")
+    fiocruz_blueprints_available = False
 
 # Configuração básica de logging
 logging.basicConfig(level=logging.DEBUG)
-CORS(app)  # Ativa o CORS
+logger = logging.getLogger(__name__)
+
+# Configuração do CORS e inicialização do Flask
+CORS(app)
+
+# Register Blueprints from current project
+app.register_blueprint(senhas_bp, url_prefix="/api/senhas")
+app.register_blueprint(reports_bp, url_prefix="/api/reports")
+
+# Register Blueprints from Fiocruz project
+if fiocruz_blueprints_available:
+    app.register_blueprint(diabetes_bp, url_prefix="/api/v1/diabetes")
+    app.register_blueprint(children_bp, url_prefix="/api/v1/children")
+    app.register_blueprint(city_informations_bp, url_prefix="/api/v1/city-info")
+    app.register_blueprint(demographics_info_bp, url_prefix="/api/v1/demographics")
+    app.register_blueprint(elderly_bp, url_prefix="/api/v1/elderly")
+    app.register_blueprint(hypertension_bp, url_prefix="/api/v1/hypertension")
+    app.register_blueprint(oral_health_bp, url_prefix="/api/v1/oral-health")
+    app.register_blueprint(records_bp, url_prefix="/api/v1/records")
+    app.register_blueprint(smoking_bp, url_prefix="/api/v1/smoking")
+    app.register_blueprint(units_bp, url_prefix="/api/v1/units")
+    logger.info("Fiocruz dashboard blueprints registered.")
+
+# Ensure the backend directory and src directory are in the Python path
+backend_dir = os.path.dirname(os.path.abspath(__file__))
+src_dir = os.path.join(backend_dir, "src")
+if backend_dir not in sys.path:
+    sys.path.insert(0, backend_dir)
+if src_dir not in sys.path:
+    sys.path.insert(0, src_dir)
+
+# --- Catch-all for React Frontend ---
+frontend_build_path = os.path.abspath(os.path.join(backend_dir, "..", "frontend", "build"))
+
+@app.route("/", defaults={"path": ""})
+@app.route("/<path:path>")
+def serve_react_app(path):
+    if path.startswith("api/"):
+        return jsonify({"error": "API endpoint not found"}), 404
+    if path != "" and os.path.exists(os.path.join(frontend_build_path, path)):
+        return send_from_directory(frontend_build_path, path)
+    elif os.path.exists(os.path.join(frontend_build_path, "index.html")):
+        return send_from_directory(frontend_build_path, "index.html")
+    else:
+        return "Frontend build not found.", 404
 
 # Definições de variáveis globais
 cancel_requests = {}
 
-#Configuração do cache
+# Configuração do cache
 cache = Cache(config={'CACHE_TYPE': 'SimpleCache'})
 cache.init_app(app)
+
 # =================== Endpoints da API ===================
 
 @app.route('/api/save-config', methods=['POST'])
 def save_config():
     config_data = request.json
     try:
-        # Modificação: adicionando codificação UTF-8
         engine = create_engine(
             f"postgresql://{config_data['username']}:{config_data['password']}@{config_data['ip']}:{config_data['port']}/{config_data['database']}",
             connect_args={'options': '-c client_encoding=utf8'})
         with engine.connect() as connection:
-            connection.execute(text('SELECT 1'))  # Testa a conexão
+            connection.execute(text('SELECT 1'))
         with open('config.json', 'w') as config_file:
-            json.dump(config_data, config_file)  # Salva configuração em arquivo
+            json.dump(config_data, config_file)
         return jsonify({"status": "Configuração salva com sucesso!"})
     except Exception as e:
-        logging.error(f"Erro ao testar a conexão: {e}")
+        logger.error(f"Erro ao testar a conexão: {e}")
         return jsonify({"status": f"Erro ao testar a conexão: {str(e)}"})
-    
+
 @app.route('/api/get-config', methods=['GET'])
 def get_config():
     try:
@@ -60,7 +132,6 @@ def get_config():
 def test_connection():
     config_data = request.json
     try:
-        # Modificação: adicionando codificação UTF-8
         engine = create_engine(
             f"postgresql://{config_data['username']}:{config_data['password']}@{config_data['ip']}:{config_data['port']}/{config_data['database']}",
             connect_args={'options': '-c client_encoding=utf8'})
@@ -68,9 +139,9 @@ def test_connection():
             connection.execute(text('SELECT 1'))
         return jsonify({"message": "Conexão bem-sucedida!"})
     except Exception as e:
-        logging.error(f"Erro na conexão: {e}")
+        logger.error(f"Erro na conexão: {e}")
         return jsonify({"message": f"Erro na conexão: {str(e)}"})
-    
+
 @app.route('/api/download-results')
 def download_results():
     filename = request.args.get('file')
@@ -82,32 +153,40 @@ def query_progress():
 
 @app.route('/execute-queries/<tipo>', methods=['GET', 'POST'])
 def execute_queries(tipo):
-    # Verifica se o tipo é válido
-    if tipo not in ['cadastro', 'domiciliofcd', 'bpa', 'visitas', 'iaf', 'pse', 'pse_prof']:
+    if tipo not in ['cadastro', 'domiciliofcd', 'bpa', 'visitas', 'atendimentos', 'iaf', 'pse', 'pse_prof']:
+        logger.error(f"Tipo desconhecido: {tipo}")
         return jsonify({"status": "error", "message": "Tipo desconhecido."})
 
-    # Verifica se já existe uma tarefa em execução
     if task_status.get(tipo) == "running":
+        logger.warning(f"Consultas {tipo} já estão em execução.")
         return jsonify({"status": "error", "message": f"Consultas {tipo} já estão em execução."})
 
-    # Se não estiver em execução, atualiza o progresso para 0% e inicia a tarefa
+    logger.info(f"[API] Iniciando tarefa para tipo={tipo}")
     send_progress_update(tipo, 0)
 
-    # Lê a configuração atual do arquivo
-    with open('config.json', 'r') as config_file:
-        config_data = json.load(config_file)
+    try:
+        with open('config.json', 'r') as config_file:
+            config_data = json.load(config_file)
+    except FileNotFoundError:
+        logger.error("Arquivo config.json não encontrado.")
+        return jsonify({"status": "error", "message": "Arquivo de configuração não encontrado."}), 500
+    except json.JSONDecodeError as e:
+        logger.error(f"Erro ao decodificar config.json: {e}")
+        return jsonify({"status": "error", "message": "Erro ao ler o arquivo de configuração."}), 500
 
-    # Atualiza o ano e o mês, se fornecidos na requisição POST
     if request.method == 'POST':
         incoming_data = request.json
+        if incoming_data is None:
+            logger.error("Nenhum dado JSON recebido na requisição POST.")
+            return jsonify({"status": "error", "message": "Nenhum dado JSON fornecido."}), 400
         if 'ano' in incoming_data:
             config_data['ano'] = incoming_data['ano']
         if 'mes' in incoming_data:
             config_data['mes'] = incoming_data['mes']
 
-    # Inicia a thread para executar a tarefa de importação
     thread = threading.Thread(target=execute_long_task, args=(config_data, tipo))
     thread.start()
+    logger.info(f"Tarefa para tipo={tipo} iniciada em uma thread.")
 
     return jsonify({"status": "success", "message": f"Consultas {tipo} em execução."})
 
@@ -119,213 +198,180 @@ def get_progress_endpoint(tipo):
     response.headers['Pragma'] = 'no-cache'
     return response
 
+@app.route('/task-status/<tipo>', methods=['GET'])
+def get_task_status_endpoint(tipo):
+    logger.info(f"[TASK-STATUS] Acessando task_status para tipo={tipo}, task_status atual: {task_status}")
+    if tipo not in task_status:
+        logger.info(f"[TASK-STATUS] Tipo {tipo} não encontrado em task_status")
+        return jsonify({"status": "unknown"}), 404
+    status = task_status.get(tipo, "unknown")
+    if not isinstance(status, str):
+        logger.error(f"[TASK-STATUS] Status inválido para {tipo}: {status}. Convertendo para string.")
+        status = str(status)
+    response = {"status": status}
+    logger.info(f"[TASK-STATUS] Retornando status para {tipo}: {response}")
+    return jsonify(response)
+
 @app.after_request
 def add_header(response):
     response.headers['Cache-Control'] = 'no-store'
     return response
 
-@app.route('/export-xls', methods=['GET'])
-def export_xls():
-    tipo = 'cadastro'
+# Função genérica para exportação
+def export_task(tipo, query, filename, sid):
+    try:
+        logger.info(f"[EXPORT-{tipo.upper()}] Iniciando exportação para {tipo} para sid={sid}")
+        emit_start_task(tipo, sid)
+        update_task_status(tipo, "running")
+        with progress_lock:
+            progress[tipo] = 0
+        update_progress_safely(tipo, 0)
+
+        logger.info(f"[EXPORT-{tipo.upper()}] Enviando progresso inicial (0%) para sid={sid}")
+        emit_progress(tipo, 0, sid)
+
+        update_progress_safely(tipo, 25)
+        logger.info(f"[EXPORT-{tipo.upper()}] Enviando progresso (25%) para sid={sid}")
+        emit_progress(tipo, 25, sid)
+
+        engine = get_local_engine()
+        logger.info(f"[EXPORT-{tipo.upper()}] Conectado ao banco de dados, executando query: {query}")
+        df = pd.read_sql(query, engine)
+        logger.info(f"[EXPORT-{tipo.upper()}] Query executada, {len(df)} linhas retornadas")
+
+        update_progress_safely(tipo, 50)
+        logger.info(f"[EXPORT-{tipo.upper()}] Enviando progresso (50%) para sid={sid}")
+        emit_progress(tipo, 50, sid)
+
+        filepath = os.path.join(os.getcwd(), filename)
+        logger.info(f"[EXPORT-{tipo.upper()}] Salvando arquivo em {filepath}")
+        df.to_excel(filepath, index=False)
+        logger.info(f"[EXPORT-{tipo.upper()}] Arquivo salvo com sucesso")
+
+        update_progress_safely(tipo, 100)
+        logger.info(f"[EXPORT-{tipo.upper()}] Enviando progresso final (100%) para sid={sid}")
+        emit_progress(tipo, 100, sid)
+
+        update_task_status(tipo, "completed")
+        log_message(f"Exportação de {tipo} concluída com sucesso.")
+    except Exception as e:
+        error_message = traceback.format_exc()
+        log_message(f"Erro na exportação de {tipo}: {error_message}")
+        update_task_status(tipo, "failed")
+        update_progress_safely(tipo, 0, error=str(e))
+        logger.error(f"[EXPORT-{tipo.upper()}] Erro durante exportação: {str(e)}")
+        emit_progress(tipo, 0, sid, error=str(e))
+    finally:
+        emit_end_task(tipo, sid)
+        logger.info(f"[EXPORT-{tipo.upper()}] Finalizando tarefa para sid={sid}")
+
+# Rota genérica para exportação
+@app.route('/export/<tipo>', methods=['GET'])
+def export_data(tipo):
+    export_configs = {
+        "cadastro": {
+            "query": "SELECT * FROM tb_cadastro",
+            "filename": "cadastros_exportados.xlsx"
+        },
+        "domiciliofcd": {
+            "query": "SELECT * FROM tb_domicilio",
+            "filename": "domiciliofcd_exportadas.xlsx"
+        },
+        "visitas": {
+            "query": "SELECT * FROM tb_visitas",
+            "filename": "visitas_exportadas.xlsx"
+        },
+        "atendimentos": {
+            "query": "SELECT * FROM tb_atendimentos",
+            "filename": "atendimentos_exportadas.xlsx"
+        },
+        "bpa": {
+            "query": "SELECT * FROM tb_bpa",
+            "filename": "bpa.xlsx"
+        },
+        "iaf": {
+            "query": "SELECT * FROM tb_iaf",
+            "filename": "iaf.xlsx"
+        },
+        "pse": {
+            "query": "SELECT * FROM tb_pse",
+            "filename": "pse.xlsx"
+        },
+        "pse_prof": {
+            "query": "SELECT * FROM tb_pse_prof",
+            "filename": "pse_prof.xlsx"
+        }
+    }
+
+    if tipo not in export_configs:
+        logger.error(f"[EXPORT-{tipo.upper()}] Tipo não suportado: {tipo}")
+        return jsonify({"status": "error", "message": f"Tipo {tipo} não suportado."}), 400
+
+    if task_status.get(tipo) == "running":
+        logger.info(f"[EXPORT-{tipo.upper()}] Tarefa para {tipo} já está em execução.")
+        return jsonify({"status": "error", "message": f"Exportação {tipo} já está em execução."}), 400
+
+    # Verificar se há um cliente associado à tarefa
+    sid = task_clients.get(tipo)
+    if not sid:
+        logger.warning(f"[EXPORT-{tipo.upper()}] Nenhum cliente associado à tarefa {tipo}. Usando emissão global.")
+        sid = None  # Fallback para emissão global
+
+    config = export_configs[tipo]
+    logger.info(f"[EXPORT-{tipo.upper()}] Iniciando thread de exportação para tipo={tipo}, sid={sid}")
+    threading.Thread(target=export_task, args=(tipo, config["query"], config["filename"], sid)).start()
+    return jsonify({"status": "started", "message": "Exportação iniciada com sucesso."})
+
+# Rota para baixar o arquivo exportado
+@app.route('/download-exported-file/<tipo>', methods=['GET'])
+def download_exported_file(tipo):
+    export_configs = {
+        "cadastro": "cadastros_exportados.xlsx",
+        "domiciliofcd": "domiciliofcd_exportadas.xlsx",
+        "visitas": "visitas_exportadas.xlsx",
+        "atendimentos": "atendimentos_exportadas.xlsx",
+        "bpa": "bpa.xlsx",
+        "iaf": "iaf.xlsx",
+        "pse": "pse.xlsx",
+        "pse_prof": "pse_prof.xlsx"
+    }
+
+    if tipo not in export_configs:
+        return jsonify({"status": "error", "message": f"Tipo {tipo} não suportado."}), 400
+
+    # Verificar o status da tarefa
+    current_status = task_status.get(tipo)
+    if current_status == "running":
+        return jsonify({"status": "error", "message": "Exportação ainda em andamento. Aguarde a conclusão."}), 400
+    elif current_status == "failed":
+        return jsonify({"status": "error", "message": "Exportação falhou. Verifique os logs para mais detalhes."}), 400
+    elif current_status != "completed":
+        return jsonify({"status": "error", "message": "Nenhuma exportação concluída para este tipo."}), 400
+
+    try:
+        filename = export_configs[tipo]
+        filepath = os.path.join(os.getcwd(), filename)
+        if not os.path.exists(filepath):
+            return jsonify({"status": "error", "message": "Arquivo não encontrado. Tente exportar novamente."}), 404
+
+        response = make_response(send_file(filepath, as_attachment=True))
+        response.headers["Content-Disposition"] = f"attachment; filename={filename}"
+        response.headers['Content-Type'] = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+        return response
+    except Exception as e:
+        logger.error(f"[DOWNLOAD-{tipo.upper()}] Erro ao baixar o arquivo: {str(e)}")
+        return jsonify({"status": "error", "message": f"Erro ao baixar o arquivo: {str(e)}"}), 500
     
-    # Verifica se a exportação já está em execução
-    if task_status.get(tipo) == "running":
-        return jsonify({"status": "error", "message": f"Exportação {tipo} já está em execução."})
-
-    try:
-        update_task_status(tipo, "running")  # Atualiza o status para "running"
-        engine = get_local_engine()
-        query = "SELECT * FROM tb_cadastro"
-        df = pd.read_sql(query, engine)
-        filename = "cadastros_exportados.xlsx"
-        filepath = os.path.join(os.getcwd(), filename)
-        df.to_excel(filepath, index=False)
-
-        response = make_response(send_file(filepath, as_attachment=True))
-        response.headers["Content-Disposition"] = f"attachment; filename={filename}"
-        response.headers['Content-Type'] = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-
-        update_task_status(tipo, "completed")  # Marca como "completed"
-        return response
-
-    except Exception as e:
-        update_task_status(tipo, "failed")  # Marca como "failed"
-        return jsonify({"status": "error", "message": f"Erro na exportação {tipo}: {str(e)}"})
-
-@app.route('/export-xls2', methods=['GET'])
-def export_xls2():
-    tipo = 'domiciliofcd'
-
-    if task_status.get(tipo) == "running":
-        return jsonify({"status": "error", "message": f"Exportação {tipo} já está em execução."})
-
-    try:
-        update_task_status(tipo, "running")
-        engine = get_local_engine()
-        query = "SELECT * FROM tb_domicilio"
-        df = pd.read_sql(query, engine)
-        filename = "domiciliofcd_exportadas.xlsx"
-        filepath = os.path.join(os.getcwd(), filename)
-        df.to_excel(filepath, index=False)
-
-        response = make_response(send_file(filepath, as_attachment=True))
-        response.headers["Content-Disposition"] = f"attachment; filename={filename}"
-        response.headers['Content-Type'] = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-
-        update_task_status(tipo, "completed")
-        return response
-
-    except Exception as e:
-        update_task_status(tipo, "failed")
-        return jsonify({"status": "error", "message": f"Erro na exportação {tipo}: {str(e)}"})
-
-@app.route('/export-visitas', methods=['GET'])
-def export_visitas():
-    tipo = 'visitas'
-
-    if task_status.get(tipo) == "running":
-        return jsonify({"status": "error", "message": f"Exportação {tipo} já está em execução."})
-
-    try:
-        update_task_status(tipo, "running")
-        engine = get_local_engine()
-        query = "SELECT * FROM tb_visitas"
-        df = pd.read_sql(query, engine)
-        filename = "visitas_exportadas.xlsx"
-        filepath = os.path.join(os.getcwd(), filename)
-        df.to_excel(filepath, index=False)
-
-        response = make_response(send_file(filepath, as_attachment=True))
-        response.headers["Content-Disposition"] = f"attachment; filename={filename}"
-        response.headers['Content-Type'] = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-
-        update_task_status(tipo, "completed")
-        return response
-
-    except Exception as e:
-        update_task_status(tipo, "failed")
-        return jsonify({"status": "error", "message": f"Erro na exportação {tipo}: {str(e)}"})
-
-@app.route('/export-bpa', methods=['GET'])
-def export_xls3():
-    tipo = 'bpa'
-
-    if task_status.get(tipo) == "running":
-        return jsonify({"status": "error", "message": f"Exportação {tipo} já está em execução."})
-
-    try:
-        update_task_status(tipo, "running")
-        engine = get_local_engine()
-        query = "SELECT * FROM tb_bpa"
-        df = pd.read_sql(query, engine)
-        filename = "bpa.xlsx"
-        filepath = os.path.join(os.getcwd(), filename)
-        df.to_excel(filepath, index=False)
-
-        response = make_response(send_file(filepath, as_attachment=True))
-        response.headers["Content-Disposition"] = f"attachment; filename={filename}"
-        response.headers['Content-Type'] = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-
-        update_task_status(tipo, "completed")
-        return response
-
-    except Exception as e:
-        update_task_status(tipo, "failed")
-        return jsonify({"status": "error", "message": f"Erro na exportação {tipo}: {str(e)}"})
-
-@app.route('/export_iaf', methods=['GET'])
-def export_iaf():
-    tipo = 'iaf'
-
-    if task_status.get(tipo) == "running":
-        return jsonify({"status": "error", "message": f"Exportação {tipo} já está em execução."})
-
-    try:
-        update_task_status(tipo, "running")
-        engine = get_local_engine()
-        query = "SELECT * FROM tb_iaf"
-        df = pd.read_sql(query, engine)
-        filename = "iaf.xlsx"
-        filepath = os.path.join(os.getcwd(), filename)
-        df.to_excel(filepath, index=False)
-
-        response = make_response(send_file(filepath, as_attachment=True))
-        response.headers["Content-Disposition"] = f"attachment; filename={filename}"
-        response.headers['Content-Type'] = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-
-        update_task_status(tipo, "completed")
-        return response
-
-    except Exception as e:
-        update_task_status(tipo, "failed")
-        return jsonify({"status": "error", "message": f"Erro na exportação {tipo}: {str(e)}"})
-
-@app.route('/export_pse', methods=['GET'])
-def export_pse():
-    tipo = 'pse'
-
-    if task_status.get(tipo) == "running":
-        return jsonify({"status": "error", "message": f"Exportação {tipo} já está em execução."})
-
-    try:
-        update_task_status(tipo, "running")
-        engine = get_local_engine()
-        query = "SELECT * FROM tb_pse"
-        df = pd.read_sql(query, engine)
-        filename = "pse.xlsx"
-        filepath = os.path.join(os.getcwd(), filename)
-        df.to_excel(filepath, index=False)
-
-        response = make_response(send_file(filepath, as_attachment=True))
-        response.headers["Content-Disposition"] = f"attachment; filename={filename}"
-        response.headers['Content-Type'] = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-
-        update_task_status(tipo, "completed")
-        return response
-
-    except Exception as e:
-        update_task_status(tipo, "failed")
-        return jsonify({"status": "error", "message": f"Erro na exportação {tipo}: {str(e)}"})
-
-@app.route('/export_pse_prof', methods=['GET'])
-def export_pse_prof():
-    tipo = 'pse_prof'
-
-    if task_status.get(tipo) == "running":
-        return jsonify({"status": "error", "message": f"Exportação {tipo} já está em execução."})
-
-    try:
-        update_task_status(tipo, "running")
-        engine = get_local_engine()
-        query = "SELECT * FROM tb_pse_prof"
-        df = pd.read_sql(query, engine)
-        filename = "pse_prof.xlsx"
-        filepath = os.path.join(os.getcwd(), filename)
-        df.to_excel(filepath, index=False)
-
-        response = make_response(send_file(filepath, as_attachment=True))
-        response.headers["Content-Disposition"] = f"attachment; filename={filename}"
-        response.headers['Content-Type'] = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-
-        update_task_status(tipo, "completed")
-        return response
-
-    except Exception as e:
-        update_task_status(tipo, "failed")
-        return jsonify({"status": "error", "message": f"Erro na exportação {tipo}: {str(e)}"})
-
 @app.route('/api/gerar-bpa', methods=['POST'])
 def gerar_bpa_route():
     try:
         filepath = Gerar_BPA.criar_arquivo_bpa()
-        
         if filepath:
-            # Envia o arquivo diretamente ao frontend para download
             return send_file(filepath, as_attachment=True)
         else:
             return jsonify({"message": "Erro ao gerar BPA: Arquivo não foi criado."}), 500
     except Exception as e:
-        print(f"Erro ao gerar BPA: {str(e)}")
+        logger.error(f"Erro ao gerar BPA: {str(e)}")
         return jsonify({"message": f"Erro ao gerar BPA: {str(e)}"}), 500
 
 @app.route('/execute-queries/bpa', methods=['GET'])
@@ -355,21 +401,17 @@ def load_bpa_config():
 def list_bpa_files():
     files = []
     try:
-        # Lista todos os arquivos no diretório atual
         for filename in os.listdir('.'):
-            # Verifica se o arquivo começa com 'bpa_' e termina com '.txt'
             if filename.startswith('bpa_') and filename.endswith('.txt'):
                 files.append(filename)
         return jsonify({"files": files})
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
-# Endpoint para deletar um arquivo BPA específico
 @app.route('/api/delete-bpa-file', methods=['DELETE'])
 def delete_bpa_file():
     filename = request.args.get('filename')
     try:
-        # Caminho completo para o arquivo
         file_path = os.path.join(os.getcwd(), filename)
         if os.path.exists(file_path):
             os.remove(file_path)
@@ -379,26 +421,21 @@ def delete_bpa_file():
     except Exception as e:
         return jsonify({"message": f"Erro ao deletar arquivo: {str(e)}"}), 500
 
-# Endpoint para baixar um arquivo BPA específico
 @app.route('/api/download-bpa-file', methods=['GET'])
 def download_bpa_file():
     filename = request.args.get('filename')
     try:
-        # Envia o arquivo para download
         return send_from_directory(os.getcwd(), filename, as_attachment=True)
     except Exception as e:
         return jsonify({"message": f"Erro ao baixar o arquivo: {str(e)}"}), 500
 
 @app.route('/api/contagens', methods=['GET'])
 def fetch_contagens():
-    # Obtém os parâmetros da requisição
     unidade_saude = request.args.get('unidade_saude', default='', type=str)
     equipe = request.args.get('equipe', default='', type=str)
     profissional = request.args.get('profissional', default='', type=str)
 
     engine = get_local_engine()
-
-    # Filtros e parâmetros
     query_filters = []
     params = {}
 
@@ -417,7 +454,6 @@ def fetch_contagens():
         query_filters.append("no_profissional IN :profissional")
         params["profissional"] = tuple(profissional_list)
 
-    # Consulta de cadastros gerais (tb_cadastro)
     base_query_geral = """
         SELECT 
         COUNT(t1.co_seq_fat_cad_individual) as "Cadastros Individuais",
@@ -429,35 +465,29 @@ def fetch_contagens():
         COUNT(CASE WHEN dt_atualizado < (CURRENT_DATE - INTERVAL '1 year') THEN 1 END) as "Cadastros Desatualizados",
         COUNT(CASE WHEN t1.co_dim_tipo_saida_cadastro = '3' AND LENGTH(TRIM(nu_cns)) = 15 AND nu_cns != '0' THEN 1 END) as "Cadastros com Cns",
         COUNT(CASE WHEN t1.co_dim_tipo_saida_cadastro = '3' AND (LENGTH(TRIM(nu_cns)) != 15 OR nu_cns = '0') THEN 1 END) as "Cadastros com Cpf"
-    FROM tb_cadastro t1
-    WHERE t1.st_ativo = 1 
-    AND t1.co_dim_tipo_saida_cadastro IS NOT NULL 
-    AND t1.st_ficha_inativa = 0
-    """
+        FROM tb_cadastro t1
+        WHERE t1.st_ativo = 1 
+        AND t1.co_dim_tipo_saida_cadastro IS NOT NULL 
+        AND t1.st_ficha_inativa = 0
+        """
 
-    # Consulta de cadastros domiciliares (tb_domicilio)
     domicilio_query = """
-    SELECT COUNT(q2.co_seq_cds_cad_domiciliar) as "Cadastros Domiciliares"
-    FROM tb_domicilio q2
-    WHERE q2.st_ativo = 1
-    """
+        SELECT COUNT(q2.co_seq_cds_cad_domiciliar) as "Cadastros Domiciliares"
+        FROM tb_domicilio q2
+        WHERE q2.st_ativo = 1
+        """
 
-    # Aplica os filtros, se existirem, a ambas as consultas
     if query_filters:
         base_query_geral += " AND " + " AND ".join(query_filters)
         domicilio_query += " AND " + " AND ".join(query_filters)
 
-    # Executando as consultas
     with engine.connect() as connection:
-        # Executa a consulta para cadastros gerais
         result_geral = connection.execute(text(base_query_geral), params)
         counts_geral = result_geral.fetchone()
 
-        # Executa a consulta para cadastros domiciliares
         result_domicilio = connection.execute(text(domicilio_query), params)
         counts_domicilio = result_domicilio.fetchone()
 
-    # Converte os resultados para um dicionário
     counts_dict = {
         "Cadastros Individuais": counts_geral[0],
         "Moradores de Rua": counts_geral[1],
@@ -468,22 +498,19 @@ def fetch_contagens():
         "Cadastros Desatualizados": counts_geral[6],
         "Cadastros com Cns": counts_geral[7],
         "Cadastros com Cpf": counts_geral[8],
-        "Cadastros Domiciliares": counts_domicilio[0]  # Adiciona o resultado da segunda consulta
+        "Cadastros Domiciliares": counts_domicilio[0]
     }
 
-    # Retorna os resultados em formato JSON
     return jsonify(counts_dict)
 
 @app.route('/api/unidades-saude', methods=['GET'])
-@cache.cached(timeout=300)  # Cache por 5 minutos (300 segundos)
+@cache.cached(timeout=300)
 def fetchUnidadesSaude():
-    # Obtendo os parâmetros da requisição
     unidade_saude = request.args.get('unidade_saude', default='', type=str)
     equipe = request.args.get('equipe', default='', type=str)
     profissional = request.args.get('profissional', default='', type=str)
     engine = get_local_engine()
 
-    # SQL base para a consulta
     query = """
     SELECT 
     no_unidade_saude, 
@@ -492,7 +519,6 @@ def fetchUnidadesSaude():
     FROM tb_cadastro
     """
 
-    # Adiciona a condição de filtro pela unidade de saúde, se fornecida
     conditions = []
     params = {}
 
@@ -508,18 +534,15 @@ def fetchUnidadesSaude():
         conditions.append("no_profissional = :profissional")
         params["profissional"] = profissional
 
-    # Concatena todas as condições SQL na query base
     if conditions:
         query += " WHERE " + " AND ".join(conditions)
 
-    # Adiciona o agrupamento após as condições
     query += " GROUP BY no_unidade_saude, no_equipe, no_profissional"
 
     try:
         with engine.connect() as connection:
             result = connection.execute(text(query), params)
         
-        # Converte o resultado para um dicionário agrupando por unidade de saúde, equipe e profissional
         data = [
             {
                 'unidadeSaude': row._mapping['no_unidade_saude'],
@@ -529,13 +552,10 @@ def fetchUnidadesSaude():
             for row in result.fetchall()
         ]
 
-        # Retorna os dados no formato JSON
         return jsonify(data)
-
     except Exception as e:
-        # Em caso de erro, retorna a mensagem de erro com status 500
         return jsonify({'error': str(e)}), 500
-    
+
 @app.route('/api/detalhes', methods=['GET'])
 def fetch_detalhes():
     tipo = request.args.get('tipo', default='', type=str).strip().lower()
@@ -589,15 +609,12 @@ def fetch_detalhes():
         'problema renal (não sabe)': 'st_problema_rins_nao_sabe'
     }
 
-    # Adiciona o filtro global de "Cadastros Ativos", exceto para condições que explicitam saídas específicas
     if tipo not in ['óbitos', 'mudou-se']:
-        query_filters.append("t1.co_dim_tipo_saida_cadastro = '3'")  # Apenas cadastros ativos
+        query_filters.append("t1.co_dim_tipo_saida_cadastro = '3'")
 
-    # Verifica se o tipo está no mapeamento
     if tipo in tipo_map:
         query_filters.append(f"t1.{tipo_map[tipo]} = '1'")
 
-    # Filtros adicionais para unidade de saúde, equipe e profissional
     if unidades:
         unidade_saude_list = [u.strip() for u in unidades.split(',')]
         query_filters.append("no_unidade_saude = ANY(:unidades)")
@@ -631,7 +648,6 @@ def fetch_detalhes():
         elif tipo == "cadastros com cpf":
             query_filters.append("(LENGTH(TRIM(t1.nu_cns)) != 15 OR t1.nu_cns = '0') and co_dim_tipo_saida_cadastro = '3'")
 
-    # SQL base para cadastros gerais
     base_query = """
     SELECT 
         no_cidadao,
@@ -647,11 +663,9 @@ def fetch_detalhes():
     WHERE st_ativo = 1 
     """
 
-    # Adiciona os filtros à consulta
     if query_filters:
         base_query += " AND " + " AND ".join(query_filters)
 
-    # Executa a consulta e retorna os resultados
     with engine.connect() as connection:
         result = connection.execute(text(base_query), params)
         data = []
@@ -681,7 +695,6 @@ def fetch_cadastros_domiciliares():
     query_filters = []
     params = {}
 
-    # Filtros para cadastros domiciliares
     if unidades:
         unidade_saude_list = [u.strip() for u in unidades.split(',')]
         if unidade_saude_list:
@@ -700,7 +713,6 @@ def fetch_cadastros_domiciliares():
             query_filters.append("no_profissional = ANY(:profissionais)")
             params["profissionais"] = profissional_list
 
-    # SQL base para cadastros domiciliares
     domicilio_query = """
     SELECT 
         no_logradouro AS rua,
@@ -715,16 +727,13 @@ def fetch_cadastros_domiciliares():
     WHERE q2.st_ativo = 1
     """
 
-    # Adiciona os filtros à consulta de cadastros domiciliares
     if query_filters:
         domicilio_query += " AND " + " AND ".join(query_filters)
 
-    # Executa a consulta e retorna os resultados
     with engine.connect() as connection:
         result = connection.execute(text(domicilio_query), params)
         data = []
         for row in result.fetchall():
-            # Acessa os valores usando row._mapping para utilizar nomes das colunas
             item = {
                 'rua': row._mapping['rua'],
                 'numero': row._mapping['numero'],
@@ -748,7 +757,6 @@ def fetch_detalhes_hover():
 
     engine = get_local_engine()
 
-    # Consulta SQL modificada para JSON
     query = """
     SELECT jsonb_strip_nulls(
         jsonb_build_object(
@@ -797,29 +805,24 @@ def fetch_detalhes_hover():
     WHERE co_cidadao = :co_cidadao
     """
 
-    # Condições de filtro adicionais
     query_filters = []
     params = {"co_cidadao": co_cidadao}
 
-    # Filtro por unidade de saúde
     if unidades:
         unidade_saude_list = [u.strip() for u in unidades.split(',')]
         query_filters.append("no_unidade_saude = ANY(:unidades)")
         params["unidades"] = unidade_saude_list
 
-    # Filtro por equipe
     if equipes:
         equipe_list = [e.strip() for e in equipes.split(',')]
         query_filters.append("no_equipe = ANY(:equipes)")
         params["equipes"] = equipe_list
 
-    # Filtro por profissional
     if profissionais:
         profissional_list = [p.strip() for p in profissionais.split(',')]
         query_filters.append("no_profissional = ANY(:profissionais)")
         params["profissionais"] = profissional_list
 
-    # Adiciona os filtros à consulta base
     if query_filters:
         query += " AND " + " AND ".join(query_filters)
 
@@ -835,14 +838,12 @@ def fetch_detalhes_hover():
 
 @app.route('/api/contagem-detalhes', methods=['GET'])
 def fetch_detalhes_count():
-    # Obtém os parâmetros da requisição
     unidades = request.args.get('unidade_saude', default='', type=str).strip()
     equipes = request.args.get('equipe', default='', type=str).strip()
     profissionais = request.args.get('profissional', default='', type=str).strip()
 
     engine = get_local_engine()
 
-    # SQL base para a consulta agregada
     base_query = """
     SELECT
         COUNT(CASE WHEN st_responsavel_familiar = '1' THEN 1 END) AS responsavel_familiar,
@@ -888,38 +889,31 @@ def fetch_detalhes_count():
     WHERE st_ativo = 1 and co_dim_tipo_saida_cadastro = '3'
     """
 
-    # Condições de filtro adicionais
     query_filters = []
     params = {}
 
-    # Filtro por unidade de saúde
     if unidades:
         unidade_saude_list = [u.strip() for u in unidades.split(',')]
         query_filters.append("no_unidade_saude = ANY(:unidades)")
         params["unidades"] = unidade_saude_list
 
-    # Filtro por equipe
     if equipes:
         equipe_list = [e.strip() for e in equipes.split(',')]
         query_filters.append("no_equipe = ANY(:equipes)")
         params["equipes"] = equipe_list
 
-    # Filtro por profissional
     if profissionais:
         profissional_list = [p.strip() for p in profissionais.split(',')]
         query_filters.append("no_profissional = ANY(:profissionais)")
         params["profissionais"] = profissional_list
 
-    # Adiciona os filtros à consulta base
     if query_filters:
         base_query += " AND " + " AND ".join(query_filters)
 
-    # Executa a consulta
     with engine.connect() as connection:
         result = connection.execute(text(base_query), params)
         data = result.fetchone()
 
-        # Acesse os resultados usando índices inteiros
         count_data = {
             'Responsável Familiar': data[0],
             'Frequenta Creche': data[1],
@@ -970,7 +964,6 @@ def get_last_import():
         config = json.load(f)
     return jsonify(config)
 
-# Rota para obter a configuração de autoatualização
 @app.route('/api/get-import-config', methods=['GET'])
 def get_import_config():
     config_data = importdados.ensure_auto_update_config()
@@ -978,26 +971,23 @@ def get_import_config():
 
 @app.route('/api/save-auto-update-config', methods=['POST'])
 def save_auto_update_config_route():
-    data = request.json
-    is_auto_update_on = data['isAutoUpdateOn']
-    auto_update_time = data['autoUpdateTime']
+    with app.app_context():  # Garante o contexto da aplicação
+        data = request.json
+        is_auto_update_on = data['isAutoUpdateOn']
+        auto_update_time = data['autoUpdateTime']
 
-    # Salvar a configuração no arquivo
-    importdados.save_auto_update_config(is_auto_update_on, auto_update_time)
+        importdados.save_auto_update_config(is_auto_update_on, auto_update_time)
 
-    # Se a autoatualização estiver ligada, agendar a importação
-    if is_auto_update_on:
-        # Verificar se já existe um job para evitar múltiplos jobs
-        if len(importdados.scheduler.get_jobs()) > 0:
+        if is_auto_update_on:
+            if len(importdados.scheduler.get_jobs()) > 0:
+                importdados.scheduler.remove_all_jobs()
+            importdados.schedule_auto_import(importdados.scheduler, auto_update_time)
+            logger.info(f"Autoatualização agendada para {auto_update_time}")
+        else:
             importdados.scheduler.remove_all_jobs()
+            logger.info("Autoatualização desativada")
 
-        importdados.schedule_auto_import(importdados.scheduler, auto_update_time)
-        print(f"Autoatualização agendada para {auto_update_time}")
-    else:
-        importdados.scheduler.remove_all_jobs()
-        print("Autoatualização desativada")
-
-    return jsonify({"status": "Configuração de autoatualização salva com sucesso!"})
+        return jsonify({"status": "Configuração de autoatualização salva com sucesso!"})
 
 @app.route('/check-file/<import_type>', methods=['GET'])
 def check_file(import_type):
@@ -1007,20 +997,17 @@ def check_file(import_type):
 
 @app.route('/api/visitas-domiciliares', methods=['GET'])
 def fetch_visitas_domiciliares():
-    # Parâmetros de entrada
     unidades = request.args.get('unidade_saude', default='', type=str)
     equipes = request.args.get('equipe', default='', type=str)
     profissionais = request.args.get('profissional', default='', type=str)
-    start_date = request.args.get('start_date', default='', type=str)  # Nova entrada para a data inicial
-    end_date = request.args.get('end_date', default='', type=str)      # Nova entrada para a data final
+    start_date = request.args.get('start_date', default='', type=str)
+    end_date = request.args.get('end_date', default='', type=str)
     tipo_consulta = request.args.get('tipo_consulta', default='filtros', type=str)
-
 
     engine = get_local_engine()
     query_filters = []
     params = {}
 
-    # Filtros para unidades, equipes e profissionais
     if unidades:
         unidade_saude_list = [u.strip() for u in unidades.split(',')]
         if unidade_saude_list:
@@ -1039,7 +1026,6 @@ def fetch_visitas_domiciliares():
             query_filters.append("no_profissional = ANY(:profissionais)")
             params["profissionais"] = profissional_list
 
-    # Adicionando filtro de data
     if start_date and end_date:
         try:
             start = datetime.strptime(start_date, "%Y-%m-%d")
@@ -1050,9 +1036,7 @@ def fetch_visitas_domiciliares():
         except ValueError:
             return jsonify({"error": "Data inválida"}), 400
 
-    # Consulta de filtros
     if tipo_consulta == 'filtros':
-        # Primeira query: trazer apenas os filtros (unidade, equipe, profissional)
         filtros_query = """
         SELECT
             initcap(no_unidade_saude) AS no_unidade_saude,    
@@ -1061,16 +1045,13 @@ def fetch_visitas_domiciliares():
         FROM tb_visitas
         """
 
-        # Adiciona os filtros à consulta
         if query_filters:
             filtros_query += " WHERE " + " AND ".join(query_filters)
 
-        # Adiciona GROUP BY
         filtros_query += """
         GROUP BY no_unidade_saude, no_profissional, no_equipe
         """
 
-        # Executa a consulta
         with engine.connect() as connection:
             result = connection.execute(text(filtros_query), params)
             data = []
@@ -1085,7 +1066,6 @@ def fetch_visitas_domiciliares():
         return jsonify(data)
 
     elif tipo_consulta == 'mapa':
-        # Segunda query: trazer latitude e longitude para o mapa
         visitas_query = """
         SELECT
             nu_latitude,
@@ -1093,18 +1073,16 @@ def fetch_visitas_domiciliares():
             initcap(no_unidade_saude) AS no_unidade_saude,    
             initcap(no_profissional) AS no_profissional,      
             initcap(no_equipe) AS no_equipe,
-            co_dim_desfecho_visita,  -- Status da visita (1: realizada, 2: recusada, 3: ausente)
+            co_dim_desfecho_visita,
             to_char(dt_visita_mcaf, 'DD/MM/YYYY') as dt_visita,
             sg_sexo,
-            case when com_localizacao = '0' then 'Não' else 'Sim'end as com_localizacao
+            case when com_localizacao = '0' then 'Não' else 'Sim' end as com_localizacao
         FROM tb_visitas
         """
 
-        # Adiciona os filtros à consulta
         if query_filters:
             visitas_query += " WHERE " + " AND ".join(query_filters)
 
-        # Executa a consulta
         with engine.connect() as connection:
             result = connection.execute(text(visitas_query), params)
             data = []
@@ -1115,7 +1093,7 @@ def fetch_visitas_domiciliares():
                     'no_unidade_saude': row._mapping['no_unidade_saude'],
                     'no_profissional': row._mapping['no_profissional'],
                     'no_equipe': row._mapping['no_equipe'],
-                    'co_dim_desfecho_visita': row._mapping['co_dim_desfecho_visita'],  # Status da visita
+                    'co_dim_desfecho_visita': row._mapping['co_dim_desfecho_visita'],
                     'dt_visita': row._mapping['dt_visita'],
                     'sg_sexo': row._mapping['sg_sexo'],
                     'com_localizacao': row._mapping['com_localizacao']
@@ -1130,17 +1108,14 @@ def fetch_visitas_domiciliares():
 @app.route('/api/data', methods=['POST'])
 def get_data():
     try:
-        # Captura o payload da requisição
         data = request.get_json()
-        tipo = data.get('tipo')  # 'iaf', 'pse', 'pse_prof'
+        tipo = data.get('tipo')
         ano = data.get('ano')
         mes = data.get('mes')
 
-        # Verificação dos parâmetros
         if not tipo or not ano or not mes:
             return jsonify({'error': 'Tipo, ano e mês são obrigatórios!'}), 400
 
-        # Dicionário de queries para cada tipo de dado
         queries = {
             'iaf': '''
                 SELECT 
@@ -1178,19 +1153,16 @@ def get_data():
             '''
         }
 
-        # Escolha a query correta com base no tipo
         query = queries.get(tipo)
         if not query:
             return jsonify({'error': 'Tipo inválido!'}), 400
 
-        # Executar a consulta no banco de dados
         with get_local_engine().connect() as conn:
             result = conn.execute(text(query), {'ano': ano, 'mes': mes})
             rows = result.fetchall()
 
-            # Convertendo os dados em uma lista de dicionários serializáveis
             data_list = []
-            columns = result.keys()  # Pega os nomes das colunas
+            columns = result.keys()
 
             for row in rows:
                 row_dict = {}
@@ -1198,17 +1170,16 @@ def get_data():
                     row_dict[col] = str(value) if not isinstance(value, (str, int, float, bool, type(None))) else value
                 data_list.append(row_dict)
 
-        # Retornar os dados e as colunas
         return jsonify({
             'columns': list(columns),
             'data': data_list
         })
 
     except SQLAlchemyError as e:
-        logging.error(f"Erro ao buscar os dados do banco de dados: {str(e)}")
+        logger.error(f"Erro ao buscar os dados do banco de dados: {str(e)}")
         return jsonify({'error': 'Erro ao buscar os dados!'}), 500
     except Exception as e:
-        logging.error(f"Erro inesperado: {str(e)}")
+        logger.error(f"Erro inesperado: {str(e)}")
         return jsonify({'error': 'Erro inesperado!'}), 500
 
 @app.route('/api/corrigir-ceps')
@@ -1219,10 +1190,9 @@ def corrigir_ceps():
             Gerar_BPA.atualizar_enderecos(connection)
         return jsonify({"status": "ok"})
     except Exception as e:
-        import traceback
-        traceback.print_exc()
+        logger.error(f"Erro ao corrigir CEPs: {str(e)}")
         return jsonify({"error": str(e)}), 500
-    
+
 @app.route('/api/atualizar-cep-escolhido', methods=['POST'])
 def atualizar_cep_escolhido():
     data = request.json
@@ -1244,13 +1214,18 @@ def atualizar_cep_escolhido():
         })
     return jsonify({"status": "Atualizado com sucesso"})
 
-
+# Inicialização do servidor
 if __name__ == '__main__':
-    config = importdados.ensure_auto_update_config()
-    if config['isAutoUpdateOn']:
-        importdados.schedule_auto_import(importdados.scheduler, config['autoUpdateTime'])
+    with app.app_context():  # Garante o contexto da aplicação
+        logger.info(f"[STARTUP] Estado inicial de task_status: {task_status}")
+        config = importdados.ensure_auto_update_config()
+        if config['isAutoUpdateOn']:
+            if len(importdados.scheduler.get_jobs()) > 0:
+                importdados.scheduler.remove_all_jobs()
+            importdados.schedule_auto_import(importdados.scheduler, config['autoUpdateTime'])
+            logger.info(f"Autoatualização agendada para {config['autoUpdateTime']}")
+        else:
+            logger.info("Autoatualização desativada")
 
-    socketio.run(app, host='0.0.0.0', port=5000, debug=True)  # Executando com suporte ao WebSocket
-    print("Executando importação automática de dados...")
-
-
+    socketio.run(app, host='0.0.0.0', port=5000, debug=True, use_reloader=False)
+    logger.info("Executando importação automática de dados...")

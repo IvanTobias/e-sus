@@ -3,6 +3,7 @@ import os
 import asyncio
 import threading
 import traceback
+import logging
 from apscheduler.triggers.cron import CronTrigger
 from apscheduler.schedulers.background import BackgroundScheduler
 from Consultas import execute_long_task
@@ -77,32 +78,61 @@ def ensure_auto_update_config():
                 json.dump(default_config, config_file, indent=4)
             return default_config
 
-# Função para salvar a configuração de auto-update
-def save_auto_update_config(is_auto_update_on, auto_update_time):
-    config_data = {
-        "isAutoUpdateOn": is_auto_update_on,
-        "autoUpdateTime": auto_update_time
-    }
-    with open(AUTO_UPDATE_CONFIG_FILE, 'w') as config_file:
-        json.dump(config_data, config_file, indent=4)
-    print(f"Configuração de auto-update salva: {config_data}")
+from flask import current_app
 
-# Função para rodar tarefas de importação de forma assíncrona
+# Função para executar as importações automáticas
 def auto_update_imports_wrapper():
-    asyncio.run(auto_update_imports())  # Usando asyncio.run para executar a coroutine
+    with current_app.app_context():  # Garante que estamos dentro do contexto da aplicação
+        logging.info("Executando autoatualização de importações...")
+        # Aqui você pode chamar as funções de importação
+        # Por exemplo, para cada tipo de importação:
+        tipos = ['cadastro', 'domiciliofcd', 'bpa', 'visitas', 'atendimentos', 'iaf', 'pse', 'pse_prof']
+        for tipo in tipos:
+            try:
+                # Lê a configuração atual
+                with open('config.json', 'r') as config_file:
+                    config_data = json.load(config_file)
+                # Executa a importação
+                execute_long_task(config_data, tipo)
+            except Exception as e:
+                logging.error(f"Erro ao executar autoatualização para {tipo}: {str(e)}")
 
-# Função para agendar o auto-update
-def schedule_auto_import(scheduler, time_str):
-    hour, minute = map(int, time_str.split(':'))
-    trigger = CronTrigger(hour=hour, minute=minute)
+# Função para agendar a importação automática
+def schedule_auto_import(scheduler, auto_update_time):
+    try:
+        # Divide a string "HH:MM" em horas e minutos
+        hour, minute = map(int, auto_update_time.split(':'))
+        # Agenda a tarefa para rodar diariamente no horário especificado
+        scheduler.add_job(
+            auto_update_imports_wrapper,
+            'cron',
+            hour=hour,
+            minute=minute,
+            id='auto_update_imports_wrapper'
+        )
+        logging.info(f"Tarefa de auto-importação agendada para {auto_update_time}.")
+    except Exception as e:
+        logging.error(f"Erro ao agendar auto-importação: {str(e)}")
 
-    # Verifica se uma tarefa já está agendada
-    if not scheduler.get_job("auto_import"):
-        scheduler.add_job(auto_update_imports_wrapper, trigger, id="auto_import")
-        print(f"Tarefa de auto-importação agendada para {time_str}.")
-    else:
-        print("Tarefa de auto importação já agendada.")
+# Função para garantir a configuração de autoatualização
+def ensure_auto_update_config():
+    config_file = 'auto_update_config.json'
+    default_config = {'isAutoUpdateOn': False, 'autoUpdateTime': '23:00'}
+    if not os.path.exists(config_file):
+        with open(config_file, 'w') as f:
+            json.dump(default_config, f)
+        logging.info("Arquivo de configuração de autoatualização criado com valores padrão.")
+    with open(config_file, 'r') as f:
+        config = json.load(f)
+    logging.info(f"Configuração de auto-update carregada: {config}")
+    return config
 
+# Função para salvar a configuração de autoatualização
+def save_auto_update_config(is_auto_update_on, auto_update_time):
+    config = {'isAutoUpdateOn': is_auto_update_on, 'autoUpdateTime': auto_update_time}
+    with open('auto_update_config.json', 'w') as f:
+        json.dump(config, f)
+    logging.info("Configuração de autoatualização salva.")
 # Função para rodar tarefas de importação sequencialmente
 def run_import_sequentially(import_type, config_data):
     lock_name = f"import_lock_{import_type}"

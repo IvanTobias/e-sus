@@ -1,0 +1,118 @@
+/* /home/ubuntu/esus_project/frontend/src/components/BPAConfig.css */
+
+.bpa-config-container {
+    /* Inherits container styles from styles.css */
+    max-width: 700px;
+}
+
+.bpa-config-container h1 {
+    color: var(--dark);
+    margin-bottom: 15px;
+    font-size: 1.8em;
+    font-weight: 600;
+    text-align: center;
+}
+
+.bpa-config-container p {
+    text-align: center;
+    color: #636366;
+    margin-bottom: 30px;
+}
+
+.loading-message,
+.success-message,
+.error-message {
+    padding: 12px;
+    margin-bottom: 20px;
+    border-radius: 6px;
+    text-align: center;
+    font-weight: 500;
+}
+
+.loading-message {
+    background-color: #eef2ff; /* Light indigo */
+    color: #4338ca; /* Indigo */
+}
+
+.success-message {
+    background-color: #dcfce7; /* Light green */
+    color: #166534; /* Green */
+}
+
+.error-message {
+    background-color: #fee2e2; /* Light red */
+    color: #991b1b; /* Red */
+}
+
+.bpa-config-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px; /* Space between form groups */
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group label {
+    margin-bottom: 8px;
+    font-weight: 600;
+    font-size: 0.95em;
+    color: var(--dark);
+}
+
+.form-group input[type="text"],
+.form-group select {
+    padding: 10px 14px;
+    border: 1px solid #c6c6c8;
+    border-radius: 6px;
+    font-size: 1em;
+    background-color: var(--white);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.form-group input[type="text"]:focus,
+.form-group select:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.3);
+}
+
+.form-group input[type="text"]:required:invalid {
+    border-color: var(--danger);
+}
+
+.form-group input[type="text"]:required:invalid:focus {
+    box-shadow: 0 0 0 3px rgba(255, 59, 48, 0.3);
+}
+
+.botao-salvar-config {
+    padding: 12px 25px;
+    font-size: 1.1em;
+    font-weight: 600;
+    background-color: var(--primary);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+    margin-top: 15px; /* Add some space above the button */
+    align-self: center; /* Center the button */
+    min-width: 250px;
+}
+
+.botao-salvar-config:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    background-color: #b3d7ff;
+}
+
+.botao-salvar-config:active:not(:disabled) {
+    transform: scale(0.98);
+}
+
+.botao-salvar-config:hover:not(:disabled) {
+    background-color: #0056b3;
+}
+

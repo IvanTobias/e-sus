@@ -1,0 +1,234 @@
+/* /home/ubuntu/esus_project/frontend/src/components/ChamarSenha.css */
+
+.chamar-senha-container {
+    /* Inherits container styles from styles.css */
+    text-align: center;
+}
+
+.chamar-senha-container h1 {
+    color: var(--dark);
+    margin-bottom: 30px;
+    font-size: 1.8em;
+    font-weight: 600;
+}
+
+.config-guiche {
+    margin-bottom: 25px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.config-guiche label {
+    font-weight: 600;
+    font-size: 1em;
+}
+
+.config-guiche input[type="text"] {
+    padding: 8px 12px;
+    border: 1px solid #c6c6c8;
+    border-radius: 6px;
+    font-size: 1em;
+    width: 200px; /* Adjust width as needed */
+    background-color: #f0f0f0;
+}
+
+.config-guiche input[type="text"]:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.3);
+    background-color: var(--white);
+}
+
+.botao-chamar {
+    padding: 12px 25px;
+    font-size: 1.2em;
+    font-weight: 600;
+    background-color: var(--success); /* Green for calling */
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+    margin-bottom: 25px;
+}
+
+.botao-chamar:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    background-color: #a5d6a7; /* Lighter green when disabled */
+}
+
+.botao-chamar:active:not(:disabled) {
+    transform: scale(0.98);
+}
+
+.botao-chamar:hover:not(:disabled) {
+    background-color: #2e7d32; /* Darker green */
+}
+
+.chamar-senha-error {
+    color: var(--danger);
+    background-color: rgba(255, 59, 48, 0.1);
+    padding: 10px;
+    border-radius: 6px;
+    margin-bottom: 20px;
+    font-weight: 500;
+}
+
+.senha-chamada-atual-info {
+    margin-top: 20px;
+    padding: 20px;
+    background-color: var(--light-grey);
+    border-radius: 10px;
+    border: 1px solid #e5e5ea;
+    animation: fadeIn 0.5s ease-out;
+}
+
+.senha-chamada-atual-info h2 {
+    font-size: 1.4em;
+    color: var(--dark);
+    margin-bottom: 15px;
+}
+
+.numero-senha-atual {
+    font-size: 3em;
+    font-weight: bold;
+    color: var(--success); /* Green for called ticket */
+    margin-bottom: 10px;
+}
+
+.senha-chamada-atual-info p {
+    font-size: 1.1em;
+    color: #636366;
+    margin-bottom: 8px;
+}
+
+.botoes-status {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap; /* Allow buttons to wrap on smaller screens */
+}
+
+.botoes-status button {
+    padding: 8px 16px;
+    font-size: 0.9em;
+    font-weight: 500;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.botoes-status button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.botoes-status button:active:not(:disabled) {
+    transform: scale(0.97);
+}
+
+.botao-status.iniciar {
+    background-color: var(--primary);
+    color: white;
+}
+.botao-status.iniciar:hover:not(:disabled) {
+    background-color: #0056b3;
+}
+.botao-status.iniciar:disabled {
+    background-color: #b3d7ff;
+}
+
+.botao-status.finalizar {
+    background-color: #34c759; /* Green */
+    color: white;
+}
+.botao-status.finalizar:hover:not(:disabled) {
+    background-color: #28a745;
+}
+.botao-status.finalizar:disabled {
+    background-color: #a5d6a7;
+}
+
+.botao-status.requeue {
+    background-color: #ff9500; /* Orange */
+    color: white;
+}
+.botao-status.requeue:hover:not(:disabled) {
+    background-color: #cc7a00;
+}
+.botao-status.requeue:disabled {
+    background-color: #ffcc80;
+}
+
+.botao-status.cancelar {
+    background-color: var(--danger);
+    color: white;
+}
+.botao-status.cancelar:hover:not(:disabled) {
+    background-color: #c82333;
+}
+.botao-status.cancelar:disabled {
+    background-color: #f5c6cb;
+}
+
+.fila-espera-preview {
+    margin-top: 30px;
+    padding: 15px;
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    max-height: 200px; /* Limit height */
+    overflow-y: auto;
+}
+
+.fila-espera-preview h3 {
+    margin-top: 0;
+    margin-bottom: 10px;
+    font-size: 1.2em;
+    color: var(--dark);
+    text-align: left;
+}
+
+.fila-espera-preview ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    text-align: left;
+}
+
+.fila-espera-preview li {
+    padding: 5px 0;
+    border-bottom: 1px solid #e9ecef;
+    font-size: 0.95em;
+}
+
+.fila-espera-preview li:last-child {
+    border-bottom: none;
+}
+
+.fila-espera-preview li.prioritario {
+    font-weight: bold;
+    color: #e65100; /* Darker orange for priority */
+}
+
+.fila-espera-preview li.normal {
+    color: #343a40;
+}
+
+/* Re-use fadeIn animation from GerarSenha.css or styles.css */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+

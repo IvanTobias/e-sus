@@ -1,0 +1,125 @@
+/* /home/ubuntu/esus_project/frontend/src/components/BPAGeneration.css */
+
+.bpa-generation-container {
+    /* Inherits container styles from styles.css */
+    max-width: 800px;
+    text-align: center;
+}
+
+.bpa-generation-container h1 {
+    color: var(--dark);
+    margin-bottom: 15px;
+    font-size: 1.8em;
+    font-weight: 600;
+}
+
+.bpa-generation-container p {
+    color: #636366;
+    margin-bottom: 30px;
+}
+
+.botao-gerar-bpa {
+    padding: 12px 25px;
+    font-size: 1.2em;
+    font-weight: 600;
+    background-color: var(--success); /* Green */
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+    margin-bottom: 40px; /* Space before the file list */
+}
+
+.botao-gerar-bpa:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    background-color: #a5d6a7;
+}
+
+.botao-gerar-bpa:active:not(:disabled) {
+    transform: scale(0.98);
+}
+
+.botao-gerar-bpa:hover:not(:disabled) {
+    background-color: #2e7d32;
+}
+
+.generated-files-section {
+    margin-top: 30px;
+    padding: 20px;
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    text-align: left;
+}
+
+.generated-files-section h2 {
+    margin-top: 0;
+    margin-bottom: 20px;
+    font-size: 1.4em;
+    color: var(--dark);
+    border-bottom: 1px solid #dee2e6;
+    padding-bottom: 10px;
+}
+
+.file-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.file-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.file-item:last-child {
+    border-bottom: none;
+}
+
+.file-item span {
+    font-size: 1em;
+    color: #495057;
+}
+
+.botao-download-file {
+    background: none;
+    border: none;
+    color: var(--primary);
+    cursor: pointer;
+    padding: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: background-color 0.2s ease;
+}
+
+.botao-download-file:hover {
+    background-color: rgba(0, 122, 255, 0.1);
+}
+
+/* Inherit message styles from BPAConfig.css or define similar ones */
+.success-message,
+.error-message {
+    padding: 12px;
+    margin-bottom: 20px;
+    border-radius: 6px;
+    text-align: center;
+    font-weight: 500;
+}
+
+.success-message {
+    background-color: #dcfce7; /* Light green */
+    color: #166534; /* Green */
+}
+
+.error-message {
+    background-color: #fee2e2; /* Light red */
+    color: #991b1b; /* Red */
+}
+

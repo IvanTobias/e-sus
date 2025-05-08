@@ -1,0 +1,65 @@
+/* /home/ubuntu/esus_project/frontend/src/components/ProntuarioSupport.css */
+
+.prontuario-support-container {
+  padding: 20px;
+  background-color: var(--background-light);
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  height: calc(100vh - 100px); /* Adjust based on header/footer height */
+  overflow-y: auto;
+}
+
+.prontuario-support-container h2 {
+  color: var(--primary);
+  margin-bottom: 20px;
+  border-bottom: 2px solid var(--primary-light);
+  padding-bottom: 10px;
+}
+
+.filter-section {
+  margin-bottom: 25px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.filter-section label {
+  font-weight: bold;
+  color: var(--text-primary);
+}
+
+.filter-section select {
+  padding: 8px 12px;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  background-color: #fff;
+  font-size: 1rem;
+  min-width: 200px;
+}
+
+.content-section {
+  margin-top: 20px;
+}
+
+.content-item {
+  background-color: #fff;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  padding: 15px;
+  margin-bottom: 15px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.content-item h3 {
+  color: var(--secondary);
+  margin-top: 0;
+  margin-bottom: 10px;
+  font-size: 1.1rem;
+}
+
+.content-item p {
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin-bottom: 0;
+}
+
