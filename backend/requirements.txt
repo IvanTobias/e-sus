@@ -38,3 +38,4 @@ urllib3==2.2.3
 Werkzeug==3.0.4
 wsproto==1.2.0
 eventlet==0.33.3
+PyJWT>=2.0.0
