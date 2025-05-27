@@ -1,5 +1,5 @@
 # esus_project/backend/routes/powerbi_reports_routes.py
-from Conexões import get_external_engine
+from Conexões import get_external_engine, get_local_engine # Added get_local_engine
 from flask import Blueprint, jsonify, request
 from init import db
 from sqlalchemy import text, func, case
@@ -11,6 +11,7 @@ from datetime import datetime, timedelta # Import datetime for date filtering
 
 reports_bp = Blueprint("reports", __name__, url_prefix="/api/reports")
 
+# Function to execute queries on the external DW
 def execute_query(query_str, params={}):
     try:
         engine = get_external_engine()
@@ -27,7 +28,26 @@ def execute_query(query_str, params={}):
             else:
                 return None
     except Exception as e:
-        print(f"Error executing query: {e}")
+        print(f"Error executing query on external DW: {e}")
+        print(traceback.format_exc())
+        return None
+
+# Function to execute queries on the local DB (for Previne Brasil indicators)
+def execute_local_query(query_str, params={}):
+    try:
+        engine = get_local_engine() # Use local engine
+        with engine.connect() as connection:
+            result = connection.execute(text(query_str), params)
+            if result.returns_rows:
+                if result.rowcount == 1:
+                    row = result.fetchone()
+                    return dict(row._mapping) if row and hasattr(row, "_mapping") else (row if row else None)
+                else:
+                    return [dict(row._mapping) if hasattr(row, "_mapping") else row for row in result.fetchall()]
+            else: # For statements like INSERT, UPDATE, DELETE that don't return rows
+                return {"rowcount": result.rowcount, "lastrowid": result.lastrowid if hasattr(result, 'lastrowid') else None}
+    except Exception as e:
+        print(f"Error executing query on local DB: {e}")
         print(traceback.format_exc())
         return None
 
@@ -453,34 +473,154 @@ def get_vacinas_summary():
 @reports_bp.route("/previne/summary", methods=["GET"])
 def get_previne_summary():
     """ Endpoint to get summary data for Previne Brasil dashboard (Page 1). """
-    # Placeholder implementation - Requires specific indicator logic and queries
+def _get_indicador_1_prenatal(period_start_date, period_end_date):
+    # Placeholder
+    return {"nome": "Gestantes com pelo menos 6 consultas pré-natal realizadas, sendo a 1ª até a 12ª semana de gestação", 
+            "valor": 0, "numerador": 0, "denominador": 0, "meta": "60%", "status": "pending implementation"}
+
+def _get_indicador_2_saude_bucal_gestantes(period_start_date, period_end_date):
+    # Placeholder
+    return {"nome": "Gestantes com atendimento odontológico realizado", 
+            "valor": 0, "numerador": 0, "denominador": 0, "meta": "60%", "status": "pending implementation"}
+
+def _get_indicador_3_citopatologico(period_start_date, period_end_date):
+    # Placeholder
+    return {"nome": "Mulheres com coleta de citopatológico na APS", 
+            "valor": 0, "numerador": 0, "denominador": 0, "meta": "40%", "status": "pending implementation"}
+
+def _get_indicador_4_vacina_polio_penta(period_start_date, period_end_date):
+    # Placeholder
+    return {"nome": "Crianças de 1 ano vacinadas contra Difteria, Tétano, Coqueluche, Hepatite B, infecções por haemophilus influenzae tipo b e Poliomielite inativada e oral", 
+            "valor": 0, "numerador": 0, "denominador": 0, "meta": "95%", "status": "pending implementation"}
+
+def _get_indicador_5_vacina_papiloma(period_start_date, period_end_date):
+    # Placeholder, specific age range for HPV vaccine
+    return {"nome": "Meninas de 9 a 14 anos vacinadas contra o Papilomavírus Humano (HPV)", 
+            "valor": 0, "numerador": 0, "denominador": 0, "meta": "60%", "status": "pending implementation"}
+
+def _get_indicador_6_hipertensao(period_start_date, period_end_date):
+    """
+    Indicador 6: Proporção de pessoas hipertensas com Pressão Arterial (PA) 
+    aferida em cada semestre.
+    Denominador: Pessoas com diagnóstico de Hipertensão Arterial Sistêmica (HAS) 
+                 cadastradas na APS no quadrimestre de avaliação.
+    Numerador: Pessoas do denominador com pelo menos uma PA aferida registrada 
+               na APS no semestre de avaliação.
+    """
+    # Illustrative query - specific CIAP/CID codes for hypertension and PA measurement procedures 
+    # would need to be confirmed with documentation.
+    # This query assumes 'tb_cadastro' for patient registration and demographics,
+    # and 'tb_atendimentos' for procedures like PA measurement.
     
-    # Define target period (e.g., current quadrimestre or based on request args)
-    # For simplicity, using placeholder values
-    quad = "3º Quadrimestre 2024"
+    query_denominador = """
+        SELECT COUNT(DISTINCT tc.co_seq_fat_cad_individual) as denominador
+        FROM tb_fat_cad_individual tc
+        WHERE tc.st_ativo = 1 
+        AND tc.st_hipertensao = 1; -- Assuming a flag for hypertension in tb_cadastro
+                                 -- OR join with tb_fat_condicao_avaliada for CIAP K86, K87 or CID I10-I16
+    """
+    # For Numerator:
+    # Check for PA measurement (e.g., CIAP 'K01002' or a specific procedure code) in tb_fat_proced_atend
+    # linked to tb_fat_atend_individual, filtered by the semester dates.
+    query_numerador = f"""
+        SELECT COUNT(DISTINCT fai.co_fat_cidadao_pec) as numerador
+        FROM tb_fat_atend_individual fai
+        JOIN tb_fat_cad_individual fci ON fai.co_fat_cidadao_pec = fci.co_fat_cidadao_pec
+        JOIN tb_fat_proced_atend fpa ON fai.co_seq_fat_atend_individual = fpa.co_fat_atend_individual
+        JOIN tb_dim_procedimento dp ON fpa.co_dim_procedimento = dp.co_seq_dim_procedimento
+        JOIN tb_dim_tempo dt ON fai.co_dim_tempo = dt.co_seq_dim_tempo
+        WHERE fci.st_ativo = 1 
+        AND fci.st_hipertensao = 1 -- Denominator condition
+        AND dp.co_procedimento IN ('ABPG001', 'ABEX004', '0301100039') -- Placeholder codes for PA measurement
+        AND dt.dt_registro BETWEEN '{period_start_date}' AND '{period_end_date}';
+    """
     
-    # Placeholder calculations for each indicator (Numerator / Denominator * 100)
-    # These queries need to be developed based on official Previne Brasil technical notes
-    # and the e-SUS AB DW schema.
+    den_result = execute_local_query(query_denominador)
+    num_result = execute_local_query(query_numerador)
     
-    # Example Placeholder Structure:
-    indicadores = {
-        "i1_prenatal": {"nome": "Pré-Natal (6 consultas, 1ª até 12ª sem)", "valor": 75.5, "numerador": 755, "denominador": 1000}, # Placeholder
-        "i2_saude_bucal": {"nome": "Saúde Bucal de Gestantes", "valor": 60.2, "numerador": 602, "denominador": 1000}, # Placeholder
-        "i3_citopatologico": {"nome": "Citopatológico", "valor": 55.0, "numerador": 5500, "denominador": 10000}, # Placeholder
-        "i4_vacina_polio_penta": {"nome": "Vacinação (Poliomielite e Pentavalente)", "valor": 95.1, "numerador": 951, "denominador": 1000}, # Placeholder
-        "i5_vacina_papiloma": {"nome": "Vacinação Papilomavírus Humano", "valor": 80.0, "numerador": 800, "denominador": 1000}, # Placeholder
-        "i6_hipertensao": {"nome": "Hipertensão (PA aferida)", "valor": 88.9, "numerador": 4445, "denominador": 5000}, # Placeholder
-        "i7_diabetes": {"nome": "Diabetes (Hemoglobina Glicada)", "valor": 70.3, "numerador": 1406, "denominador": 2000} # Placeholder
+    denominador = den_result["denominador"] if den_result and den_result["denominador"] is not None else 0
+    numerador = num_result["numerador"] if num_result and num_result["numerador"] is not None else 0
+    
+    valor = (numerador / denominador * 100) if denominador > 0 else 0
+    
+    return {
+        "nome": "Pessoas hipertensas com Pressão Arterial (PA) aferida no semestre", 
+        "valor": round(valor, 2), 
+        "numerador": numerador, 
+        "denominador": denominador,
+        "meta": "70%", # Example meta, actual metas may vary
+        "status": "partial" 
     }
+
+def _get_indicador_7_diabetes(period_start_date, period_end_date):
+    # Placeholder
+    return {"nome": "Pessoas com Diabetes Mellitus (DM) com solicitação de hemoglobina glicada no semestre", 
+            "valor": 0, "numerador": 0, "denominador": 0, "meta": "50%", "status": "pending implementation"}
+
+
+@reports_bp.route("/previne/summary", methods=["GET"])
+def get_previne_summary():
+    """ Endpoint to get summary data for Previne Brasil dashboard. """
     
-    # Placeholder ISF calculation (Simple average for demonstration)
-    isf_valor = round(sum(ind["valor"] for ind in indicadores.values()) / len(indicadores), 2)
+    # Define target period - Example: First Quadrimestre of 2024
+    # Actual determination of current/selectable quadrimestre would be more dynamic.
+    current_year = datetime.now().year
+    # For this example, let's fix it to Q1 2024 for consistent testing
+    # In a real scenario, this would be determined based on current date or request params
+    period_name = "1º Quadrimestre 2024" 
+    period_start_date = f"{current_year}-01-01"
+    period_end_date = f"{current_year}-04-30"
     
+    # For a semester-based indicator like Hipertensão, adjust period if needed or use a rolling semester.
+    # Example: If current reporting is Q1, Hipertensão might refer to S2 of previous year or S1 of current.
+    # For simplicity, we'll use the quadrimestre dates for all illustrative queries.
+    # A more robust solution would define semester logic based on the quadrimestre.
+    # For Indicator 6 (Hipertensão) which is typically semestral:
+    # Let's assume it refers to the semester containing the quadrimestre's end.
+    # Q1 (Jan-Apr) -> S1 (Jan-Jun)
+    # Q2 (May-Aug) -> S1 (Jan-Jun) for first half, S2 (Jul-Dec) for second half (or previous S2)
+    # Q3 (Sep-Dec) -> S2 (Jul-Dec)
+    # For this placeholder, using the quad dates for all.
+    
+    indicadores_data = []
+    indicadores_data.append(_get_indicador_1_prenatal(period_start_date, period_end_date))
+    indicadores_data.append(_get_indicador_2_saude_bucal_gestantes(period_start_date, period_end_date))
+    indicadores_data.append(_get_indicador_3_citopatologico(period_start_date, period_end_date))
+    indicadores_data.append(_get_indicador_4_vacina_polio_penta(period_start_date, period_end_date))
+    indicadores_data.append(_get_indicador_5_vacina_papiloma(period_start_date, period_end_date))
+    indicadores_data.append(_get_indicador_6_hipertensao(period_start_date, period_end_date))
+    indicadores_data.append(_get_indicador_7_diabetes(period_start_date, period_end_date))
+    
+    # Calculate ISF (Indicador Sintético Final)
+    # Only include indicators that have a valid 'valor' (not "pending implementation" if that results in non-numeric)
+    valid_valores = [ind["valor"] for ind in indicadores_data if isinstance(ind["valor"], (int, float)) and ind["status"] != "pending implementation"]
+    if valid_valores:
+        isf_valor = round(sum(valid_valores) / len(valid_valores), 2)
+    else:
+        # If only Ind6 is partially implemented, ISF might be just its value or an average of 1.
+        # Or handle as per specific business rule for ISF when indicators are missing.
+        # For now, if only one indicator is partially done, ISF is its value.
+        # Otherwise, if no indicators have values, ISF is 0.
+        if len(valid_valores) == 1:
+             isf_valor = round(valid_valores[0], 2)
+        else:
+             isf_valor = 0.0 
+
+
+    # If all are pending, ISF should be 0 or handled as per rules.
+    all_pending = all(ind["status"] == "pending implementation" for ind in indicadores_data)
+    if all_pending:
+        isf_valor = 0.0
+    elif not valid_valores: # No valid values but not all are pending (e.g. Ind6 failed query)
+        isf_valor = 0.0
+    else: # At least one valid value, proceed with average
+        isf_valor = round(sum(valid_valores) / len(valid_valores), 2)
+
+
     summary_data = {
-        "periodo": quad,
-        "isf": isf_valor,
-        "indicadores": indicadores
+        "periodo_apuracao": period_name,
+        "isf_valor_municipal": isf_valor,
+        "indicadores": indicadores_data
     }
     
     return jsonify(summary_data)
