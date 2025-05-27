@@ -285,7 +285,6 @@ def atualizar_enderecos(connection):
     logging.info(resumo)
     socketio.emit('progress_update', {'tipo': 'cep', 'percentual': 100})
 
-    # Adicione isso aqui 👇
     try:
         connection.commit()
     except Exception as e:

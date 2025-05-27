@@ -1,4 +1,3 @@
-#socketio_config.py
 from flask_socketio import SocketIO
 from flask import request
 from init import app  # Importa o app já inicializado de init.py
@@ -23,25 +22,38 @@ task_clients = {}
 
 # Funções auxiliares para emissão de eventos
 def emit_start_task(tipo, sid=None):
+    log_message = f"[SOCKET] Emitindo start_task para '{tipo}'"
     if sid:
+        log_message += f" para SID: {sid}"
         socketio.emit('start_task', tipo, to=sid)
     else:
+        log_message += " (global)"
         socketio.emit('start_task', tipo)
+    logger.info(log_message)
 
 def emit_progress(tipo, percentual, sid=None, error=None):
     msg = {'tipo': tipo, 'percentual': percentual}
+    log_message = f"[SOCKET] Emitindo progress_update para '{tipo}': {percentual}%"
     if error:
         msg['error'] = error
+        log_message += f", erro: {error}"
     if sid:
+        log_message += f" para SID: {sid}"
         socketio.emit('progress_update', msg, to=sid)
     else:
+        log_message += " (global)"
         socketio.emit('progress_update', msg)
+    logger.info(log_message)
 
 def emit_end_task(tipo, sid=None):
+    log_message = f"[SOCKET] Emitindo end_task para '{tipo}'"
     if sid:
+        log_message += f" para SID: {sid}"
         socketio.emit('end_task', tipo, to=sid)
     else:
+        log_message += " (global)"
         socketio.emit('end_task', tipo)
+    logger.info(log_message)
 
 # Monitorar conexões WebSocket
 @socketio.on('connect', namespace='/')
@@ -78,3 +90,4 @@ def handle_start_export(data):
 
     task_clients[task_name] = sid
     logger.info(f"[SOCKET] Exportação iniciada por sid={sid}: task={task_name}")
+

@@ -1,3 +1,4 @@
+//fronted/src/components/importData.js
 import React, { useReducer, useEffect, useCallback, useState, memo } from 'react';
 import axios from 'axios';
 import Switch from 'react-switch';
@@ -119,8 +120,9 @@ function ImportData() {
   const [isAutoUpdateOn, setIsAutoUpdateOn] = useState(false);
   const [autoUpdateTime, setAutoUpdateTime] = useState('00:00');
 
-  const extractData = useExtractData(dispatch);
-
+  const socket = io(API_BASE_URL);
+  const extractData = useExtractData(dispatch, socket); // Passe 'socket' aqui
+ 
   // Inicialização combinada
   useEffect(() => {
     const initialize = async () => {
@@ -251,13 +253,38 @@ function ImportData() {
       }
     });
 
-    socket.on('end-task', ({ task }) => {
-      console.log(`[SOCKET] end-task recebido: task=${task}`);
-      dispatch({ type: 'SET_BOTAO_DESABILITADO', payload: { type: task, value: false } });
-      dispatch({ type: 'SET_EXECUTANDO', payload: { type: task, value: false } });
-      dispatch({ type: 'SET_PROGRESSO', payload: { type: task, value: 100 } });
-      dispatch({ type: 'SET_ARQUIVO_DISPONIVEL', payload: { type: task, value: true } });
+    socket.on('end_task', async (tipo) => {
+      console.log(`[SOCKET] end_task recebido: tipo=${tipo}`);
+      dispatch({ type: 'SET_BOTAO_DESABILITADO', payload: { type: tipo, value: false } });
+      dispatch({ type: 'SET_EXECUTANDO', payload: { type: tipo, value: false } });
+      dispatch({ type: 'SET_PROGRESSO', payload: { type: tipo, value: 100 } });
+      dispatch({ type: 'SET_ARQUIVO_DISPONIVEL', payload: { type: tipo, value: true } });
+    
+      try {
+        const response = await fetch(`${API_BASE_URL}/download-exported-file/${tipo}`);
+        if (!response.ok) throw new Error('Falha ao baixar o arquivo');
+    
+        const blob = await response.blob();
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+    
+        // Pega o nome do arquivo enviado pelo backend
+        const disposition = response.headers.get('Content-Disposition');
+        const match = disposition && disposition.match(/filename="?(.+)"?/);
+        const filename = match?.[1] || `${tipo}_export.xlsx`;
+    
+        link.href = url;
+        link.setAttribute('download', filename);
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        window.URL.revokeObjectURL(url);
+      } catch (error) {
+        console.error(`[EXPORT-${tipo.toUpperCase()}] Erro ao baixar o arquivo:`, error);
+        dispatch({ type: 'SET_MENSAGEM_ERRO', payload: { type: tipo, message: `Erro ao baixar: ${error.message}` } });
+      }
     });
+    
 
     return () => {
       socket.off('connect');

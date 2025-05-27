@@ -1,4 +1,4 @@
-2025-05-06 16:02:09 [ERROR] src.errors.log.config: (sqlite3.OperationalError) no such table: diabetes
+2025-05-12 12:03:19 [ERROR] src.errors.log.config: (sqlite3.OperationalError) no such table: diabetes
 [SQL: select * from diabetes ;]
 (Background on this error at: https://sqlalche.me/e/20/e3q8)
 Traceback (most recent call last):
@@ -55,7 +55,7 @@ Traceback (most recent call last):
 sqlalchemy.exc.OperationalError: (sqlite3.OperationalError) no such table: diabetes
 [SQL: select * from diabetes ;]
 (Background on this error at: https://sqlalche.me/e/20/e3q8)
-2025-05-06 16:02:10 [ERROR] src.errors.log.config: (sqlite3.OperationalError) no such table: hipertensao
+2025-05-12 12:03:19 [ERROR] src.errors.log.config: (sqlite3.OperationalError) no such table: hipertensao
 [SQL: 
         with 
         lista as (
@@ -174,7 +174,7 @@ sqlalchemy.exc.OperationalError: (sqlite3.OperationalError) no such table: hiper
         from idades
         group by co_dim_sexo, faixa_etaria;]
 (Background on this error at: https://sqlalche.me/e/20/e3q8)
-2025-05-06 16:02:10 [ERROR] src.errors.log.config: (sqlite3.OperationalError) no such table: diabetes
+2025-05-12 12:03:19 [ERROR] src.errors.log.config: (sqlite3.OperationalError) no such table: diabetes
 [SQL: select * from diabetes ;]
 (Background on this error at: https://sqlalche.me/e/20/e3q8)
 Traceback (most recent call last):
@@ -231,7 +231,7 @@ Traceback (most recent call last):
 sqlalchemy.exc.OperationalError: (sqlite3.OperationalError) no such table: diabetes
 [SQL: select * from diabetes ;]
 (Background on this error at: https://sqlalche.me/e/20/e3q8)
-2025-05-06 16:02:10 [ERROR] src.errors.log.config: (sqlite3.OperationalError) no such table: hipertensao
+2025-05-12 12:03:19 [ERROR] src.errors.log.config: (sqlite3.OperationalError) no such table: hipertensao
 [SQL: 
         with 
         lista as (
