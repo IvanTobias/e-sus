@@ -46,6 +46,27 @@ except ImportError as e:
     print(f"Error importing Fiocruz blueprints: {e}. Fiocruz dashboards might not work.")
     fiocruz_blueprints_available = False
 
+# Database setup imports
+from init import db # db should be accessible from init
+from database_setup import create_custom_tables
+from models.senha import Senha
+# It's assumed that src.infra.db.settings.base.Base.metadata is populated correctly
+# by importing the entities for db.create_all() to work on them.
+# If not, direct imports like these would be needed:
+try:
+    from src.infra.db.entities.pessoas import Pessoas
+    from src.infra.db.entities.equipes import Equipes
+    from src.infra.db.entities.diabetes_nominal import DiabetesNominal
+    from src.infra.db.entities.hypertension_nominal import HipertensaoNominal
+    from src.infra.db.entities.criancas import Crianca # Assuming 'criancas.py' for Crianca model
+    from src.infra.db.entities.idosos import Idoso # Assuming 'idosos.py' for Idoso model
+except ImportError as e:
+    print(f"Could not import all Fiocruz SQLAlchemy models: {e}. Some tables might not be created by db.create_all().")
+
+from importar_ceps_local import populate_correios_ceps_if_empty
+import os # Ensure os is imported
+
+
 # Configuração básica de logging
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
@@ -73,6 +94,8 @@ if fiocruz_blueprints_available:
 
 # Ensure the backend directory and src directory are in the Python path
 backend_dir = os.path.dirname(os.path.abspath(__file__))
+DNE_FILES_DIR = os.path.join(backend_dir, "dne_data") # Define DNE_FILES_DIR
+
 src_dir = os.path.join(backend_dir, "src")
 if backend_dir not in sys.path:
     sys.path.insert(0, backend_dir)
@@ -1212,11 +1235,43 @@ def atualizar_cep_escolhido():
             'bairro': bairro,
             'cep': cep
         })
+        conn.commit() # Added commit
     return jsonify({"status": "Atualizado com sucesso"})
 
 # Inicialização do servidor
 if __name__ == '__main__':
-    with app.app_context():  # Garante o contexto da aplicação
+    with app.app_context():
+        logger.info("Ensuring database schema exists...")
+        # Create tables defined by raw SQL (tb_*, correios_ceps)
+        # from sqlalchemy import create_engine # Already imported at the top
+        
+        # Use the URI from Flask config for the custom table creation engine
+        # This ensures it uses the same database as SQLAlchemy's db.create_all()
+        sql_alchemy_uri = app.config['SQLALCHEMY_DATABASE_URI']
+        if sql_alchemy_uri.startswith('postgresql://'): # psycopg2 compatibility
+            sql_alchemy_uri = sql_alchemy_uri.replace('postgresql://', 'postgresql+psycopg2://')
+
+        custom_engine = create_engine(sql_alchemy_uri)
+        create_custom_tables(custom_engine)
+        logger.info("Custom tables checked/created.")
+
+        # Create tables for SQLAlchemy models (Senha, Pessoas, Equipes, etc.)
+        # Ensure all models are imported so db.metadata knows about them
+        db.create_all()
+        logger.info("SQLAlchemy model tables checked/created.")
+
+        logger.info("Checking and populating 'correios_ceps' table if empty...")
+        # Ensure the DNE_FILES_DIR exists before attempting to populate
+        if not os.path.exists(DNE_FILES_DIR):
+            logger.warning(f"DNE data directory not found: {DNE_FILES_DIR}")
+            logger.warning("Skipping population of 'correios_ceps'. Please ensure DNE files are in the correct location.")
+        else:
+            db_uri_for_population = app.config['SQLALCHEMY_DATABASE_URI']
+            if db_uri_for_population.startswith('postgresql://'): # Ensure psycopg2 compatibility
+                db_uri_for_population = db_uri_for_population.replace('postgresql://', 'postgresql+psycopg2://')
+            populate_correios_ceps_if_empty(db_uri_for_population, DNE_FILES_DIR)
+            logger.info("'correios_ceps' table check/population complete.")
+
         logger.info(f"[STARTUP] Estado inicial de task_status: {task_status}")
         config = importdados.ensure_auto_update_config()
         if config['isAutoUpdateOn']:
