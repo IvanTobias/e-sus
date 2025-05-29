@@ -1,11 +1,10 @@
 # /home/ubuntu/esus_project/backend/models/senha.py
 from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, Enum as SQLEnum
 from sqlalchemy.orm import relationship
-from sqlalchemy.ext.declarative import declarative_base
 from datetime import datetime
 import enum
 
-Base = declarative_base()
+from backend.init import db
 
 class StatusSenha(enum.Enum):
     AGUARDANDO = "Aguardando"
@@ -14,7 +13,7 @@ class StatusSenha(enum.Enum):
     FINALIZADO = "Finalizado"
     CANCELADO = "Cancelado"
 
-class Senha(Base):
+class Senha(db.Model):
     __tablename__ = 'senhas'
 
     id = Column(Integer, primary_key=True)
