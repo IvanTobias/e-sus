@@ -36,7 +36,9 @@ import eventlet
 eventlet.monkey_patch()
 
 # Agora podemos importar os outros módulos
-from init import app, CORS # app is initialized in init.py
+from backend.init import app, CORS, db # app is initialized in init.py, added db
+from backend.models.database import init_db
+from backend.database_setup import create_application_tables
 from socketio_config import socketio
 # import Gerar_BPA # Moved to bpa_routes
 # import pandas as pd # Moved to file_routes
@@ -240,6 +242,11 @@ def add_header(response):
 # Inicialização do servidor
 if __name__ == '__main__':
     with app.app_context():  # Garante o contexto da aplicação
+        logger.info("Initializing database and tables...")
+        init_db(app)
+        create_application_tables(db.engine)
+        logger.info("Database and tables initialization complete.")
+
         logger.info(f"[STARTUP] Estado inicial de task_status: {task_status}")
         config = importdados.ensure_auto_update_config()
         if config['isAutoUpdateOn']:
