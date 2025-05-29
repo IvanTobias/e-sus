@@ -3,9 +3,9 @@ from flask import request
 from init import app  # Importa o app já inicializado de init.py
 import logging
 
-# Configuração de logging para depuração
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
+# Configuração de logging para depuração - REMOVED (centralized in app.py)
+# logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__) # This will now use the root config
 
 # Configuração do SocketIO
 socketio = SocketIO(
