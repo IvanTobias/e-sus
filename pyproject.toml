@@ -1,0 +1,44 @@
+[tool.deptry]
+extend_exclude = ["venv", ".*_test.py", "tests"]
+ignore = ["DEP001", "DEP003", "DEP004"] # DEP004 is for dev dependencies in main files
+requirements_files = ["backend/requirements.txt"]
+# Telling deptry that these packages are used, even if it can't find the imports.
+# This is because they might be used in ways deptry can't detect (e.g. dynamic imports, plugins)
+# or are needed for specific functionalities not directly imported in the backend code it scans.
+# psycopg2 is used by SQLAlchemy for PostgreSQL
+# Flask-SocketIO and Flask-SQLAlchemy are Flask extensions
+# Flask-Cors is a flask extension
+# Flask-Caching is a flask extension
+# redis is used for caching
+# openpyxl is used by pandas for Excel
+# greenlet is a dependency of some of the async libraries
+# numpy and pandas are core data manipulation libraries, often imported by other libraries
+# or used in ways deptry might miss in a large project.
+# SQLAlchemy is a core ORM.
+# APScheduler is a scheduler library.
+# blinker is a signaling library.
+# cachelib is a caching library.
+# click is a CLI library, often used by Flask extensions.
+# colorama is for colored terminal output.
+# et-xmlfile is used by openpyxl.
+# Flask is the core web framework.
+# h11 is an HTTP/1.1 library.
+# idna is for internationalized domain names.
+# itsdangerous is for data serialization.
+# Jinja2 is a templating engine for Flask.
+# MarkupSafe is for safe HTML string handling.
+# simple-websocket is a WebSocket library.
+# six is a Python 2/3 compatibility library.
+# typing_extensions provides runtime support for type hints.
+# tzlocal provides timezone information.
+# urllib3 is an HTTP client library.
+# Werkzeug is a WSGI utility library.
+# wsproto is a WebSocket protocol library.
+known_first_party = [
+    "psycopg2", "Flask-SocketIO", "Flask-SQLAlchemy", "Flask-Cors", "Flask-Caching",
+    "redis", "openpyxl", "greenlet", "numpy", "pandas", "SQLAlchemy", "APScheduler",
+    "blinker", "cachelib", "click", "colorama", "et-xmlfile", "Flask", "h11", "idna",
+    "itsdangerous", "Jinja2", "MarkupSafe", "simple-websocket", "six",
+    "typing_extensions", "tzlocal", "urllib3", "Werkzeug", "wsproto", "certifi",
+    "charset-normalizer", "bidict"
+    ]

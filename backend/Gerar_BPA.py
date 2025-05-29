@@ -1,496 +1,67 @@
 # backend/Gerar_BPA.py
-from socketio_config import socketio  # Importe o socketio do módulo de configuração
-from Conexões import get_local_engine, log_message
-from sqlalchemy import text
-import json
+from socketio_config import socketio  # For processar_bpa and update_progress if kept
+from Conexões import get_local_engine # Still used by load_db_config, format_field, etc.
+# from Conexões import log_message # Moved to db_operations or replaced by local logger
+from sqlalchemy import text # Still used by criar_arquivo_bpa
+# import json # Moved to file_utils
 import logging
-import json
-import requests
-import time
-import logging
-import xml.etree.ElementTree as ET
-from sqlalchemy import text
-from Conexões import get_local_engine, log_message
-from socketio_config import socketio
+# import requests # Moved to cep_utils
+# import time # Moved to cep_utils
+# import xml.etree.ElementTree as ET # Not used by remaining functions
+# from sqlalchemy import text # Already imported above
+# from Conexões import get_local_engine, log_message # Already imported above
+# from socketio_config import socketio # Already imported above
 
-# Configuração do log
-logging.basicConfig(
-    filename='logs_ceps.txt',
-    level=logging.INFO,
-    format='%(asctime)s - %(levelname)s - %(message)s',
-    encoding='utf-8'
+# Import moved CEP utility functions
+from .services.bpa_service.cep_utils import (
+    limpar_logradouro,
+    buscar_dados_opencep, # Not directly used by remaining functions in Gerar_BPA.py
+    buscar_dados_viacep, # Not directly used by remaining functions in Gerar_BPA.py
+    buscar_dados_apicep, # Not directly used by remaining functions in Gerar_BPA.py
+    buscar_por_logradouro_estado_cidade_rua, # Not directly used by remaining functions in Gerar_BPA.py
+    buscar_dados_cep # Not directly used by remaining functions in Gerar_BPA.py (it's used by atualizar_enderecos)
 )
 
-def limpar_logradouro(logradouro):
-    if logradouro:
-        partes = logradouro.split(" ", 1)
-        if len(partes) == 2:
-            return partes[1]
-    return logradouro
+# Import moved DB operation functions
+from .services.bpa_service.db_operations import (
+    # atualizar_enderecos, # Not called directly from Gerar_BPA.py anymore
+    consultar_bpa_dados,
+    consultar_bpa_dados_ano_mes,
+    executar_procedure,
+    executar_procedure_segunda,
+    executar_procedure_terceira,
+    executar_procedure_quarta
+)
 
-def buscar_dados_opencep(cep):
-    url = f'https://opencep.com/v1/{cep}.json'
-    try:
-        print(f"🔁 Tentando OpenCEP para o CEP: {cep}")
-        response = requests.get(url, timeout=2)
-        time.sleep(0.1)
-        if response.status_code == 200:
-            data = response.json()
-            if not data.get('erro'):
-                return {
-                    'logradouro': limpar_logradouro(data.get('logradouro', '')),
-                    'bairro': data.get('bairro', ''),
-                    'cep': cep,
-                    'ibge': data.get('ibge', '')[:6] if data.get('ibge') else ''
-                }
-    except Exception as e:
-        print(f"❌ Erro OpenCEP: {e}")
-    return None
+# Configuração do log - REMOVED (centralized in app.py)
+# This basicConfig might conflict if app.py also calls it.
+# Ideally, basicConfig is called once at the application's entry point.
+# For now, keeping it as it was in Gerar_BPA.py.
+# logging.basicConfig(
+#     filename='logs_ceps.txt', # This will create logs_ceps.txt in the current working directory
+#     level=logging.INFO,
+#     format='%(asctime)s - %(levelname)s - %(message)s',
+#     encoding='utf-8'
+# )
+logger = logging.getLogger(__name__) # Local logger for this module, will use root config
 
-def buscar_dados_viacep(cep):
-    url = f'https://viacep.com.br/ws/{cep}/json/'
-    try:
-        print(f"🔁 Tentando ViaCEP para o CEP: {cep}")
-        response = requests.get(url, timeout=2)
-        time.sleep(0.5)
-        if response.status_code == 200:
-            data = response.json()
-            if not data.get('erro'):
-                return {
-                    'logradouro': limpar_logradouro(data.get('logradouro', '')),
-                    'bairro': data.get('bairro', ''),
-                    'cep': cep,
-                    'ibge': data.get('ibge', '')[:6] if data.get('ibge') else ''
-                }
-    except Exception as e:
-        print(f"❌ Erro ViaCEP: {e}")
-    return None
+# Import moved formatting functions
+from .services.bpa_service.formatting import format_field, format_bpa_row, gerar_cabecalho_bpa
 
-def buscar_dados_apicep(cep_com_traco):
-    url = f'https://cdn.apicep.com/file/apicep/{cep_com_traco}.json'
-    try:
-        print(f"🔁 Tentando API CEP para o CEP: {cep_com_traco}")
-        response = requests.get(url, timeout=2)
-        time.sleep(0.5)
-        if response.status_code == 200:
-            data = response.json()
-            if data.get('status') == 200:
-                return {
-                    'logradouro': limpar_logradouro(data.get('address', '')),
-                    'bairro': data.get('district', ''),
-                    'cep': data.get('code', cep_com_traco).replace('-', ''),
-                    'ibge': ''
-                }
-    except Exception as e:
-        print(f"❌ Erro API CEP: {e}")
-    return None
+# Import moved file utility functions
+from .services.bpa_service.file_utils import write_bpa_to_txt, load_db_config, carregar_config_bpa
 
 
-def buscar_por_logradouro_estado_cidade_rua(uf, cidade, logradouro, bairro=None, cod_ibge_prefix=None):
-    if not logradouro:
-        return []
+# Functions moved to services.bpa_service.db_operations:
+# - atualizar_enderecos
+# - consultar_bpa_dados
+# - consultar_bpa_dados_ano_mes
+# - executar_procedure
+# - executar_procedure_segunda
+# - executar_procedure_terceira
+# - executar_procedure_quarta
 
-    url = f'https://viacep.com.br/ws/{uf}/{cidade}/{logradouro}/json/'
-    try:
-        print(f"🔁 Tentando busca por logradouro ViaCEP: {logradouro}, Cidade: {cidade}, UF: {uf}")
-        response = requests.get(url, timeout=2)
-        time.sleep(0.5)
-        if response.status_code == 200:
-            dados = response.json()
-            if isinstance(dados, list) and dados:
-                if bairro:
-                    bairro_lower = bairro.lower().strip()
-                    for d in dados:
-                        if bairro_lower == d.get('bairro', '').lower().strip():
-                            return [d]
-
-                if cod_ibge_prefix:
-                    for d in dados:
-                        if d.get('ibge', '').startswith(cod_ibge_prefix):
-                            return [d]
-
-                return dados
-    except Exception as e:
-        print(f"❌ Erro na busca por logradouro ViaCEP: {e}")
-
-
-
-def buscar_dados_cep(cep, connection=None):
-    cep = ''.join(filter(str.isdigit, str(cep)))
-    if len(cep) != 8:
-        return None
-
-    if connection:
-        try:
-            # 1ª TENTATIVA: Buscar no banco local correios_ceps pelo CEP diretamente
-            result = connection.execute(
-                text("""
-                    SELECT logradouro, bairro, cep, ibge
-                    FROM correios_ceps
-                    WHERE cep = :cep
-                    LIMIT 1
-                """),
-                {"cep": cep}
-            ).fetchone()
-
-            if result:
-                logradouro, bairro, cep_encontrado, ibge = result
-
-                print(f"✅ Encontrado no banco Local direto: {cep, logradouro, bairro, ibge}")
-
-                return {
-                    'logradouro': limpar_logradouro(logradouro),
-                    'bairro': bairro,
-                    'cep': cep_encontrado,
-                    'ibge': str(ibge)[:6] if ibge is not None else ''
-                }
-        except Exception as e:
-            print(f"❌ Erro ao buscar no banco correios_ceps pelo CEP: {e}")
-
-    # 2ª TENTATIVA: OpenCEP
-    info = buscar_dados_opencep(cep)
-    if info:
-        return info
-
-    if connection:
-        try:
-            # 3ª TENTATIVA: Busca no tb_bpa para tentar montar logradouro + UF + cidade
-            result = connection.execute(
-                text("SELECT prd_end_pcnte, prd_bairro_pcnte, prd_ibge FROM tb_bpa WHERE prd_cep_pcnte = :cep LIMIT 1"),
-                {"cep": cep}
-            ).fetchone()
-
-            if result:
-                logradouro, bairro, prd_ibge = result
-
-                if prd_ibge:
-                    ibge_info = connection.execute(
-                        text("SELECT municipio, uf FROM tb_ibge WHERE ibge LIKE :prefixo LIMIT 1"),
-                        {"prefixo": f"{prd_ibge[:6]}%"}
-                    ).fetchone()
-
-                    if ibge_info:
-                        municipio, uf = ibge_info
-
-                        # TENTATIVA 3A: Buscar primeiro no banco correios_ceps por UF, cidade, logradouro
-                        try:
-                            candidatos = connection.execute(
-                                text("""
-                                    SELECT logradouro, bairro, cep, ibge
-                                    FROM correios_ceps
-                                    WHERE unaccent(logradouro) ILIKE unaccent(:logradouro)
-                                    AND ibge = :ibge
-                                    AND uf = :uf
-                                    LIMIT 1
-                                """),
-                                {"logradouro": f"%{logradouro}%", "ibge": prd_ibge[:6], "uf": uf}
-                            ).fetchone()
-
-                            if candidatos:
-                                logradouro_local, bairro_local, cep_local, ibge_local = candidatos
-                                print(f"✅ Encontrado no banco Local por logradouro: {logradouro_local}, {bairro_local}, {cep_local}, {ibge_local}")
-                                return {
-                                    'logradouro': limpar_logradouro(logradouro_local),
-                                    'bairro': bairro_local,
-                                    'cep': cep_local,
-                                    'ibge': str(ibge_local)[:6] if ibge_local else ''
-                                }
-                        except Exception as e:
-                            print(f"❌ Erro na busca local correios_ceps por logradouro: {e}")
-
-                        # TENTATIVA 3B: Se não achou no banco, buscar no ViaCEP usando UF, cidade, logradouro
-                        candidatos = buscar_por_logradouro_estado_cidade_rua(
-                            uf=uf, cidade=municipio, logradouro=logradouro,
-                            bairro=bairro, cod_ibge_prefix=prd_ibge[:6]
-                        )
-                        if candidatos:
-                            escolhido = candidatos[0]
-                            novo_cep = escolhido.get('cep', cep).replace('-', '')
-                            if len(novo_cep) != 8:
-                                novo_cep = cep
-                            return {
-                                'logradouro': limpar_logradouro(escolhido.get('logradouro', '')),
-                                'bairro': escolhido.get('bairro', ''),
-                                'cep': novo_cep,
-                                'ibge': escolhido.get('ibge', '')[:6] if escolhido.get('ibge') else ''
-                            }
-        except Exception as e:
-            print(f"❌ Erro busca local tb_bpa + via correios_ceps/viacep: {e}")
-
-    # 4ª TENTATIVA: ViaCEP (busca normal pelo CEP)
-    info = buscar_dados_viacep(cep)
-    if info:
-        return info
-
-    # 5ª TENTATIVA: ApiCep
-    info = buscar_dados_apicep(f"{cep[:5]}-{cep[5:]}")
-    if info:
-        return info
-
-    return None
-
-
-def atualizar_enderecos(connection):
-    ceps = connection.execute(text("SELECT DISTINCT prd_cep_pcnte FROM tb_bpa group by 1")).fetchall()
-
-    total = len(ceps)
-    atualizados, substituidos, falhas = 0, 0, 0
-
-    for index, row in enumerate(ceps, 1):
-        cep_original = row[0]
-        info = buscar_dados_cep(cep_original, connection=connection)
-
-        if info:
-            novo_cep = info.get('cep', cep_original).replace('-', '')
-            if len(novo_cep) != 8:
-                novo_cep = cep_original
-
-            update_result = connection.execute(text("""
-                UPDATE tb_bpa
-                SET prd_end_pcnte = :logradouro,
-                    prd_bairro_pcnte = :bairro,
-                    prd_cep_pcnte = :novo_cep,
-                    prd_ibge = :ibge
-                WHERE prd_cep_pcnte = :cep_antigo
-            """), {
-                'logradouro': info.get('logradouro', ''),
-                'bairro': info.get('bairro', ''),
-                'cep_antigo': cep_original,
-                'novo_cep': novo_cep,
-                'ibge': info.get('ibge', '')
-            })
-
-            if update_result.rowcount > 0:
-                if novo_cep != cep_original:
-                    substituidos += 1
-                    msg = f"✅ CEP {cep_original} atualizado para {novo_cep}: {info.get('logradouro')}, {info.get('bairro')} (IBGE: {info.get('ibge', '')})"
-                else:
-                    atualizados += 1
-                    msg = f"✅ CEP {cep_original} atualizado: {info.get('logradouro')}, {info.get('bairro')} (IBGE: {info.get('ibge', '')})"
-                print(msg)
-                logging.info(msg)
-            else:
-                falhas += 1
-                msg = f"⚠️ Nenhuma linha atualizada para CEP {cep_original}: talvez não encontrado no tb_bpa."
-                print(msg)
-                logging.warning(msg)
-
-
-        progresso = (index / total) * 100
-        print(f"📊 Progresso: {index}/{total} ({progresso:.2f}%)")
-        socketio.emit('progress_update', {'tipo': 'cep', 'percentual': int(progresso)})
-
-    resumo = f"🔚 Total: {total} | Atualizados: {atualizados} | Substituídos: {substituidos} | Falhas: {falhas}"
-    print(resumo)
-    logging.info(resumo)
-    socketio.emit('progress_update', {'tipo': 'cep', 'percentual': 100})
-
-    try:
-        connection.commit()
-    except Exception as e:
-        print(f"⚠️ Não foi possível dar commit automaticamente: {e}")
-
-
-def load_db_config(config_path='config.json'):
-    with open(config_path, 'r') as config_file:
-        return json.load(config_file)
-
-def consultar_bpa_dados():
-    query = text("""Select * FROM tb_bpa""")
-    engine = get_local_engine()
-    with engine.connect() as connection:
-        result = connection.execute(query)
-        results = result.fetchall()
-    if results:
-        #print(f"Consulta retornou {len(results)} linhas.")
-        for row in results:
-        #print(f"Linha original: {row}")
-            return results
-    else:
-        log_message("A consulta não retornou resultados.")
-    return []
-
-def consultar_bpa_dados_ano_mes():
-    query = text("""SELECT prd_cmp FROM tb_bpa LIMIT 1""")
-    engine = get_local_engine()
-    with engine.connect() as connection:
-        result = connection.execute(query)
-        results = result.fetchone()  # Use fetchone() para obter um único resultado
-    if results:
-        ano_mes = results[0]  # Supondo que prd_cmp seja a primeira coluna
-        print(f"ano_mes encontrado: {ano_mes}")
-        return ano_mes
-    else:
-        print("A consulta não retornou resultados.")
-        return None
-
-def format_field(value, length, field_type='ALFA', pad=' ', prd_org='BPI', field_name=''):
-    try:
-        # Caso o valor seja None ou uma string vazia
-        if value is None or value == '':
-            value = '' if prd_org == 'BPA' else ' ' * length
-        
-        if field_type == 'NUM':
-            # Especificamente para PRD_FLH e PRD_SEQ, sempre preencha com zeros à esquerda
-            if field_name in ['PRD_FLH', 'PRD_SEQ']:
-                value = str(value).zfill(length)
-                            # Exceção para PRD_NUM_PCNTE: sempre preencha com espaços à esquerda
-            elif field_name == 'PRD_NUM_PCNTE':
-                value = str(value).rjust(length, ' ')
-            else:
-                # Verifica se o valor é numérico antes de tentar formatá-lo
-                if isinstance(value, (int, float)) or (isinstance(value, str) and value.isdigit()):
-                    if prd_org == 'BPA':
-                        if field_name == 'PRD_QT_P':
-                            value = str(value).zfill(length)  # Zeros à esquerda para PRD_QT_P em BPA
-                        else:
-                            value = str(value).ljust(length, pad)  # Espaços à direita para outros campos numéricos em BPA
-                    else:  # BPI
-                        value = str(value).rjust(length, pad)  # Espaços à esquerda para campos numéricos em BPI
-                else:
-                    # Se o valor não é numérico, preencha com espaços para evitar erro
-                    value = ' ' * length
-        else:  # Campos alfanuméricos
-            value = str(value).ljust(length, pad)  # Espaços à direita para campos alfanuméricos em ambos
-
-        return value[:length]  # Garante que o valor final tenha exatamente o comprimento especificado
-    
-    except Exception as e:
-        print(f"Erro ao formatar o campo {field_name} com valor {value}: {e}")
-        raise
-    
-def format_bpa_row(row):
-    
-    prd_org = row.get('PRD_ORG')
-    formatted_row = ""
-
-    if prd_org == 'BPA':
-        # Formatação específica para BPA
-        row_dict = {
-            'PRD_IDENT': format_field('02', 2, 'NUM', prd_org=prd_org),
-            'PRD_UID': format_field(row.get('PRD_UID'), 7, 'NUM', prd_org=prd_org),
-            'PRD_CMP': format_field(row.get('PRD_CMP'), 6, 'NUM', prd_org=prd_org),
-            'PRD_CBO': format_field(row.get('PRD_CBO'), 6, 'ALFA', prd_org=prd_org),
-            'PRD_FLH': format_field(row.get('PRD_FLH'), 3, 'NUM', prd_org=prd_org),
-            'PRD_SEQ': format_field(row.get('PRD_SEQ'), 2, 'NUM', prd_org=prd_org),
-            'PRD_PA': format_field(row.get('PRD_PA'), 10, 'NUM', prd_org=prd_org),
-            'PRD_IDADE': format_field(row.get('PRD_IDADE'), 3, 'NUM', prd_org=prd_org),
-            'PRD_QT_P': format_field(row.get('PRD_QT_P'), 6, 'NUM', prd_org=prd_org, field_name='PRD_QT_P'),
-            'PRD_ORG': format_field(row.get('PRD_ORG'), 3, 'ALFA', prd_org=prd_org),
-        }
-    
-    
-    # Crie o dicionário com os campos e valores
-    else: 
-        row_dict = {
-        'PRD_IDENT': format_field('03', 2, 'NUM', prd_org=prd_org),
-        'PRD_UID': format_field(row.get('PRD_UID'), 7, 'NUM', prd_org=row.get('PRD_ORG')),
-        'PRD_CMP': format_field(row.get('PRD_CMP'), 6, 'NUM', prd_org=row.get('PRD_ORG')),
-        'PRD_CNSMED': format_field(row.get('PRD_CNSMED'), 15, 'NUM', prd_org=row.get('PRD_ORG')),
-        'PRD_CBO': format_field(row.get('PRD_CBO'), 6, 'NUM', prd_org=row.get('PRD_ORG')),
-        'PRD_DTATEN': format_field(row.get('PRD_DTATEN'), 8, 'NUM', prd_org=row.get('PRD_ORG')),        
-        'PRD_FLH': format_field(row.get('PRD_FLH'), 3, 'NUM', prd_org=row.get('PRD_ORG')),
-        'PRD_SEQ': format_field(row.get('PRD_SEQ'), 2, 'NUM', prd_org=row.get('PRD_ORG')),
-        'PRD_PA': format_field(row.get('PRD_PA'), 10, 'NUM', prd_org=row.get('PRD_ORG')),
-        'PRD_CNSPAC': format_field(row.get('PRD_CNSPAC'), 15, 'NUM', prd_org=row.get('PRD_ORG')),
-        'PRD_SEXO': format_field(row.get('PRD_SEXO'), 1, 'ALFA', prd_org=row.get('PRD_ORG')),        
-        'PRD_IBGE': format_field(row.get('PRD_IBGE'), 6, 'NUM', prd_org=row.get('PRD_ORG')),        
-        'PRD_CID': format_field(row.get('PRD_CID'), 4, 'ALFA', prd_org=row.get('PRD_ORG')),
-        'PRD_IDADE': format_field(row.get('PRD_IDADE'), 3, 'NUM', prd_org=row.get('PRD_ORG')),
-        'PRD_QT_P': format_field(row.get('PRD_QT_P'), 6, 'NUM', prd_org=row.get('PRD_ORG')),
-        'PRD_CATEN': format_field(row.get('PRD_CATEN'), 2, 'NUM', prd_org=row.get('PRD_ORG')),
-        'PRD_NAUT': format_field(row.get('PRD_NAUT'), 13, 'ALFA', prd_org=row.get('PRD_ORG')),
-        'PRD_ORG': format_field(row.get('PRD_ORG'), 3, 'ALFA', prd_org=row.get('PRD_ORG')),
-        'PRD_NMPAC': format_field(row.get('PRD_NMPAC'), 30, 'ALFA', prd_org=row.get('PRD_ORG')),
-        'PRD_DTNASC': format_field(row.get('PRD_DTNASC'), 8, 'NUM', prd_org=row.get('PRD_ORG')),
-        'PRD_RACA': format_field(row.get('PRD_RACA'), 2, 'NUM', prd_org=row.get('PRD_ORG')),
-        'PRD_ETNIA': format_field(row.get('PRD_ETNIA'), 4, 'ALFA', prd_org=row.get('PRD_ORG')),
-        'PRD_NAC': format_field(row.get('PRD_NAC'), 3, 'NUM', prd_org=row.get('PRD_ORG')),
-        'PRD_SERVICO': format_field(row.get('PRD_SERVICO'), 3, 'ALFA', prd_org=row.get('PRD_ORG')),
-        'PRD_CLASSIFICACAO': format_field(row.get('PRD_CLASSIFICACAO'), 3, 'ALFA', prd_org=row.get('PRD_ORG')),
-        'PRD_EQP_SEQ': format_field(row.get('PRD_EQP_SEQ'), 8, 'NUM', prd_org=row.get('PRD_ORG'), field_name='PRD_EQP_SEQ'),
-        'PRD_EQP_AREA': format_field(row.get('PRD_EQP_AREA'), 4, 'ALFA', prd_org=row.get('PRD_ORG')),
-        'PRD_CNPJ': format_field(row.get('PRD_CNPJ'), 14, 'NUM', prd_org=row.get('PRD_ORG'), field_name='PRD_CNPJ'),
-        'PRD_CEP_PCNTE': format_field(row.get('PRD_CEP_PCNTE'), 8, 'NUM', prd_org=row.get('PRD_ORG')),
-        'PRD_LOGRAD_PCNTE': format_field(row.get('PRD_LOGRAD_PCNTE'), 3, 'ALFA', prd_org=row.get('PRD_ORG')),
-        'PRD_END_PCNTE': format_field(row.get('PRD_END_PCNTE'), 30, 'ALFA', prd_org=row.get('PRD_ORG')),
-        'PRD_COMPL_PCNTE': format_field(row.get('PRD_COMPL_PCNTE'), 10, 'ALFA', prd_org=row.get('PRD_ORG')),
-        'PRD_NUM_PCNTE': format_field(row.get('PRD_NUM_PCNTE'), 5, 'NUM', prd_org=row.get('PRD_ORG'), field_name='PRD_NUM_PCNTE'),
-        'PRD_BAIRRO_PCNTE': format_field(row.get('PRD_BAIRRO_PCNTE'), 30, 'ALFA', prd_org=row.get('PRD_ORG')),
-        'PRD_DDTEL_PCNTE': format_field(row.get('PRD_DDTEL_PCNTE'), 2, 'NUM', prd_org=row.get('PRD_ORG')),
-        'PRD_TEL_PCNTE': format_field(row.get('PRD_TEL_PCNTE'), 9, 'NUM', prd_org=row.get('PRD_ORG')),
-        'PRD_EMAIL_PCNTE': format_field(row.get('PRD_EMAIL_PCNTE'), 40, 'ALFA', prd_org=row.get('PRD_ORG')),
-        'PRD_INE': format_field(row.get('PRD_INE'), 10, 'NUM', prd_org=row.get('PRD_ORG'), field_name='PRD_INE'),
-        'PRD_CPF_PCNT': format_field(row.get('PRD_CPF_PCNT'), 11, 'NUM', prd_org=row.get('PRD_ORG'), field_name='PRD_CPF_PCNT'),
-        'PRD_FIM': '\r\n'  # Corresponde a CR + LF (fim da linha em ASCII)
-}
-
-    # Adicione logs para verificar a formatação de cada campo
-    for field, formatted_value in row_dict.items():
-        if formatted_value is None:
-            formatted_value = ''  # Substitua None por string vazia
-        #print(f"Campo: {field}, Original: {row.get(field)}, Formatado: {formatted_value}")
-
-    # Concatenar todos os campos em uma única linha formatada
-    formatted_row = ''.join(str(value) for value in row_dict.values())
-    
-    return formatted_row
-
-def write_bpa_to_txt(results, filepath):
-    with open(filepath, 'w', buffering=8192) as f:  # Buffer de 8KB
-        f.writelines(results)  # Escreve todas as linhas de uma vez
-
-def carregar_config_bpa():
-    try:
-        with open('bpa_config.json', 'r') as config_file:
-            config_data = json.load(config_file)
-            return (
-                config_data.get('seq7', ""),  # Use get() para acessar os valores do dicionário
-                config_data.get('seq8', ""),
-                config_data.get('seq9', ""),
-                config_data.get('seq10', ""),
-                config_data.get('seq11', "M")  # Valor padrão "M"
-            )
-    except FileNotFoundError:
-        return "", "", "", "", "M"
-    
-seq7, seq8, seq9, seq10, seq11 = carregar_config_bpa()
-def gerar_cabecalho_bpa(ano_mes, num_linhas, num_folhas, campo_controle):
-    # Cabeçalho fixo
-    cbc_hdr = "01"  # Indicador de linha do Header
-    inicio_cabecalho = "#BPA#"
-    #campo_controle = '1111'
-
-    # Cabeçalho com variáveis
-    cbc_mvm = f"{ano_mes:0>6}"  # Ano e mês de Processamento AAAAMM
-    cbc_lin = f"{num_linhas:0>6}"  # Número de linhas do BPA gravadas
-    cbc_flh = f"{num_folhas:0>6}"  # Quantidade de folhas de BPA gravadas
-
-    # Nome e sigla do órgão responsável
-    cbc_rsp = seq7.ljust(30)
-    cbc_sgl = seq8.ljust(6)
-
-    # CGC/CPF do prestador ou órgão
-    cbc_cgccpf = seq9.zfill(14)
-
-    # Destino e indicador de órgão
-    cbc_dst = seq10.ljust(40)
-    cbc_dst_in = seq11  # M para Municipal, E para Estadual
-
-    # Versão do sistema
-    cbc_versao = "D04.01".ljust(10)
-
-    # Fim do cabeçalho (remova a quebra de linha se houver)
-    cbc_fim = ""
-
-    # Monta o cabeçalho completo
-    cabecalho = (
-        f"{cbc_hdr}{inicio_cabecalho}{cbc_mvm}{cbc_lin}{cbc_flh}"
-        f"{campo_controle:0>4}{cbc_rsp}{cbc_sgl}{cbc_cgccpf}{cbc_dst}"
-        f"{cbc_dst_in}{cbc_versao}{cbc_fim}"
-    )
-
-    return cabecalho
+# Functions load_db_config, write_bpa_to_txt, carregar_config_bpa were moved to file_utils.py
 
 def criar_arquivo_bpa():
     columns = ['PRD_UID', 'PRD_CMP', 'PRD_CNSMED', 'PRD_CBO', 'PRD_FLH', 'PRD_SEQ', 
@@ -563,10 +134,26 @@ def criar_arquivo_bpa():
         campo_controle = 1111 + resto_divisao
         log_message(f"Campo de Controle Calculado: {campo_controle}")
 
+        # Calcula o campo de controle
+# Corrige o cálculo para verificar se os valores são numéricos e não vazios
+        soma_total = sum(
+            int(row[6]) + int(row[16]) # Assuming PRD_PA (index 6) and PRD_QT_P (index 16)
+            for row in results
+            if row[6] is not None and str(row[6]).strip().isdigit() and \
+               row[16] is not None and str(row[16]).strip().isdigit()
+        )
+        resto_divisao = soma_total % 1111
+        campo_controle = 1111 + resto_divisao
+        logger.info(f"Campo de Controle Calculado: {campo_controle}")
+
+        # Carregar config para seqX valores
+        seq_config_values = carregar_config_bpa()
+
         # Cabeçalho BPA
-        ano_mes = consultar_bpa_dados_ano_mes()  # Função que obtém o ano/mês de processamento
-        total_registros = len(results) + 1  # Quantidade de registros retornados
-        cabecalho = gerar_cabecalho_bpa(ano_mes, total_registros, max_folha, campo_controle) + "\n"  # Adiciona quebra de linha ao cabeçalho
+        ano_mes = consultar_bpa_dados_ano_mes()
+        total_registros = len(results) + 1
+        # Use imported gerar_cabecalho_bpa and pass seq_config_values
+        cabecalho = gerar_cabecalho_bpa(ano_mes, total_registros, max_folha, campo_controle, seq_config_values) + "\n"
 
         # Corpo BPA
         formatted_results = []
