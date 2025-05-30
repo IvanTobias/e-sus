@@ -7,7 +7,11 @@ from datetime import datetime
 def get_local_engine():
     local_db_uri = "postgresql+psycopg2://postgres:esus@localhost:5432/esus"
     log_message(f"Conectado ao banco de dados local: {local_db_uri}")
-    return create_engine(local_db_uri, connect_args={'options': '-c client_encoding=utf8'})
+    return create_engine(
+        local_db_uri,
+        connect_args={'options': '-c client_encoding=utf8'},
+        client_encoding='utf8'  # redundante, mas garante fallback
+    )
 
 def get_external_engine():
     config = load_config()

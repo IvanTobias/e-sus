@@ -31,5 +31,9 @@ def create_database():
     except Exception as e:
         print(f"❌ Erro ao criar o banco de dados: {str(e)}".encode('utf-8').decode('utf-8'))
 
+def database_exists(cursor, dbname):
+    cursor.execute(sql.SQL("SELECT 1 FROM pg_database WHERE datname = %s"), [dbname])
+    return cursor.fetchone() is not None
+
 if __name__ == "__main__":
     create_database()

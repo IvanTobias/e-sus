@@ -1,3 +1,4 @@
+#backend/criar_banco.py
 import psycopg2
 from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT
 
@@ -38,7 +39,15 @@ from Conexões import get_local_engine
 
 def ensure_tables_exist():
     engine = get_local_engine()
-    inspector = inspect(engine)
+    try:
+        with engine.connect() as conn:
+            conn.execute(text("SET client_encoding TO 'UTF8'"))
+        inspector = inspect(engine)
+    except UnicodeDecodeError as e:
+        print("[ERRO] Falha ao inspecionar tabelas (possível problema de encoding). Pulando verificação.")
+        print(str(e))
+        return
+
     required_tables = {
         'tb_cadastro': """
             CREATE TABLE IF NOT EXISTS tb_cadastro (
@@ -171,7 +180,7 @@ def ensure_tables_exist():
 
 
 def setup_local_database():
-    ensure_database_exists('esus', 'postgres', '1234', host='localhost', port='5432')
+    ensure_database_exists('esus', 'postgres', 'esus', host='localhost', port='5432')
     ensure_tables_exist()
 
     # Finaliza conexões abertas

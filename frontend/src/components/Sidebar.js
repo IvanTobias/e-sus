@@ -34,11 +34,7 @@ function Sidebar({ onLoadContent }) {
     // BPA
     { name: 'Configurar BPA', id: 'bpa_config', icon: Tool, section: 'BPA' },
     { name: 'Gerar BPA', id: 'bpa_generate', icon: FileText, section: 'BPA' },
-    // Senhas
-    { name: 'Gerar Senha', id: 'gerar_senha', icon: Edit, section: 'Senhas' },
-    { name: 'Chamar Senha', id: 'chamar_senha', icon: PhoneCall, section: 'Senhas' },
-    { name: 'Painel TV', id: 'painel_tv', icon: Tv, section: 'Senhas' },
-    // Apoio
+ // Apoio
     { name: 'Apoio Prontuário', id: 'prontuario_support', icon: BookOpen, section: 'Apoio' },
     // { name: 'Chatbot', id: 'chatbot', icon: MessageSquare, section: 'Outros' }, // Future module
   ];

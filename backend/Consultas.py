@@ -143,6 +143,23 @@ def execute_query(query_name, query, external_engine, local_engine, step_size, t
                     break
 
                 df = pd.DataFrame(rows, columns=result.keys())
+
+                # Pre-emptive check for problematic string data
+                try:
+                    for r_idx in range(min(5, len(df))):  # Check first 5 rows, or fewer if df is smaller
+                        for c_idx, col_name in enumerate(df.columns):
+                            cell_value = df.iloc[r_idx, c_idx]
+                            if cell_value is not None and isinstance(cell_value, str):
+                                # Attempt to encode to UTF-8 to see if it's valid
+                                _ = cell_value.encode('utf-8')
+                except UnicodeEncodeError as uee:
+                    problematic_value_repr = repr(df.iloc[r_idx, c_idx]) # Get a repr of the value
+                    log_message(f"Problematic string found in initial data at row {r_idx}, col '{df.columns[c_idx]}' (index {c_idx}). Error: {uee}. Value (repr): {problematic_value_repr}")
+                    # Optional: consider raising an error here or handling it, for now, just log.
+                except Exception as ex_check:
+                    # Catch any other unexpected error during this check
+                    log_message(f"Unexpected error during pre-emptive data check at row {r_idx}, col '{df.columns[c_idx]}': {ex_check}")
+
                 df = df.apply(lambda col: col.map(normalize_text) if col.dtype == 'object' else col)
                 df = clean_dataframe(df)
 
@@ -150,6 +167,20 @@ def execute_query(query_name, query, external_engine, local_engine, step_size, t
                 for col in df.select_dtypes(include='object'):
                     df[col] = df[col].apply(lambda x: x.encode('utf-8', errors='replace').decode('utf-8') if isinstance(x, str) else x)
                 log_message(f"{len(df)} linhas processadas para {query_name} no tipo {tipo}.")
+
+                # Clean column names
+                cleaned_columns = []
+                for col_name in df.columns:
+                    normalized_col = normalize_text(str(col_name))
+                    try:
+                        # Ensure it's valid UTF-8 by encoding and decoding
+                        cleaned_col = normalized_col.encode('utf-8').decode('utf-8')
+                    except UnicodeError: # Catch broader Unicode errors during encode/decode
+                        # If direct UTF-8 encoding fails, replace problematic parts
+                        cleaned_col = normalized_col.encode('utf-8', 'replace').decode('utf-8')
+                    cleaned_columns.append(cleaned_col)
+                df.columns = cleaned_columns
+                log_message(f"Cleaned column names for {query_name}: {df.columns.tolist()}")
 
                 with session_scope(Session) as session:
                     df.to_sql(query_name, con=session.bind, if_exists='replace' if rows_processed == 0 else 'append', index=False)

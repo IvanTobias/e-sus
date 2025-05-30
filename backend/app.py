@@ -24,7 +24,10 @@ import traceback
 from flask_caching import Cache
 from datetime import datetime
 import sys
-
+from setup import create_database
+create_database()
+from criar_banco import setup_local_database
+setup_local_database()
 # Import Blueprints from current project
 
 # Import Blueprints from Fiocruz project (now under src/)
