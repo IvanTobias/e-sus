@@ -1592,3 +1592,4 @@ sqlalchemy.exc.OperationalError: (sqlite3.OperationalError) no such table: diabe
 2025-05-06 10:41:36,029 - INFO -  * Debugger PIN: 111-947-065
 2025-05-06 10:49:12,319 - INFO -  * Detected change in 'C:\\Users\\ivantp\\Downloads\\flask-react-project\\backend\\socketio_config.py', reloading
 2025-05-06 10:49:14,236 - INFO -  * Restarting with stat
+2025-05-30 11:21:51,297 - INFO - Executando importação automática de dados...

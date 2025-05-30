@@ -11,9 +11,6 @@ import Home from './components/Home'; // Assuming Home exists or will be created
 import DashboardPage from './components/DashboardPage'; // Import DashboardPage (Original Fiocruz)
 import VisitaPage from './components/VisitasPage';
 import IAFPSEPage from './components/IAFPSEPage';
-import PainelSenhasTV from './components/PainelSenhasTV'; // Import PainelSenhasTV
-import GerarSenha from './components/GerarSenha'; // Import GerarSenha
-import ChamarSenha from './components/ChamarSenha'; // Import ChamarSenha
 import ProntuarioSupport from './components/ProntuarioSupport'; // Import ProntuarioSupport
 
 // Import new Power BI style dashboards
@@ -58,10 +55,6 @@ function App() {
         {/* BPA */}
         {currentPage === 'bpa_config' && <BPAConfig />} {/* New BPA Config route */}
         {currentPage === 'bpa_generate' && <BPAGeneration />} {/* New BPA Generation route */}
-        {/* Senhas */}
-        {currentPage === 'gerar_senha' && <GerarSenha />} {/* Route for Generating Tickets */}
-        {currentPage === 'chamar_senha' && <ChamarSenha />} {/* Route for Calling Tickets */}
-        {currentPage === 'painel_tv' && <PainelSenhasTV />} {/* Route for TV Panel */}
         {/* Apoio */}
         {currentPage === 'prontuario_support' && <ProntuarioSupport />} {/* Route for Prontuario Support */}
         {/* Adicione outras condições conforme necessário */}

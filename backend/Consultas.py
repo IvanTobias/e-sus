@@ -145,6 +145,10 @@ def execute_query(query_name, query, external_engine, local_engine, step_size, t
                 df = pd.DataFrame(rows, columns=result.keys())
                 df = df.apply(lambda col: col.map(normalize_text) if col.dtype == 'object' else col)
                 df = clean_dataframe(df)
+
+                # Corrige caracteres inválidos em colunas tipo string
+                for col in df.select_dtypes(include='object'):
+                    df[col] = df[col].apply(lambda x: x.encode('utf-8', errors='replace').decode('utf-8') if isinstance(x, str) else x)
                 log_message(f"{len(df)} linhas processadas para {query_name} no tipo {tipo}.")
 
                 with session_scope(Session) as session:

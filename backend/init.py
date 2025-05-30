@@ -11,5 +11,5 @@ app = Flask(__name__)
 app.config.from_object(Config)
 
 # Inicialize o SQLAlchemy
-db = SQLAlchemy(app)
+db = SQLAlchemy(app)    
 cors_allowed_origins="*"

@@ -26,8 +26,6 @@ from datetime import datetime
 import sys
 
 # Import Blueprints from current project
-from routes.senhas_routes import senhas_bp
-from routes.powerbi_reports_routes import reports_bp
 
 # Import Blueprints from Fiocruz project (now under src/)
 try:
@@ -47,15 +45,13 @@ except ImportError as e:
     fiocruz_blueprints_available = False
 
 # Configuração básica de logging
-logging.basicConfig(level=logging.DEBUG)
+logging.basicConfig(level=logging.ERROR)
 logger = logging.getLogger(__name__)
 
 # Configuração do CORS e inicialização do Flask
 CORS(app)
 
 # Register Blueprints from current project
-app.register_blueprint(senhas_bp, url_prefix="/api/senhas")
-app.register_blueprint(reports_bp, url_prefix="/api/reports")
 
 # Register Blueprints from Fiocruz project
 if fiocruz_blueprints_available:
@@ -1227,5 +1223,5 @@ if __name__ == '__main__':
         else:
             logger.info("Autoatualização desativada")
 
-    socketio.run(app, host='0.0.0.0', port=5000, debug=True, use_reloader=False)
+    socketio.run(app, host='0.0.0.0', port=5000, debug=False, use_reloader=False)
     logger.info("Executando importação automática de dados...")
