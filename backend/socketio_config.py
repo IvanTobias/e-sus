@@ -13,8 +13,8 @@ socketio = SocketIO(
     async_mode='eventlet',  # Usar eventlet para suporte a WebSocket
     cors_allowed_origins="http://localhost:3000",  # Especificar a origem do frontend
     path='/socket.io',  # Compatível com o frontend (socket.js)
-    logger=True,  # Ativar logs para depuração
-    engineio_logger=True  # Ativar logs do engine.io para depuração
+    logger=False,  # Ativar logs para depuração
+    engineio_logger=False # Ativar logs do engine.io para depuração
 )
 
 # Dicionário para rastrear o SID do cliente que iniciou cada tarefa

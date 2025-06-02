@@ -541,3 +541,17 @@ h1, h2 {
 .tab-content.active {
     display: block;
 }
+
+.file-actions {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.botao-delete-file {
+  background: transparent;
+  border: none;
+  color: red;
+  font-size: 1rem;
+  cursor: pointer;
+}

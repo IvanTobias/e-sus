@@ -1,5 +1,27 @@
 #app.py
 # Chame o monkey_patch do eventlet antes de qualquer importação
+
+import logging
+
+# Define o nível global de logging
+logging.basicConfig(
+    level=logging.ERROR,
+    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+)
+
+# Silenciar logs do Socket.IO e Engine.IO
+logging.getLogger("engineio").setLevel(logging.ERROR)
+logging.getLogger("socketio").setLevel(logging.ERROR)
+logging.getLogger("werkzeug").setLevel(logging.ERROR)
+logging.getLogger("werkzeug").setLevel(logging.ERROR)
+
+# Reduz verbosidade de outros loggers conhecidos
+for logger_name in ['werkzeug', 'sqlalchemy', 'engineio', 'socketio']:
+    logging.getLogger(logger_name).setLevel(logging.ERROR)
+
+# Logger da aplicação principal
+logger = logging.getLogger(__name__)
+
 import eventlet
 eventlet.monkey_patch()
 
@@ -19,7 +41,6 @@ import json
 from flask import make_response, request, jsonify, send_file, send_from_directory
 from sqlalchemy import create_engine, text
 from sqlalchemy.exc import SQLAlchemyError
-import logging
 import traceback
 from flask_caching import Cache
 from datetime import datetime
@@ -47,9 +68,6 @@ except ImportError as e:
     print(f"Error importing Fiocruz blueprints: {e}. Fiocruz dashboards might not work.")
     fiocruz_blueprints_available = False
 
-# Configuração básica de logging
-logging.basicConfig(level=logging.ERROR)
-logger = logging.getLogger(__name__)
 
 # Configuração do CORS e inicialização do Flask
 CORS(app)
