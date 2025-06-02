@@ -51,32 +51,7 @@ def release_lock(lock_name):
             locks[lock_name].release()
             print(f"Lock para {lock_name} liberado.")
 
-# Função para verificar se o arquivo de configuração de auto-update existe
-def ensure_auto_update_config():
-    if not os.path.exists(AUTO_UPDATE_CONFIG_FILE):
-        default_config = {
-            "isAutoUpdateOn": False,
-            "autoUpdateTime": "00:00"  # Horário padrão (meia-noite)
-        }
-        with open(AUTO_UPDATE_CONFIG_FILE, 'w') as config_file:
-            json.dump(default_config, config_file, indent=4)
-        print(f"Arquivo de configuração {AUTO_UPDATE_CONFIG_FILE} criado com valores padrão.")
-        return default_config
-    else:
-        try:
-            with open(AUTO_UPDATE_CONFIG_FILE, 'r') as config_file:
-                config = json.load(config_file)
-                print(f"Configuração de auto-update carregada: {config}")
-                return config
-        except (json.JSONDecodeError, OSError) as e:
-            log_message(f"Erro ao ler {AUTO_UPDATE_CONFIG_FILE}: {e}. Recriando arquivo com valores padrão.")
-            default_config = {
-                "isAutoUpdateOn": False,
-                "autoUpdateTime": "00:00"
-            }
-            with open(AUTO_UPDATE_CONFIG_FILE, 'w') as config_file:
-                json.dump(default_config, config_file, indent=4)
-            return default_config
+
 
 from flask import current_app
 
@@ -159,25 +134,20 @@ def run_import_sequentially(import_type, config_data):
 async def auto_update_imports():
     try:
         config_data = {}
-        import_types = ['cadastro', 'domiciliofcd', 'visitas', 'iaf', 'pse', 'pse_prof']
+        import_types = ['cadastro', 'bpa', 'domiciliofcd', 'visitas', 'iaf', 'pse', 'pse_prof']
 
         for import_type in import_types:
             print(f"Iniciando importação para {import_type}")
-            
-            # Executa a tarefa de importação sequencialmente
             run_import_sequentially(import_type, config_data)
-
-            # Simula progresso e envia atualização via WebSocket
-            for progress in range(0, 101, 10):
-                socketio.emit('progress_update', {'tipo': import_type, 'percentual': progress})
-                print(f"Progresso {progress}% emitido para {import_type}")
-                await asyncio.sleep(1)  # Espera não-bloqueante
+            while not task_event.is_set():
+                await asyncio.sleep(1)  # Aguarda a tarefa atual terminar
 
         print("Atualização automática de importação executada com sucesso!")
 
     except Exception as e:
         error_message = traceback.format_exc()
         log_message(f"Erro ao realizar a autoatualização: {error_message}")
+
 
 # Função para verificar se um arquivo necessário está disponível
 def is_file_available(import_type):

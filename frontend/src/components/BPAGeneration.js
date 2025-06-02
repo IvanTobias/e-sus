@@ -3,17 +3,16 @@ import axios from 'axios';
 import { Download, Trash2 } from 'react-feather';
 import './BPAGeneration.css';
 
-
 const API_BASE_URL = `http://${window.location.hostname}:5000/api`;
 
 function BPAGeneration() {
     const [loading, setLoading] = useState(false);
+    const [bpaEmExecucao, setBpaEmExecucao] = useState(false);
     const [message, setMessage] = useState('');
     const [error, setError] = useState('');
     const [generatedFiles, setGeneratedFiles] = useState([]);
     const [loadingFiles, setLoadingFiles] = useState(false);
 
-    // Estados adicionais para AtualizarCEP
     const [registrosAtualizados, setRegistrosAtualizados] = useState(0);
     const [totalRegistros, setTotalRegistros] = useState(0);
     const [cepSelecionado, setCepSelecionado] = useState('');
@@ -38,97 +37,106 @@ function BPAGeneration() {
         }
     };
 
+    const verificarStatusBPA = async () => {
+        try {
+            const response = await axios.get(`${API_BASE_URL}/bpa-status`);
+            setBpaEmExecucao(response.data?.running || false);
+        } catch (err) {
+            console.error('Erro ao verificar status do BPA:', err.message);
+        }
+    };
+
     useEffect(() => {
         fetchGeneratedFiles();
+        verificarStatusBPA();
+
+        const interval = setInterval(() => {
+            verificarStatusBPA();
+        }, 3000);
+
+        return () => clearInterval(interval);
     }, []);
 
-const handleGenerateBPA = async () => {
-    setLoading(true);
-    setError('');
-    setMessage('');
-    try {
-        const response = await axios.post(`${API_BASE_URL}/gerar-bpa`, {}, { responseType: 'blob' });
+    const handleGenerateBPA = async () => {
+        setLoading(true);
+        setError('');
+        setMessage('');
+        setBpaEmExecucao(true);
 
-        const contentType = response.headers['content-type'];
-        const isPlainText = contentType?.includes('text/plain');
+        try {
+            const response = await axios.post(`${API_BASE_URL}/gerar-bpa`, {}, { responseType: 'blob' });
+            const contentType = response.headers['content-type'];
+            const isPlainText = contentType?.includes('text/plain');
+            const blob = new Blob([response.data]);
 
-        const blob = new Blob([response.data]);
+            if (!isPlainText || blob.size < 50) {
+                const text = await blob.text();
+                throw new Error(text || 'Arquivo vazio ou resposta inválida');
+            }
 
-        // Detecta se erro foi retornado no blob
-        if (!isPlainText || blob.size < 50) {
-            const text = await blob.text();
-            throw new Error(text || 'Arquivo vazio ou resposta inválida');
-        }
-
-        // Determina nome do arquivo
-        let filename = 'bpa_gerado.txt';
-        const contentDisposition = response.headers['content-disposition'];
-        if (contentDisposition) {
-            const match = contentDisposition.match(/filename="?(.+)"?/);
+            let filename = 'bpa_gerado.txt';
+            const contentDisposition = response.headers['content-disposition'];
+            const match = contentDisposition?.match(/filename="?(.+?)"?/);
             if (match?.[1]) filename = match[1];
+
+            const url = window.URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.setAttribute('download', filename);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            window.URL.revokeObjectURL(url);
+
+            setMessage(`Arquivo ${filename} gerado com sucesso.`);
+            fetchGeneratedFiles();
+        } catch (err) {
+            setError(err.message || 'Falha ao conectar com o servidor.');
+        } finally {
+            setLoading(false);
+            setBpaEmExecucao(false);
         }
+    };
 
-        // Download
-        const url = window.URL.createObjectURL(blob);
-        const link = document.createElement('a');
-        link.href = url;
-        link.setAttribute('download', filename);
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        window.URL.revokeObjectURL(url);
+    const handleDownloadFile = async (filename) => {
+        try {
+            const response = await axios.get(`${API_BASE_URL}/download-bpa-file`, {
+                params: { filename },
+                responseType: 'blob',
+            });
 
-        setMessage(`Arquivo ${filename} gerado com sucesso.`);
-        fetchGeneratedFiles();
-    } catch (err) {
-        setError(err.message || 'Falha ao conectar com o servidor.');
-    } finally {
-        setLoading(false);
-    }
-};
+            const contentType = response.headers['content-type'];
+            const blob = new Blob([response.data]);
 
+            if (!contentType?.includes('text/plain') || blob.size < 50) {
+                const text = await blob.text();
+                throw new Error(text || 'Erro ao baixar o arquivo.');
+            }
 
-const handleDownloadFile = async (filename) => {
-    try {
-        const response = await axios.get(`${API_BASE_URL}/download-bpa-file`, {
-            params: { filename },
-            responseType: 'blob',
-        });
-
-        const contentType = response.headers['content-type'];
-        const blob = new Blob([response.data]);
-
-        if (!contentType?.includes('text/plain') || blob.size < 50) {
-            const text = await blob.text();
-            throw new Error(text || 'Erro ao baixar o arquivo.');
+            const url = window.URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.setAttribute('download', filename);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            window.URL.revokeObjectURL(url);
+        } catch (err) {
+            setError(`Falha ao baixar o arquivo ${filename}: ${err.message}`);
         }
+    };
 
-        const url = window.URL.createObjectURL(blob);
-        const link = document.createElement('a');
-        link.href = url;
-        link.setAttribute('download', filename);
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        window.URL.revokeObjectURL(url);
-    } catch (err) {
-        setError(`Falha ao baixar o arquivo ${filename}: ${err.message}`);
-    }
-};
-
-const handleDeleteFile = async (filename) => {
-    try {
-        await axios.delete(`${API_BASE_URL}/delete-bpa-file`, {
-            params: { filename },
-        });
-        setGeneratedFiles(files => files.filter(f => f !== filename));
-        setMessage(`Arquivo ${filename} deletado com sucesso.`);
-    } catch (err) {
-        setError(`Erro ao deletar o arquivo ${filename}`);
-    }
-};
-
-
+    const handleDeleteFile = async (filename) => {
+        try {
+            await axios.delete(`${API_BASE_URL}/delete-bpa-file`, {
+                params: { filename },
+            });
+            setGeneratedFiles(files => files.filter(f => f !== filename));
+            setMessage(`Arquivo ${filename} deletado com sucesso.`);
+        } catch (err) {
+            setError(`Erro ao deletar o arquivo ${filename}`);
+        }
+    };
 
     const AtualizarCEP = async () => {
         setRegistrosAtualizados(0);
@@ -160,11 +168,19 @@ const handleDeleteFile = async (filename) => {
             {message && <div className="success-message">{message}</div>}
             {error && <div className="error-message">Erro: {error}</div>}
 
-            <button onClick={handleGenerateBPA} disabled={loading} className="botao-gerar-bpa">
-                {loading ? 'Gerando BPA...' : 'Gerar e Baixar BPA'}
+            <button
+                onClick={handleGenerateBPA}
+                disabled={loading || bpaEmExecucao}
+                className="botao-gerar-bpa"
+            >
+                {loading || bpaEmExecucao ? 'Gerando BPA...' : 'Gerar e Baixar BPA'}
             </button>
 
-            <button onClick={AtualizarCEP} disabled={loading} className="botao-gerar-bpa">
+            <button
+                onClick={AtualizarCEP}
+                disabled={loading || bpaEmExecucao}
+                className="botao-gerar-bpa"
+            >
                 {loading ? 'Atualizando CEP...' : 'Atualizar CEP'}
             </button>
 
@@ -176,23 +192,25 @@ const handleDeleteFile = async (filename) => {
                     <ul className="file-list">
                         {generatedFiles.map(file => (
                             <li key={file} className="file-item">
-                            <span>{file}</span>
-                            <div className="file-actions">
-                                <button
-                                onClick={() => handleDownloadFile(file)}
-                                className="botao-icon"
-                                title="Baixar"
-                                >
-                                <Download size={16} />
-                                </button>
-                                <button
-                                onClick={() => handleDeleteFile(file)}
-                                className="botao-icon"
-                                title="Deletar"
-                                >
-                                <Trash2 size={16} />
-                                </button>
-                            </div>
+                                <span>{file}</span>
+                                <div className="file-actions">
+                                    <button
+                                        onClick={() => handleDownloadFile(file)}
+                                        className="botao-icon"
+                                        disabled={bpaEmExecucao}
+                                        title="Baixar"
+                                    >
+                                        <Download size={16} />
+                                    </button>
+                                    <button
+                                        onClick={() => handleDeleteFile(file)}
+                                        className="botao-icon"
+                                        disabled={bpaEmExecucao}
+                                        title="Deletar"
+                                    >
+                                        <Trash2 size={16} />
+                                    </button>
+                                </div>
                             </li>
                         ))}
                     </ul>

@@ -1,38 +1,33 @@
-import { useCallback } from 'react';
+// frontend/src/components/useExtractData.js
 import axios from 'axios';
 
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || `http://${window.location.hostname}:5000`;
 
 const useExtractData = (dispatch, socket) => {
-  const extractData = useCallback((type) => {
-    dispatch({ type: 'SET_EXTRACTING', payload: { type, value: true } });
-    dispatch({ type: 'SET_ERROR', payload: { type, message: null } });
-    dispatch({ type: 'SET_PROGRESS', payload: { type, value: 0 } });
+  return (tipo) => {
+    dispatch({ type: 'SET_EXTRAINDO', payload: { type: tipo, value: true } });
+    dispatch({ type: 'SET_PROGRESSO', payload: { type: tipo, value: 0 } });
+    dispatch({ type: 'SET_MENSAGEM_ERRO', payload: { type: tipo, message: '' } });
 
-    const validTypes = ['cadastro', 'domiciliofcd', 'bpa', 'visitas', 'atendimentos', 'iaf', 'pse', 'pse_prof'];
-
-    if (!validTypes.includes(type)) {
-      dispatch({ type: 'SET_ERROR', payload: { type, message: `Tipo de exportação inválido: ${type}` } });
-      dispatch({ type: 'SET_EXTRACTING', payload: { type, value: false } });
-      return;
-    }
-
-    socket.emit('start_export', { task: type });
-
-    axios.get(`${API_BASE_URL}/export/${type}`)
+    axios
+      .get(`${API_BASE_URL}/export/${tipo}`)
       .then((response) => {
         if (response.data.status !== 'started') {
-          throw new Error(response.data.message || 'Falha ao iniciar a exportação.');
+          throw new Error(response.data.message || 'Erro ao iniciar exportação');
         }
+
+        console.log(`[EXTRACT-${tipo}] Exportação iniciada, aguardando conclusão via WebSocket...`);
+        // O socket.on('end_task') cuidará do download automático
       })
       .catch((error) => {
-        dispatch({ type: 'SET_ERROR', payload: { type, message: `Erro ao iniciar exportação: ${error.message}` } });
-        dispatch({ type: 'SET_EXTRACTING', payload: { type, value: false } });
-        dispatch({ type: 'SET_PROGRESS', payload: { type, value: 0 } });
+        console.error(`[EXTRACT-${tipo}] Erro ao iniciar exportação:`, error);
+        dispatch({ type: 'SET_EXTRAINDO', payload: { type: tipo, value: false } });
+        dispatch({
+          type: 'SET_MENSAGEM_ERRO',
+          payload: { type: tipo, message: `Erro ao iniciar extração: ${error.message}` },
+        });
       });
-  }, [dispatch, socket]); // 'socket' como dependência
-
-  return extractData;
+  };
 };
 
 export default useExtractData;

@@ -674,18 +674,23 @@ def executar_procedure(connection):
     log_message("Update 1 (CID para UID 0491381) executado")
     
     # Segundo update
-    #update_uid_query_2 = text("""
-    #UPDATE tb_bpa
-    #SET prd_cep_pcnte = '07400959',
-    #    prd_end_pcnte = 'dos Expedicionários',
-    #   prd_num_pcnte = '290',
-    #    prd_bairro_pcnte = 'Jardim Rincão',
-    #   prd_ibge = '350390'
-    #WHERE prd_cep_pcnte = '07400000' or 
-    #    prd_ibge <> '350390'
-    #""")
-    #connection.execute(update_uid_query_2)
-    #log_message("Update 2 (CEP 07400000) executado")
+    update_uid_query_2 = text("""
+    UPDATE tb_bpa
+    SET 
+        prd_cep_pcnte   = '07400959',
+        prd_end_pcnte   = 'dos Expedicionários',
+        prd_num_pcnte   = '290',
+        prd_bairro_pcnte = 'Jardim Rincão',
+        prd_ibge        = '350390'
+    WHERE 
+        prd_cep_pcnte IS NULL
+        OR prd_end_pcnte IS NULL
+        OR prd_num_pcnte IS NULL
+        OR prd_bairro_pcnte IS NULL
+        OR prd_ibge IS NULL
+    """)
+    connection.execute(update_uid_query_2)
+    log_message("Update 2 (CEP 07400000) executado")
 
 
 

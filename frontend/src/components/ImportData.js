@@ -72,12 +72,23 @@ const reducer = (state, action) => {
 };
 
 // Componente reutilizável para seções de dados
+// REVISÃO - Atualização na lógica de visibilidade e ativacao do botão "Extrair"
+// O objetivo é garantir que o botão só fique habilitado após a conclusão da importação e da exportação.
+
 const DataSection = memo(({ type, title, state, importData, extractData }) => {
+  const isExtractEnabled =
+    !state.executando[type] &&
+    !state.extraindo[type] &&
+    state.arquivoDisponivel[type] &&
+    state.progresso[type] === 100;
+
   return (
     <div>
       <h3>
         {title}
-        {state.ultimaImportacao[type] && <small> (Última importação: {state.ultimaImportacao[type]})</small>}
+        {state.ultimaImportacao[type] && (
+          <small> (Última importação: {state.ultimaImportacao[type]})</small>
+        )}
       </h3>
       <div className="flex-container">
         <button
@@ -87,14 +98,19 @@ const DataSection = memo(({ type, title, state, importData, extractData }) => {
         >
           {state.executando[type] ? 'Processando...' : 'Importar'}
         </button>
+
         <button
-          className={`btn btn-success ${state.extraindo[type] || state.executando[type] || !state.arquivoDisponivel[type] ? 'disabled' : ''}`}
-          onClick={() => extractData(type)}
-          disabled={state.extraindo[type] || state.executando[type] || !state.arquivoDisponivel[type]}
+          className={`btn btn-success ${!isExtractEnabled ? 'disabled' : ''}`}
+          onClick={() => isExtractEnabled && extractData(type)}
+          disabled={!isExtractEnabled}
         >
           Extrair
         </button>
-        <div className="progressContainer" style={{ display: state.executando[type] || state.extraindo[type] ? 'flex' : 'none', flex: 1 }}>
+
+        <div
+          className="progressContainer"
+          style={{ display: state.executando[type] || state.extraindo[type] ? 'flex' : 'none', flex: 1 }}
+        >
           <div className="progress">
             <div
               className="progressBar"
@@ -108,7 +124,11 @@ const DataSection = memo(({ type, title, state, importData, extractData }) => {
           </div>
         </div>
       </div>
-      <p className="errorMessage" style={{ display: state.mensagemErro[type] ? 'block' : 'none' }}>
+
+      <p
+        className="errorMessage"
+        style={{ display: state.mensagemErro[type] ? 'block' : 'none' }}
+      >
         {state.mensagemErro[type]}
       </p>
     </div>
