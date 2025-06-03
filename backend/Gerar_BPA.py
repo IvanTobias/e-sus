@@ -240,20 +240,32 @@ def atualizar_enderecos(connection):
             if len(novo_cep) != 8:
                 novo_cep = cep_original
 
-            update_result = connection.execute(text("""
+            update_fields = []
+            params = {'cep_antigo': cep_original, 'novo_cep': novo_cep}
+
+            if info.get('logradouro'):
+                update_fields.append("prd_end_pcnte = :logradouro")
+                params['logradouro'] = info['logradouro']
+
+            if info.get('bairro'):
+                update_fields.append("prd_bairro_pcnte = :bairro")
+                params['bairro'] = info['bairro']
+
+            if info.get('ibge'):
+                update_fields.append("prd_ibge = :ibge")
+                params['ibge'] = info['ibge']
+
+            # Sempre atualiza o CEP se ele mudou
+            update_fields.append("prd_cep_pcnte = :novo_cep")
+
+            update_sql = f"""
                 UPDATE tb_bpa
-                SET prd_end_pcnte = :logradouro,
-                    prd_bairro_pcnte = :bairro,
-                    prd_cep_pcnte = :novo_cep,
-                    prd_ibge = :ibge
+                SET {', '.join(update_fields)}
                 WHERE prd_cep_pcnte = :cep_antigo
-            """), {
-                'logradouro': info.get('logradouro', ''),
-                'bairro': info.get('bairro', ''),
-                'cep_antigo': cep_original,
-                'novo_cep': novo_cep,
-                'ibge': info.get('ibge', '')
-            })
+            """
+
+            update_result = connection.execute(text(update_sql), params)
+
 
             if update_result.rowcount > 0:
                 if novo_cep != cep_original:
@@ -673,6 +685,20 @@ def executar_procedure(connection):
     connection.execute(update_uid_query_1)
     log_message("Update 1 (CID para UID 0491381) executado")
     
+    verificacao = connection.execute(text("""
+    SELECT COUNT(*) FROM tb_bpa
+    WHERE 
+        prd_cep_pcnte IS NULL OR prd_cep_pcnte = ''
+        OR prd_end_pcnte IS NULL OR prd_end_pcnte = ''
+        OR prd_num_pcnte IS NULL OR prd_num_pcnte = ''
+        OR prd_bairro_pcnte IS NULL OR prd_bairro_pcnte = ''
+        OR prd_ibge IS NULL OR prd_ibge = ''
+        OR prd_cep_pcnte = '07500000'
+    """)).scalar()
+
+    log_message(f"{verificacao} registros com endereço incompleto antes do Update 2")
+
+
     # Segundo update
     update_uid_query_2 = text("""
     UPDATE tb_bpa
@@ -683,14 +709,15 @@ def executar_procedure(connection):
         prd_bairro_pcnte = 'Jardim Rincão',
         prd_ibge        = '350390'
     WHERE 
-        prd_cep_pcnte IS NULL
-        OR prd_end_pcnte IS NULL
-        OR prd_num_pcnte IS NULL
-        OR prd_bairro_pcnte IS NULL
-        OR prd_ibge IS NULL
+        prd_cep_pcnte IS NULL OR prd_cep_pcnte = ''
+        OR prd_end_pcnte IS NULL OR prd_end_pcnte = ''
+        OR prd_num_pcnte IS NULL OR prd_num_pcnte = ''
+        OR prd_bairro_pcnte IS NULL OR prd_bairro_pcnte = ''
+        OR prd_ibge IS NULL OR prd_ibge = ''
+        OR prd_cep_pcnte = '07500000'         
     """)
-    connection.execute(update_uid_query_2)
-    log_message("Update 2 (CEP 07400000) executado")
+    result = connection.execute(update_uid_query_2)
+    log_message(f"Update 2 Endereços Nulos executado — {result.rowcount} registros atualizados")
 
 
 

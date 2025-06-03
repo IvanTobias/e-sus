@@ -411,25 +411,34 @@ def execute_and_store_queries(config_data, tipo):
         '' AS PRD_EQP_AREA,
         '' AS PRD_EQP_SEQ,
         CASE 
-        WHEN tb_tipo_logradouro.nu_dne IS NULL THEN '081' 
-        ELSE tb_tipo_logradouro.nu_dne 
+        WHEN TRIM(tb_tipo_logradouro.nu_dne) IS NULL OR TRIM(tb_tipo_logradouro.nu_dne) = '' THEN '081'
+        ELSE tb_tipo_logradouro.nu_dne
         END AS PRD_LOGRAD_PCNTE,
+        -- CEP com tratamento adicional para CEP inválido
         CASE 
-        WHEN tb_cidadao.ds_cep IS NULL THEN '07400970'
-        WHEN tb_cidadao.ds_cep IN ('07400000') THEN '07400970'
-        ELSE tb_cidadao.ds_cep 
+        WHEN TRIM(tb_cidadao.ds_cep) IS NULL OR TRIM(tb_cidadao.ds_cep) = '' THEN '07400970'
+        WHEN tb_cidadao.ds_cep = '07400000' THEN '07400970'
+        ELSE tb_cidadao.ds_cep
         END AS PRD_CEP_PCNTE,
-        CASE
-        WHEN tb_cidadao.ds_logradouro IS NULL THEN SUBSTRING('Avenida dos Expedicionarios',1,30)
-        ELSE SUBSTRING(tb_cidadao.ds_logradouro,1,30) 
+        -- Logradouro
+        CASE 
+        WHEN TRIM(tb_cidadao.ds_logradouro) IS NULL OR TRIM(tb_cidadao.ds_logradouro) = '' THEN SUBSTRING('Avenida dos Expedicionarios',1,30)
+        ELSE SUBSTRING(tb_cidadao.ds_logradouro,1,30)
         END AS PRD_END_PCNTE,
-        SUBSTRING(tb_cidadao.ds_complemento,1,10) AS PRD_COMPL_PCNTE,
-        CASE
-        WHEN tb_cidadao.nu_numero IS NULL THEN  SUBSTRING('S/N',1,5) 
-        ELSE SUBSTRING(tb_cidadao.nu_numero,1,5) 
+        -- Complemento
+        CASE 
+        WHEN TRIM(tb_cidadao.ds_complemento) IS NULL OR TRIM(tb_cidadao.ds_complemento) = '' THEN ''
+        ELSE SUBSTRING(tb_cidadao.ds_complemento,1,10)
+        END AS PRD_COMPL_PCNTE,
+        -- Número
+        CASE 
+        WHEN TRIM(tb_cidadao.nu_numero) IS NULL OR TRIM(tb_cidadao.nu_numero) = '' THEN SUBSTRING('S/N',1,5)
+        ELSE SUBSTRING(tb_cidadao.nu_numero,1,5)
         END AS PRD_NUM_PCNTE,
-        CASE WHEN tb_cidadao.no_bairro IS NULL THEN 'Centro' 
-        ELSE SUBSTRING(tb_cidadao.no_bairro,1,30) 
+        -- Bairro
+        CASE 
+        WHEN TRIM(tb_cidadao.no_bairro) IS NULL OR TRIM(tb_cidadao.no_bairro) = '' THEN SUBSTRING('Centro',1,30)
+        ELSE SUBSTRING(tb_cidadao.no_bairro,1,30)
         END AS PRD_BAIRRO_PCNTE,
         substring(tb_cidadao.nu_telefone_residencial, 1 , 2) AS PRD_DDTEL_PCNTE,
         substring(tb_cidadao.nu_telefone_residencial, 3 , 9) AS PRD_TEL_PCNTE,
@@ -564,25 +573,34 @@ def execute_and_store_queries(config_data, tipo):
         '' AS PRD_EQP_AREA,
         '' AS PRD_EQP_SEQ,
         CASE 
-        WHEN tb_tipo_logradouro.nu_dne IS NULL THEN '081' 
-        ELSE tb_tipo_logradouro.nu_dne 
+        WHEN TRIM(tb_tipo_logradouro.nu_dne) IS NULL OR TRIM(tb_tipo_logradouro.nu_dne) = '' THEN '081'
+        ELSE tb_tipo_logradouro.nu_dne
         END AS PRD_LOGRAD_PCNTE,
+        -- CEP com tratamento adicional para CEP inválido
         CASE 
-        WHEN tb_cidadao.ds_cep IS NULL THEN '07400970'
-        WHEN tb_cidadao.ds_cep IN ('07400000') THEN '07400970'
-        ELSE tb_cidadao.ds_cep 
+        WHEN TRIM(tb_cidadao.ds_cep) IS NULL OR TRIM(tb_cidadao.ds_cep) = '' THEN '07400970'
+        WHEN tb_cidadao.ds_cep = '07400000' THEN '07400970'
+        ELSE tb_cidadao.ds_cep
         END AS PRD_CEP_PCNTE,
-        CASE
-        WHEN tb_cidadao.ds_logradouro IS NULL THEN SUBSTRING('Avenida dos Expedicionarios',1,30)
-        ELSE SUBSTRING(tb_cidadao.ds_logradouro,1,30) 
+        -- Logradouro
+        CASE 
+        WHEN TRIM(tb_cidadao.ds_logradouro) IS NULL OR TRIM(tb_cidadao.ds_logradouro) = '' THEN SUBSTRING('Avenida dos Expedicionarios',1,30)
+        ELSE SUBSTRING(tb_cidadao.ds_logradouro,1,30)
         END AS PRD_END_PCNTE,
-        SUBSTRING(tb_cidadao.ds_complemento,1,10) AS PRD_COMPL_PCNTE,
-        CASE
-        WHEN tb_cidadao.nu_numero IS NULL THEN  SUBSTRING('S/N',1,5) 
-        ELSE SUBSTRING(tb_cidadao.nu_numero,1,5) 
+        -- Complemento
+        CASE 
+        WHEN TRIM(tb_cidadao.ds_complemento) IS NULL OR TRIM(tb_cidadao.ds_complemento) = '' THEN ''
+        ELSE SUBSTRING(tb_cidadao.ds_complemento,1,10)
+        END AS PRD_COMPL_PCNTE,
+        -- Número
+        CASE 
+        WHEN TRIM(tb_cidadao.nu_numero) IS NULL OR TRIM(tb_cidadao.nu_numero) = '' THEN SUBSTRING('S/N',1,5)
+        ELSE SUBSTRING(tb_cidadao.nu_numero,1,5)
         END AS PRD_NUM_PCNTE,
-        CASE WHEN tb_cidadao.no_bairro IS NULL THEN 'Centro' 
-        ELSE SUBSTRING(tb_cidadao.no_bairro,1,30) 
+        -- Bairro
+        CASE 
+        WHEN TRIM(tb_cidadao.no_bairro) IS NULL OR TRIM(tb_cidadao.no_bairro) = '' THEN SUBSTRING('Centro',1,30)
+        ELSE SUBSTRING(tb_cidadao.no_bairro,1,30)
         END AS PRD_BAIRRO_PCNTE,
         substring(tb_cidadao.nu_telefone_residencial, 1 , 2) AS PRD_DDTEL_PCNTE,
         substring(tb_cidadao.nu_telefone_residencial, 3 , 9) AS PRD_TEL_PCNTE,
@@ -752,21 +770,29 @@ def execute_and_store_queries(config_data, tipo):
         '' AS PRD_EQP_SEQ,
         '081' AS PRD_LOGRAD_PCNTE,
         CASE 
-        WHEN tb_cidadao.ds_cep IS NULL THEN '07400970'
-        WHEN tb_cidadao.ds_cep IN ('07400000') THEN '07400970'
-        ELSE tb_cidadao.ds_cep 
+        WHEN TRIM(tb_cidadao.ds_cep) IS NULL OR TRIM(tb_cidadao.ds_cep) = '' THEN '07400970'
+        WHEN tb_cidadao.ds_cep = '07400000' THEN '07400970'
+        ELSE tb_cidadao.ds_cep
         END AS PRD_CEP_PCNTE,
-        CASE
-        WHEN tb_cidadao.ds_logradouro IS NULL THEN SUBSTRING('Avenida dos Expedicionarios',1,30)
-        ELSE SUBSTRING(tb_cidadao.ds_logradouro,1,30) 
+        -- Logradouro
+        CASE 
+        WHEN TRIM(tb_cidadao.ds_logradouro) IS NULL OR TRIM(tb_cidadao.ds_logradouro) = '' THEN SUBSTRING('Avenida dos Expedicionarios',1,30)
+        ELSE SUBSTRING(tb_cidadao.ds_logradouro,1,30)
         END AS PRD_END_PCNTE,
-        SUBSTRING(tb_cidadao.ds_complemento,1,10) AS PRD_COMPL_PCNTE,
-        CASE
-        WHEN tb_cidadao.nu_numero IS NULL THEN  SUBSTRING('S/N',1,5) 
-        ELSE SUBSTRING(tb_cidadao.nu_numero,1,5) 
+        -- Complemento
+        CASE 
+        WHEN TRIM(tb_cidadao.ds_complemento) IS NULL OR TRIM(tb_cidadao.ds_complemento) = '' THEN ''
+        ELSE SUBSTRING(tb_cidadao.ds_complemento,1,10)
+        END AS PRD_COMPL_PCNTE,
+        -- Número
+        CASE 
+        WHEN TRIM(tb_cidadao.nu_numero) IS NULL OR TRIM(tb_cidadao.nu_numero) = '' THEN SUBSTRING('S/N',1,5)
+        ELSE SUBSTRING(tb_cidadao.nu_numero,1,5)
         END AS PRD_NUM_PCNTE,
-        CASE WHEN tb_cidadao.no_bairro IS NULL THEN 'Centro' 
-        ELSE SUBSTRING(tb_cidadao.no_bairro,1,30) 
+        -- Bairro
+        CASE 
+        WHEN TRIM(tb_cidadao.no_bairro) IS NULL OR TRIM(tb_cidadao.no_bairro) = '' THEN SUBSTRING('Centro',1,30)
+        ELSE SUBSTRING(tb_cidadao.no_bairro,1,30)
         END AS PRD_BAIRRO_PCNTE,
         substring(tb_cidadao.nu_telefone_residencial, 1 , 2) AS PRD_DDTEL_PCNTE,
         substring(tb_cidadao.nu_telefone_residencial, 3 , 9) AS PRD_TEL_PCNTE,
