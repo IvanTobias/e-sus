@@ -20,8 +20,8 @@ sys.path.insert(0, backend_path)
 # Import necessary functions from backend modules
 # Note: Adjust imports if function names or locations differ slightly
 try:
-    # Assuming Conexões.py and banco.py are in the backend_path
-    from Conexões import load_config as backend_load_config, get_local_engine as backend_get_local_engine
+    # Assuming Conexoes.py and banco.py are in the backend_path
+    from Conexoes import load_config as backend_load_config, get_local_engine as backend_get_local_engine # Changed from Conexões
     from banco import clean_dataframe, rename_duplicate_columns # Use cleaning functions from banco.py
     # Import query definitions if they are centralized, otherwise define here
     # from Consultas import get_queries_for_type # Example if queries are in Consultas.py
@@ -58,7 +58,7 @@ def get_local_engine():
 def get_external_engine():
     """Gets the SQLAlchemy engine for the external database using config.json."""
     try:
-        config = backend_load_config() # Use function from Conexões.py
+        config = backend_load_config() # Use function from Conexoes.py
         # Use placeholders if config is not fully set, log warning
         db_ip = config.get('ip', 'YOUR_EXTERNAL_DB_IP')
         db_port = config.get('port', '5432')

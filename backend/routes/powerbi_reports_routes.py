@@ -1,5 +1,5 @@
 # esus_project/backend/routes/powerbi_reports_routes.py
-from Conexões import get_external_engine, get_local_engine # Added get_local_engine
+from Conexoes import get_external_engine, get_local_engine # Changed from Conexões
 from flask import Blueprint, jsonify, request
 from init import db
 from sqlalchemy import text, func, case

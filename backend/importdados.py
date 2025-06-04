@@ -8,7 +8,7 @@ from apscheduler.triggers.cron import CronTrigger
 from apscheduler.schedulers.background import BackgroundScheduler
 from Consultas import execute_long_task
 from socketio_config import socketio
-from Conexões import log_message
+from Conexoes import log_message # Changed from Conexões
 from Common import AUTO_UPDATE_CONFIG_FILE, task_event, update_last_import
 
 # Inicializar o agendador de tarefas
