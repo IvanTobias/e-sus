@@ -1,7 +1,7 @@
 #backend/banco.py
 import pandas as pd
 from pandas.api.types import is_object_dtype
-from Conexões import get_external_engine, log_message
+from Conexoes import get_external_engine, log_message # Changed from Conexões
 import unicodedata
 # As outras funções do banco.py ficam aqui
 
