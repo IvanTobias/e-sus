@@ -4,7 +4,7 @@ from flask import Blueprint, request, jsonify
 # Remove create_engine and text if no longer directly used
 # from sqlalchemy import create_engine, text
 import logging
-from backend.Conexoes import test_db_connection # Import the new function
+from Conexoes import test_db_connection # Import the new function
 
 logger = logging.getLogger(__name__)
 config_bp = Blueprint('config_bp', __name__)

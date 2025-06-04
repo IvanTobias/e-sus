@@ -19,7 +19,7 @@ from Consultas import (
 )
 # emit_start_task, emit_progress, emit_end_task are used by services or Consultas
 from socketio_config import task_clients # Retain for export_data route
-from backend.services import export_task # Import the moved function
+from services import export_task # Import the moved function
 
 logger = logging.getLogger(__name__)
 task_bp = Blueprint('task_bp', __name__, url_prefix='/api') # Adding /api prefix here
