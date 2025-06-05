@@ -16,6 +16,39 @@ progress = {}  # Variável global para rastreamento de progresso
 cancel_requests = {}  # Variável global para rastreamento de pedidos de cancelamento
 progress_lock = threading.Lock()  # Lock para proteger acesso concorrente ao progresso
 
+from sqlalchemy import text
+
+def build_incremental_query(table_name, key_column, base_query, local_engine):
+    try:
+        with local_engine.connect() as conn:
+            result = conn.execute(
+                text(f"SELECT MAX({key_column}) FROM {table_name}")
+            )
+            max_key = result.scalar()
+    except Exception:
+        max_key = None
+
+    if max_key is not None:
+        lower_query = base_query.lower()
+        order_index = lower_query.rfind("order by")
+        if order_index != -1:
+            before_order = base_query[:order_index].strip()
+            after_order = base_query[order_index:].strip()
+        else:
+            before_order = base_query
+            after_order = ""
+
+        if "where" in lower_query:
+            before_order += f" AND {key_column} > :max_key"
+        else:
+            before_order += f" WHERE {key_column} > :max_key"
+
+        incremental_query = f"{before_order} {after_order}"
+        return incremental_query, {"max_key": max_key}
+    else:
+        return base_query, {}
+
+
 # Função que executa a tarefa e atualiza o status
 def execute_long_task(config_data, tipo):
     emit_start_task(tipo)  # Certifique-se de que isso é chamado
@@ -213,9 +246,8 @@ def execute_and_store_queries(config_data, tipo):
     log_message(f"Parâmetros recebidos: ano={ano}, mes={mes}, tipo={tipo}")
 
     if tipo =='cadastro':
-        queries = {
-        'tb_cadastro': '''  
-        SELECT      
+        queries = [(
+        'tb_cadastro', """SELECT t1.co_cidadao,
         INITCAP(t1.no_cidadao) AS no_cidadao,
         INITCAP(t4_fci.no_unidade_saude) AS no_unidade_saude,
         INITCAP(t6.no_profissional) AS no_profissional,
@@ -298,7 +330,7 @@ def execute_and_store_queries(config_data, tipo):
         left join tb_dim_uf t25 on t25.co_seq_dim_uf = t24.co_dim_uf
         left join tb_dim_identidade_genero t26 on t26.co_seq_dim_identidade_genero = t3.co_dim_identidade_genero
         where t2.st_ativo = 1 and t3.co_dim_tipo_saida_cadastro is not null and t3.st_ficha_inativa = 0
-        order by 1''',}
+        order by 1""","co_cidadao")]
     
     elif tipo =='domiciliofcd':
         queries ={'tb_domicilio': '''SELECT 
@@ -411,25 +443,34 @@ def execute_and_store_queries(config_data, tipo):
         '' AS PRD_EQP_AREA,
         '' AS PRD_EQP_SEQ,
         CASE 
-        WHEN tb_tipo_logradouro.nu_dne IS NULL THEN '081' 
-        ELSE tb_tipo_logradouro.nu_dne 
+        WHEN TRIM(tb_tipo_logradouro.nu_dne) IS NULL OR TRIM(tb_tipo_logradouro.nu_dne) = '' THEN '081'
+        ELSE tb_tipo_logradouro.nu_dne
         END AS PRD_LOGRAD_PCNTE,
+        -- CEP com tratamento adicional para CEP inválido
         CASE 
-        WHEN tb_cidadao.ds_cep IS NULL THEN '07400970'
-        WHEN tb_cidadao.ds_cep IN ('07400000') THEN '07400970'
-        ELSE tb_cidadao.ds_cep 
+        WHEN TRIM(tb_cidadao.ds_cep) IS NULL OR TRIM(tb_cidadao.ds_cep) = '' THEN '07400970'
+        WHEN tb_cidadao.ds_cep = '07400000' THEN '07400970'
+        ELSE tb_cidadao.ds_cep
         END AS PRD_CEP_PCNTE,
-        CASE
-        WHEN tb_cidadao.ds_logradouro IS NULL THEN SUBSTRING('Avenida dos Expedicionarios',1,30)
-        ELSE SUBSTRING(tb_cidadao.ds_logradouro,1,30) 
+        -- Logradouro
+        CASE 
+        WHEN TRIM(tb_cidadao.ds_logradouro) IS NULL OR TRIM(tb_cidadao.ds_logradouro) = '' THEN SUBSTRING('Avenida dos Expedicionarios',1,30)
+        ELSE SUBSTRING(tb_cidadao.ds_logradouro,1,30)
         END AS PRD_END_PCNTE,
-        SUBSTRING(tb_cidadao.ds_complemento,1,10) AS PRD_COMPL_PCNTE,
-        CASE
-        WHEN tb_cidadao.nu_numero IS NULL THEN  SUBSTRING('S/N',1,5) 
-        ELSE SUBSTRING(tb_cidadao.nu_numero,1,5) 
+        -- Complemento
+        CASE 
+        WHEN TRIM(tb_cidadao.ds_complemento) IS NULL OR TRIM(tb_cidadao.ds_complemento) = '' THEN ''
+        ELSE SUBSTRING(tb_cidadao.ds_complemento,1,10)
+        END AS PRD_COMPL_PCNTE,
+        -- Número
+        CASE 
+        WHEN TRIM(tb_cidadao.nu_numero) IS NULL OR TRIM(tb_cidadao.nu_numero) = '' THEN SUBSTRING('S/N',1,5)
+        ELSE SUBSTRING(tb_cidadao.nu_numero,1,5)
         END AS PRD_NUM_PCNTE,
-        CASE WHEN tb_cidadao.no_bairro IS NULL THEN 'Centro' 
-        ELSE SUBSTRING(tb_cidadao.no_bairro,1,30) 
+        -- Bairro
+        CASE 
+        WHEN TRIM(tb_cidadao.no_bairro) IS NULL OR TRIM(tb_cidadao.no_bairro) = '' THEN SUBSTRING('Centro',1,30)
+        ELSE SUBSTRING(tb_cidadao.no_bairro,1,30)
         END AS PRD_BAIRRO_PCNTE,
         substring(tb_cidadao.nu_telefone_residencial, 1 , 2) AS PRD_DDTEL_PCNTE,
         substring(tb_cidadao.nu_telefone_residencial, 3 , 9) AS PRD_TEL_PCNTE,
@@ -564,25 +605,34 @@ def execute_and_store_queries(config_data, tipo):
         '' AS PRD_EQP_AREA,
         '' AS PRD_EQP_SEQ,
         CASE 
-        WHEN tb_tipo_logradouro.nu_dne IS NULL THEN '081' 
-        ELSE tb_tipo_logradouro.nu_dne 
+        WHEN TRIM(tb_tipo_logradouro.nu_dne) IS NULL OR TRIM(tb_tipo_logradouro.nu_dne) = '' THEN '081'
+        ELSE tb_tipo_logradouro.nu_dne
         END AS PRD_LOGRAD_PCNTE,
+        -- CEP com tratamento adicional para CEP inválido
         CASE 
-        WHEN tb_cidadao.ds_cep IS NULL THEN '07400970'
-        WHEN tb_cidadao.ds_cep IN ('07400000') THEN '07400970'
-        ELSE tb_cidadao.ds_cep 
+        WHEN TRIM(tb_cidadao.ds_cep) IS NULL OR TRIM(tb_cidadao.ds_cep) = '' THEN '07400970'
+        WHEN tb_cidadao.ds_cep = '07400000' THEN '07400970'
+        ELSE tb_cidadao.ds_cep
         END AS PRD_CEP_PCNTE,
-        CASE
-        WHEN tb_cidadao.ds_logradouro IS NULL THEN SUBSTRING('Avenida dos Expedicionarios',1,30)
-        ELSE SUBSTRING(tb_cidadao.ds_logradouro,1,30) 
+        -- Logradouro
+        CASE 
+        WHEN TRIM(tb_cidadao.ds_logradouro) IS NULL OR TRIM(tb_cidadao.ds_logradouro) = '' THEN SUBSTRING('Avenida dos Expedicionarios',1,30)
+        ELSE SUBSTRING(tb_cidadao.ds_logradouro,1,30)
         END AS PRD_END_PCNTE,
-        SUBSTRING(tb_cidadao.ds_complemento,1,10) AS PRD_COMPL_PCNTE,
-        CASE
-        WHEN tb_cidadao.nu_numero IS NULL THEN  SUBSTRING('S/N',1,5) 
-        ELSE SUBSTRING(tb_cidadao.nu_numero,1,5) 
+        -- Complemento
+        CASE 
+        WHEN TRIM(tb_cidadao.ds_complemento) IS NULL OR TRIM(tb_cidadao.ds_complemento) = '' THEN ''
+        ELSE SUBSTRING(tb_cidadao.ds_complemento,1,10)
+        END AS PRD_COMPL_PCNTE,
+        -- Número
+        CASE 
+        WHEN TRIM(tb_cidadao.nu_numero) IS NULL OR TRIM(tb_cidadao.nu_numero) = '' THEN SUBSTRING('S/N',1,5)
+        ELSE SUBSTRING(tb_cidadao.nu_numero,1,5)
         END AS PRD_NUM_PCNTE,
-        CASE WHEN tb_cidadao.no_bairro IS NULL THEN 'Centro' 
-        ELSE SUBSTRING(tb_cidadao.no_bairro,1,30) 
+        -- Bairro
+        CASE 
+        WHEN TRIM(tb_cidadao.no_bairro) IS NULL OR TRIM(tb_cidadao.no_bairro) = '' THEN SUBSTRING('Centro',1,30)
+        ELSE SUBSTRING(tb_cidadao.no_bairro,1,30)
         END AS PRD_BAIRRO_PCNTE,
         substring(tb_cidadao.nu_telefone_residencial, 1 , 2) AS PRD_DDTEL_PCNTE,
         substring(tb_cidadao.nu_telefone_residencial, 3 , 9) AS PRD_TEL_PCNTE,
@@ -752,21 +802,29 @@ def execute_and_store_queries(config_data, tipo):
         '' AS PRD_EQP_SEQ,
         '081' AS PRD_LOGRAD_PCNTE,
         CASE 
-        WHEN tb_cidadao.ds_cep IS NULL THEN '07400970'
-        WHEN tb_cidadao.ds_cep IN ('07400000') THEN '07400970'
-        ELSE tb_cidadao.ds_cep 
+        WHEN TRIM(tb_cidadao.ds_cep) IS NULL OR TRIM(tb_cidadao.ds_cep) = '' THEN '07400970'
+        WHEN tb_cidadao.ds_cep = '07400000' THEN '07400970'
+        ELSE tb_cidadao.ds_cep
         END AS PRD_CEP_PCNTE,
-        CASE
-        WHEN tb_cidadao.ds_logradouro IS NULL THEN SUBSTRING('Avenida dos Expedicionarios',1,30)
-        ELSE SUBSTRING(tb_cidadao.ds_logradouro,1,30) 
+        -- Logradouro
+        CASE 
+        WHEN TRIM(tb_cidadao.ds_logradouro) IS NULL OR TRIM(tb_cidadao.ds_logradouro) = '' THEN SUBSTRING('Avenida dos Expedicionarios',1,30)
+        ELSE SUBSTRING(tb_cidadao.ds_logradouro,1,30)
         END AS PRD_END_PCNTE,
-        SUBSTRING(tb_cidadao.ds_complemento,1,10) AS PRD_COMPL_PCNTE,
-        CASE
-        WHEN tb_cidadao.nu_numero IS NULL THEN  SUBSTRING('S/N',1,5) 
-        ELSE SUBSTRING(tb_cidadao.nu_numero,1,5) 
+        -- Complemento
+        CASE 
+        WHEN TRIM(tb_cidadao.ds_complemento) IS NULL OR TRIM(tb_cidadao.ds_complemento) = '' THEN ''
+        ELSE SUBSTRING(tb_cidadao.ds_complemento,1,10)
+        END AS PRD_COMPL_PCNTE,
+        -- Número
+        CASE 
+        WHEN TRIM(tb_cidadao.nu_numero) IS NULL OR TRIM(tb_cidadao.nu_numero) = '' THEN SUBSTRING('S/N',1,5)
+        ELSE SUBSTRING(tb_cidadao.nu_numero,1,5)
         END AS PRD_NUM_PCNTE,
-        CASE WHEN tb_cidadao.no_bairro IS NULL THEN 'Centro' 
-        ELSE SUBSTRING(tb_cidadao.no_bairro,1,30) 
+        -- Bairro
+        CASE 
+        WHEN TRIM(tb_cidadao.no_bairro) IS NULL OR TRIM(tb_cidadao.no_bairro) = '' THEN SUBSTRING('Centro',1,30)
+        ELSE SUBSTRING(tb_cidadao.no_bairro,1,30)
         END AS PRD_BAIRRO_PCNTE,
         substring(tb_cidadao.nu_telefone_residencial, 1 , 2) AS PRD_DDTEL_PCNTE,
         substring(tb_cidadao.nu_telefone_residencial, 3 , 9) AS PRD_TEL_PCNTE,
@@ -837,7 +895,7 @@ def execute_and_store_queries(config_data, tipo):
         ORDER BY 9,13'''}
             
     elif tipo =='visitas':
-        queries ={'tb_visitas': '''select 
+        queries =[('tb_visitas', """select t0.co_seq_fat_visita_domiciliar,
         case when t0.nu_cpf_cidadao is null then null else 'X' end as nu_cpf_cidadao,
         case when t0.nu_cns is null then null else 'X' end as nu_cns,
         co_dim_tipo_ficha, co_dim_municipio, co_dim_profissional, co_dim_tipo_imovel, nu_micro_area, nu_peso, nu_altura, t0.dt_nascimento, co_dim_faixa_etaria, st_visita_compartilhada, st_mot_vis_cad_att, st_mot_vis_visita_periodica, st_mot_vis_busca_ativa, st_mot_vis_acompanhamento, st_mot_vis_egresso_internacao, st_mot_vis_ctrl_ambnte_vetor, st_mot_vis_convte_atvidd_cltva, st_mot_vis_orintacao_prevncao, st_mot_vis_outros, st_busca_ativa_consulta, st_busca_ativa_exame, st_busca_ativa_vacina, st_busca_ativa_bolsa_familia, st_acomp_gestante, st_acomp_puerpera, st_acomp_recem_nascido, st_acomp_crianca, st_acomp_pessoa_desnutricao, st_acomp_pessoa_reabil_deficie, st_acomp_pessoa_hipertensao, st_acomp_pessoa_diabetes, st_acomp_pessoa_asma, st_acomp_pessoa_dpoc_enfisema, st_acomp_pessoa_cancer, st_acomp_pessoa_doenca_cronica, st_acomp_pessoa_hanseniase, st_acomp_pessoa_tuberculose, st_acomp_sintomaticos_respirat, st_acomp_tabagista, st_acomp_domiciliados_acamados, st_acomp_condi_vulnerab_social, st_acomp_condi_bolsa_familia, st_acomp_saude_mental, st_acomp_usuario_alcool, st_acomp_usuario_outras_drogra, st_ctrl_amb_vet_acao_educativa, st_ctrl_amb_vet_imovel_foco, st_ctrl_amb_vet_acao_mecanica, st_ctrl_amb_vet_tratamnt_focal, co_dim_desfecho_visita, co_dim_tipo_origem_dado_transp, co_dim_cds_tipo_origem, co_fat_cidadao_pec, co_dim_tipo_glicemia, nu_medicao_pressao_arterial, nu_medicao_temperatura, nu_medicao_glicemia,
@@ -921,7 +979,7 @@ def execute_and_store_queries(config_data, tipo):
         --OPÇÃO 2 - EXTRAIR VISITAS DOS ÚLTIMOS 12 MESES
         --and dt_registro date_trunc('month', current_date) - interval '47 months'
         --OPÇÃO 3 - EXTRAIR VISITAS APENAS DO ANO ATUAL
-        and date_part('year', dt_registro) = date_part('year', current_date)'''} 
+        and date_part('year', dt_registro) = date_part('year', current_date)""","co_seq_fat_visita_domiciliar")] 
         
     elif tipo =='iaf':
         queries ={'tb_iaf': '''select 
@@ -1025,7 +1083,7 @@ def execute_and_store_queries(config_data, tipo):
         GROUP BY 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12,13'''}
 
     elif tipo =='atendimentos':
-        queries ={'tb_atendimentos': '''SELECT
+        queries =[('tb_atendimentos', """SELECT
         fai.co_seq_fat_atd_ind,
         fai.co_dim_tempo AS co_dim_tempo_atend,
         tempo_atend.dt_registro AS dt_atendimento,
@@ -1167,23 +1225,154 @@ def execute_and_store_queries(config_data, tipo):
         LEFT JOIN tb_dim_tipo_tratamento_agua trat_agua ON fcd.co_dim_tipo_tratamento_agua = trat_agua.co_seq_dim_tipo_tratament_agua
         LEFT JOIN tb_dim_tipo_escoamento_sanitar esgoto ON fcd.co_dim_tipo_escoamento_sanitar = esgoto.co_seq_dim_tipo_escoamento_snt
         LEFT JOIN tb_dim_tipo_destino_lixo lixo ON fcd.co_dim_tipo_destino_lixo = lixo.co_seq_dim_tipo_destino_lixo
-        WHERE fai.co_fat_cidadao_pec IS NOT NULL'''}
+        WHERE fai.co_fat_cidadao_pec IS NOT NULL""","co_seq_fat_atd_ind")]
+
+        
+    elif tipo == "fiocruz":
+        queries = [
+            # Dimensões padrão (Incremental)
+            ("tb_dim_tipo_ficha", "SELECT * FROM tb_dim_tipo_ficha", "co_seq_dim_tipo_ficha"),
+            ("tb_dim_municipio", "SELECT * FROM tb_dim_municipio", "co_seq_dim_municipio"),
+            ("tb_dim_cbo", "SELECT * FROM tb_dim_cbo", "co_seq_dim_cbo"),
+            ("tb_dim_sexo", "SELECT * FROM tb_dim_sexo", "co_seq_dim_sexo"),
+            ("tb_dim_faixa_etaria", "SELECT * FROM tb_dim_faixa_etaria", "co_seq_dim_faixa_etaria"),
+            ("tb_dim_tipo_atendimento", "SELECT * FROM tb_dim_tipo_atendimento", "co_seq_dim_tipo_atendimento"),
+            ("tb_dim_tipo_consulta_odonto", "SELECT * FROM tb_dim_tipo_consulta_odonto", "co_seq_dim_tipo_cnsulta_odonto"),
+            ("tb_dim_unidade_saude", "SELECT * FROM tb_dim_unidade_saude", "co_seq_dim_unidade_saude"),
+            ("tb_dim_tempo", "SELECT * FROM tb_dim_tempo", "co_seq_dim_tempo"),
+            ("tb_dim_local_atendimento", "SELECT * FROM tb_dim_local_atendimento", "co_seq_dim_local_atendimento"),
+            ("tb_dim_tipo_localizacao", "SELECT * FROM tb_dim_tipo_localizacao", "co_seq_dim_tipo_localizacao"),
+            ("tb_dim_desfecho_visita", "SELECT * FROM tb_dim_desfecho_visita", "co_seq_dim_desfecho_visita"),
+            ("tb_dim_motivo_visita", "SELECT * FROM tb_cds_visita_dom_motivo", "co_cds_visita_dom_motivo"),
+            ("tb_dim_procedimento", "SELECT * FROM tb_dim_procedimento", "co_seq_dim_procedimento"),
+            ("tb_dim_equipe", "SELECT * FROM tb_dim_equipe", "co_seq_dim_equipe"),
+            ("tb_dim_profissional", "SELECT * FROM tb_dim_profissional", "co_seq_dim_profissional"),
+            ("tb_dim_imunobiologico", "SELECT * FROM tb_dim_imunobiologico", "co_seq_dim_imunobiologico"),
+            
+            # Fato: Diabete
+            ("local_fiocruz_diabetes_cad", """SELECT 
+                fci.*, -- Seleciona todas as colunas de tb_fat_cad_individual
+                fcp.co_cidadao, -- Adiciona co_cidadao de tb_fat_cidadao_pec
+                c.dt_nascimento, -- Adiciona dt_nascimento de tb_cidadao
+                c.nu_micro_area as nu_micro_area_cidadao, 
+                c.st_ativo 
+            FROM tb_fat_cad_individual fci
+            LEFT JOIN tb_cidadao c ON fci.nu_uuid_ficha = c.co_unico_ultima_ficha
+            LEFT JOIN tb_fat_cidadao_pec fcp ON c.co_seq_cidadao = fcp.co_cidadao
+            WHERE fci.st_ficha_inativa = 0 AND c.st_ativo = 1 and fci.st_diabete = 1
+            ""","co_seq_fat_cad_individual"),
+
+            # Fato: Hipertensão
+            ("local_fiocruz_hipertensao_cad", """
+            SELECT 
+                fci.*, 
+                fcp.co_cidadao, 
+                c.dt_nascimento, 
+                c.nu_micro_area as nu_micro_area_cidadao, 
+                c.st_ativo 
+            FROM tb_fat_cad_individual fci
+            LEFT JOIN tb_cidadao c ON fci.nu_uuid_ficha = c.co_unico_ultima_ficha
+            LEFT JOIN tb_fat_cidadao_pec fcp ON c.co_seq_cidadao = fcp.co_cidadao
+            WHERE fci.st_ficha_inativa = 0 AND c.st_ativo = 1 and fci.st_hipertensao_arterial = 1
+            ""","co_seq_fat_cad_individual"),
+
+            # Fato: Odontologia
+            ("local_fiocruz_atendimento_odonto", """ 
+            SELECT 
+                fao.*, -- Seleciona todas as colunas de tb_fat_atendimento_odonto
+                -- Adiciona colunas de JOINs que podem ser úteis localmente (opcional)
+                tdtf.ds_tipo_ficha,
+                tdm.no_municipio,
+                tdm.co_ibge,
+                tdc.no_cbo,
+                tdus.no_unidade_saude,
+                tdt.dt_registro,
+                tdfe.ds_faixa_etaria,
+                tds.ds_sexo,
+                tdla.ds_local_atendimento,
+                tdta.ds_tipo_atendimento,
+                tdtco.ds_tipo_consulta_odonto,
+                tdtl.ds_tipo_localizacao
+            FROM tb_fat_atendimento_odonto fao
+            -- JOINs com tabelas de dimensão (assumindo que elas existem no banco externo)
+            LEFT JOIN tb_dim_tipo_ficha tdtf on tdtf.co_seq_dim_tipo_ficha = fao.co_dim_tipo_ficha 
+            LEFT JOIN tb_dim_municipio tdm on tdm.co_seq_dim_municipio = fao.co_dim_municipio 
+            LEFT JOIN tb_dim_cbo tdc on tdc.co_seq_dim_cbo = fao.co_dim_cbo_1 
+            LEFT JOIN tb_dim_sexo tds on tds.co_seq_dim_sexo = fao.co_dim_sexo 
+            LEFT JOIN tb_dim_faixa_etaria tdfe on tdfe.co_seq_dim_faixa_etaria = fao.co_dim_faixa_etaria 
+            LEFT JOIN tb_dim_tipo_atendimento tdta on tdta.co_seq_dim_tipo_atendimento = fao.co_dim_tipo_atendimento 
+            LEFT JOIN tb_dim_tipo_consulta_odonto tdtco on tdtco.co_seq_dim_tipo_cnsulta_odonto = fao.co_dim_tipo_consulta  
+            LEFT JOIN tb_dim_unidade_saude tdus on tdus.co_seq_dim_unidade_saude = fao.co_dim_unidade_saude_1 
+            LEFT JOIN tb_dim_tempo tdt on tdt.co_seq_dim_tempo = fao.co_dim_tempo 
+            LEFT JOIN tb_dim_local_atendimento tdla on tdla.co_seq_dim_local_atendimento  = fao.co_dim_local_atendimento 
+            -- JOINs com tabelas fato (assumindo que existem no banco externo)
+            LEFT JOIN tb_fat_familia_territorio tfft on tfft.co_fat_cidadao_pec = fao.co_fat_cidadao_pec
+            LEFT JOIN tb_fat_cad_domiciliar tfcd on tfcd.co_seq_fat_cad_domiciliar = tfft.co_fat_cad_domiciliar
+            LEFT JOIN tb_dim_tipo_localizacao tdtl on tfcd.co_dim_tipo_localizacao = tdtl.co_seq_dim_tipo_localizacao
+            ""","co_seq_fat_atd_odnt"),
+            #Fat
+            ("tb_fat_cad_individual","SELECT * FROM tb_fat_cad_individual",'co_seq_fat_cad_individual'),
+            ("tb_fat_familia_territorio","SELECT * FROM tb_fat_familia_territorio",'co_seq_fat_familia_territorio'),
+            ("tb_fat_cad_dom_familia","SELECT * FROM tb_fat_cad_dom_familia",'co_seq_fat_cad_dom_familia'),
+            ("tb_fat_cidadao_pec","SELECT * FROM tb_fat_cidadao_pec",'co_seq_fat_cidadao_pec'),
+            ("tb_fat_atendimento_individual","SELECT * FROM tb_fat_atendimento_individual",'co_seq_fat_atd_ind'),
+            ("tb_fat_atendimento_odonto","SELECT * FROM tb_fat_atendimento_odonto",'co_seq_fat_atd_odnt')]
+            # Tabelas Intermediárias (com queries reais) que precisam ser validaddas e criadas as query com base na Fiocruz
+            #("pessoas", PESSOAS_QUERY),
+            #("equipes", EQUIPES_QUERY),
+            #("crianca", CRIANCA_QUERY),
+            #("idoso", IDOSO_QUERY)]
+        
+        step_size = 100 / len(queries)
+        for query_name, query, key_col in queries:
+            final_query, params = build_incremental_query(query_name, key_col, query, local_engine)
+            execute_query(
+                query_name, text(final_query), external_engine, local_engine,
+                step_size, tipo, cancel_requests, update_progress=True, params=params
+            )
+
+
+
 
     if queries is None:
         raise ValueError(f"Tipo de consulta desconhecido: {tipo}")
 
     step_size = 100 / len(queries)
-    for query_name, query in queries.items():
-        if tipo == 'bpa':
-            execute_query(
-                query_name, text(query), external_engine, local_engine, step_size, tipo,
-                cancel_requests, update_progress=True, params={'ano': ano, 'mes': mes}
-            )
+
+    for item in queries:
+        if isinstance(item, tuple):
+            if len(item) == 3:
+                # Query com incremental
+                query_name, query, key_col = item
+                final_query, params = build_incremental_query(query_name, key_col, query, local_engine)
+            elif len(item) == 2:
+                # Query simples
+                query_name, query = item
+                final_query = query
+                params = {}
+            else:
+                raise ValueError("Formato inválido na lista de queries.")
+        elif isinstance(item, str):
+            # Caso queries esteja no formato antigo de dict
+            query_name = item
+            query = queries[item]
+            final_query = query
+            params = {'ano': ano, 'mes': mes} if tipo == 'bpa' else {}
         else:
-            execute_query(
-                query_name, text(query), external_engine, local_engine, step_size, tipo,
-                cancel_requests, update_progress=True
-            )
+            raise ValueError("Item de query inválido.")
+
+        execute_query(
+            query_name,
+            text(final_query),
+            external_engine,
+            local_engine,
+            step_size,
+            tipo,
+            cancel_requests,
+            update_progress=True,
+            params=params
+        )
+
 
     update_progress_safely(tipo, 100)
     log_message(f"Todas as queries para {tipo} foram processadas.")

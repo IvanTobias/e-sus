@@ -170,7 +170,7 @@ def query_progress():
 
 @app.route('/execute-queries/<tipo>', methods=['GET', 'POST'])
 def execute_queries(tipo):
-    if tipo not in ['cadastro', 'domiciliofcd', 'bpa', 'visitas', 'atendimentos', 'iaf', 'pse', 'pse_prof']:
+    if tipo not in ['cadastro', 'domiciliofcd', 'bpa', 'visitas', 'atendimentos', 'iaf', 'pse', 'pse_prof', 'fiocruz']:
         logger.error(f"Tipo desconhecido: {tipo}")
         return jsonify({"status": "error", "message": "Tipo desconhecido."})
 

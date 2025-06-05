@@ -30,7 +30,7 @@ const getInitialDateValues = () => {
 };
 
 const initialDateValues = getInitialDateValues();
-const sections = ['cadastro', 'domiciliofcd', 'bpa', 'visitas', 'iaf', 'pse', 'pse_prof', 'atendimentos'];
+const sections = ['cadastro', 'domiciliofcd', 'bpa', 'visitas', 'iaf', 'pse', 'pse_prof', 'atendimentos', 'fiocruz'];
 
 const generateStateObject = (defaultValue) => Object.fromEntries(sections.map((key) => [key, defaultValue]));
 
@@ -99,13 +99,15 @@ const DataSection = memo(({ type, title, state, importData, extractData }) => {
           {state.executando[type] ? 'Processando...' : 'Importar'}
         </button>
 
-        <button
-          className={`btn btn-success ${!isExtractEnabled ? 'disabled' : ''}`}
-          onClick={() => isExtractEnabled && extractData(type)}
-          disabled={!isExtractEnabled}
-        >
-          Extrair
-        </button>
+        {type !== 'fiocruz' && (
+          <button
+            className={`btn btn-success ${!isExtractEnabled ? 'disabled' : ''}`}
+            onClick={() => isExtractEnabled && extractData(type)}
+            disabled={!isExtractEnabled}
+          >
+            Extrair
+          </button>
+        )}
 
         <div
           className="progressContainer"
@@ -134,6 +136,7 @@ const DataSection = memo(({ type, title, state, importData, extractData }) => {
     </div>
   );
 });
+
 
 function ImportData() {
   const [state, dispatch] = useReducer(reducer, initialState);
@@ -317,38 +320,43 @@ function ImportData() {
     };
   }, [state.executando, state.progresso]);
 
-  const getRequestConfig = (type, state) => {
-    if (type === 'bpa') {
-      return {
-        url: `/execute-queries/${type}`,
-        method: 'POST',
-        data: { ano: String(state.ano), mes: state.mes },
-      };
-    }
-    return { url: `/execute-queries/${type}`, method: 'POST', data: {} };
-  };
+const getRequestConfig = (type, { ano, mes }) => {
+  if (type === 'bpa') {
+    return {
+      url: `/execute-queries/${type}`,
+      method: 'POST',
+      data: { ano: String(ano), mes },
+    };
+  }
+  return { url: `/execute-queries/${type}`, method: 'POST', data: {} };
+};
 
-  const importData = useCallback((type) => {
-    const { url, method, data } = getRequestConfig(type, state);
-    dispatch({ type: 'SET_PROGRESSO', payload: { type, value: 0 } });
-    dispatch({ type: 'SET_BOTAO_DESABILITADO', payload: { type, value: true } });
-    dispatch({ type: 'SET_EXECUTANDO', payload: { type, value: true } });
-    dispatch({ type: 'SET_ARQUIVO_DISPONIVEL', payload: { type, value: false } });
-    dispatch({ type: 'SET_MENSAGEM_ERRO', payload: { type, message: '' } });
 
-    apiCall(url, method, data)
-      .then(() => {
-        dispatch({ type: 'SET_EXECUTANDO', payload: { type, value: true } });
-      })
-      .catch((error) => {
-        dispatch({
-          type: 'SET_MENSAGEM_ERRO',
-          payload: { type, message: `Erro ao importar ${type}: ${error.message}` },
-        });
-        dispatch({ type: 'SET_BOTAO_DESABILITADO', payload: { type, value: false } });
-        dispatch({ type: 'SET_EXECUTANDO', payload: { type, value: false } });
+const { ano, mes } = state;
+
+const importData = useCallback((type) => {
+  const { url, method, data } = getRequestConfig(type, { ano, mes });
+
+  dispatch({ type: 'SET_PROGRESSO', payload: { type, value: 0 } });
+  dispatch({ type: 'SET_BOTAO_DESABILITADO', payload: { type, value: true } });
+  dispatch({ type: 'SET_EXECUTANDO', payload: { type, value: true } });
+  dispatch({ type: 'SET_ARQUIVO_DISPONIVEL', payload: { type, value: false } });
+  dispatch({ type: 'SET_MENSAGEM_ERRO', payload: { type, message: '' } });
+
+  apiCall(url, method, data)
+    .then(() => {
+      dispatch({ type: 'SET_EXECUTANDO', payload: { type, value: true } });
+    })
+    .catch((error) => {
+      dispatch({
+        type: 'SET_MENSAGEM_ERRO',
+        payload: { type, message: `Erro ao importar ${type}: ${error.message}` },
       });
-  }, [state.ano, state.mes]);
+      dispatch({ type: 'SET_BOTAO_DESABILITADO', payload: { type, value: false } });
+      dispatch({ type: 'SET_EXECUTANDO', payload: { type, value: false } });
+    });
+}, [ano, mes]);
+
 
   const handleAutoUpdateToggle = useCallback(() => {
     setIsAutoUpdateOn((prevState) => !prevState);
@@ -376,6 +384,7 @@ function ImportData() {
         <DataSection type="iaf" title="IAF" state={state} importData={importData} extractData={extractData} />
         <DataSection type="pse" title="PSE" state={state} importData={importData} extractData={extractData} />
         <DataSection type="pse_prof" title="PSE Profissionais" state={state} importData={importData} extractData={extractData} />
+        <DataSection type="fiocruz" title="FioCruz" state={state} importData={importData} />        
         <DataSection type="bpa" title="BPA" state={state} importData={importData} extractData={extractData} />
 
         <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>

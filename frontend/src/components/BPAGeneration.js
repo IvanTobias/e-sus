@@ -1,225 +1,194 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Download, Trash2 } from 'react-feather';
+import io from 'socket.io-client';
 import './BPAGeneration.css';
 
 const API_BASE_URL = `http://${window.location.hostname}:5000/api`;
+const SOCKET_URL = `http://${window.location.hostname}:5000`;
 
 function BPAGeneration() {
-    const [loading, setLoading] = useState(false);
-    const [bpaEmExecucao, setBpaEmExecucao] = useState(false);
-    const [message, setMessage] = useState('');
-    const [error, setError] = useState('');
-    const [generatedFiles, setGeneratedFiles] = useState([]);
-    const [loadingFiles, setLoadingFiles] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [bpaEmExecucao, setBpaEmExecucao] = useState(false);
+  const [message, setMessage] = useState('');
+  const [error, setError] = useState('');
+  const [generatedFiles, setGeneratedFiles] = useState([]);
+  const [loadingFiles, setLoadingFiles] = useState(false);
+  const [progressoCEP, setProgressoCEP] = useState(0);
 
-    const [registrosAtualizados, setRegistrosAtualizados] = useState(0);
-    const [totalRegistros, setTotalRegistros] = useState(0);
-    const [cepSelecionado, setCepSelecionado] = useState('');
-    const [enderecosCandidatos, setEnderecosCandidatos] = useState([]);
-    const [mostrarEscolhaEndereco, setMostrarEscolhaEndereco] = useState(false);
+  const socket = io(SOCKET_URL);
 
-    const fetchGeneratedFiles = async () => {
-        setLoadingFiles(true);
-        setError('');
-        try {
-            const response = await axios.get(`${API_BASE_URL}/list-bpa-files`);
-            if (response.data && Array.isArray(response.data.files)) {
-                setGeneratedFiles(response.data.files);
-            } else {
-                throw new Error(response.data.error || 'Erro ao listar arquivos BPA.');
-            }
-        } catch (err) {
-            setError(err.message || 'Falha ao conectar com o servidor.');
-            setGeneratedFiles([]);
-        } finally {
-            setLoadingFiles(false);
-        }
+  useEffect(() => {
+    fetchGeneratedFiles();
+    verificarStatusBPA();
+
+    const interval = setInterval(() => verificarStatusBPA(), 3000);
+    socket.on('progress_update', ({ tipo, percentual }) => {
+      if (tipo === 'cep') setProgressoCEP(percentual);
+    });
+
+    return () => {
+      clearInterval(interval);
+      socket.disconnect();
     };
+  }, []);
 
-    const verificarStatusBPA = async () => {
-        try {
-            const response = await axios.get(`${API_BASE_URL}/bpa-status`);
-            setBpaEmExecucao(response.data?.running || false);
-        } catch (err) {
-            console.error('Erro ao verificar status do BPA:', err.message);
-        }
-    };
+  const fetchGeneratedFiles = async () => {
+    setLoadingFiles(true);
+    try {
+      const response = await axios.get(`${API_BASE_URL}/list-bpa-files`);
+      setGeneratedFiles(response.data?.files || []);
+    } catch (err) {
+      setError('Erro ao listar arquivos BPA.');
+    } finally {
+      setLoadingFiles(false);
+    }
+  };
 
-    useEffect(() => {
-        fetchGeneratedFiles();
-        verificarStatusBPA();
+  const verificarStatusBPA = async () => {
+    try {
+      const response = await axios.get(`${API_BASE_URL}/bpa-status`);
+      setBpaEmExecucao(response.data?.running || false);
+    } catch {
+      setBpaEmExecucao(false);
+    }
+  };
 
-        const interval = setInterval(() => {
-            verificarStatusBPA();
-        }, 3000);
+  const handleGenerateBPA = async () => {
+    setLoading(true);
+    setMessage('');
+    setError('');
+    setBpaEmExecucao(true);
 
-        return () => clearInterval(interval);
-    }, []);
+    try {
+      const response = await axios.post(`${API_BASE_URL}/gerar-bpa`, {}, { responseType: 'blob' });
+      const blob = new Blob([response.data]);
+      const contentDisposition = response.headers['content-disposition'];
+      let filename = 'bpa_gerado.txt';
 
-    const handleGenerateBPA = async () => {
-        setLoading(true);
-        setError('');
-        setMessage('');
-        setBpaEmExecucao(true);
+      const match = contentDisposition?.match(/filename="?(.+?)"?/);
+      if (match?.[1]) filename = match[1];
 
-        try {
-            const response = await axios.post(`${API_BASE_URL}/gerar-bpa`, {}, { responseType: 'blob' });
-            const contentType = response.headers['content-type'];
-            const isPlainText = contentType?.includes('text/plain');
-            const blob = new Blob([response.data]);
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', filename);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(url);
 
-            if (!isPlainText || blob.size < 50) {
-                const text = await blob.text();
-                throw new Error(text || 'Arquivo vazio ou resposta inválida');
-            }
+      setMessage(`Arquivo ${filename} gerado com sucesso.`);
+      fetchGeneratedFiles();
+    } catch (err) {
+      setError('Erro ao gerar BPA.');
+    } finally {
+      setLoading(false);
+      setBpaEmExecucao(false);
+    }
+  };
 
-            let filename = 'bpa_gerado.txt';
-            const contentDisposition = response.headers['content-disposition'];
-            const match = contentDisposition?.match(/filename="?(.+?)"?/);
-            if (match?.[1]) filename = match[1];
+  const handleDownloadFile = async (filename) => {
+    try {
+      const response = await axios.get(`${API_BASE_URL}/download-bpa-file`, {
+        params: { filename },
+        responseType: 'blob',
+      });
+      const url = window.URL.createObjectURL(response.data);
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', filename);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(url);
+    } catch {
+      setError(`Erro ao baixar o arquivo ${filename}`);
+    }
+  };
 
-            const url = window.URL.createObjectURL(blob);
-            const link = document.createElement('a');
-            link.href = url;
-            link.setAttribute('download', filename);
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-            window.URL.revokeObjectURL(url);
+  const handleDeleteFile = async (filename) => {
+    try {
+      await axios.delete(`${API_BASE_URL}/delete-bpa-file`, {
+        params: { filename },
+      });
+      setGeneratedFiles(generatedFiles.filter(f => f !== filename));
+      setMessage(`Arquivo ${filename} deletado.`);
+    } catch {
+      setError('Erro ao deletar arquivo.');
+    }
+  };
 
-            setMessage(`Arquivo ${filename} gerado com sucesso.`);
-            fetchGeneratedFiles();
-        } catch (err) {
-            setError(err.message || 'Falha ao conectar com o servidor.');
-        } finally {
-            setLoading(false);
-            setBpaEmExecucao(false);
-        }
-    };
+  const AtualizarCEP = async () => {
+    setMessage('');
+    setError('');
+    setProgressoCEP(0);
+    try {
+      await axios.get(`${API_BASE_URL}/corrigir-ceps`);
+    } catch {
+      setError('Erro ao atualizar CEP.');
+    }
+  };
 
-    const handleDownloadFile = async (filename) => {
-        try {
-            const response = await axios.get(`${API_BASE_URL}/download-bpa-file`, {
-                params: { filename },
-                responseType: 'blob',
-            });
+  return (
+    <div className="bpa-generation-container container">
+      <h1>Gerar Arquivo BPA</h1>
+      <p>Clique abaixo para gerar o arquivo BPA.</p>
 
-            const contentType = response.headers['content-type'];
-            const blob = new Blob([response.data]);
+      {message && <div className="success-message">{message}</div>}
+      {error && <div className="error-message">Erro: {error}</div>}
 
-            if (!contentType?.includes('text/plain') || blob.size < 50) {
-                const text = await blob.text();
-                throw new Error(text || 'Erro ao baixar o arquivo.');
-            }
+      <button
+        onClick={handleGenerateBPA}
+        disabled={loading || bpaEmExecucao}
+        className="botao-gerar-bpa"
+      >
+        {loading ? 'Gerando BPA...' : 'Gerar e Baixar BPA'}
+      </button>
 
-            const url = window.URL.createObjectURL(blob);
-            const link = document.createElement('a');
-            link.href = url;
-            link.setAttribute('download', filename);
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-            window.URL.revokeObjectURL(url);
-        } catch (err) {
-            setError(`Falha ao baixar o arquivo ${filename}: ${err.message}`);
-        }
-    };
+      <button
+        onClick={AtualizarCEP}
+        disabled={bpaEmExecucao}
+        className="botao-gerar-bpa"
+      >
+        Atualizar CEP
+      </button>
 
-    const handleDeleteFile = async (filename) => {
-        try {
-            await axios.delete(`${API_BASE_URL}/delete-bpa-file`, {
-                params: { filename },
-            });
-            setGeneratedFiles(files => files.filter(f => f !== filename));
-            setMessage(`Arquivo ${filename} deletado com sucesso.`);
-        } catch (err) {
-            setError(`Erro ao deletar o arquivo ${filename}`);
-        }
-    };
-
-    const AtualizarCEP = async () => {
-        setRegistrosAtualizados(0);
-        setTotalRegistros(0);
-        setMostrarEscolhaEndereco(false);
-        setError('');
-
-        try {
-            const response = await axios.get(`${API_BASE_URL}/corrigir-ceps`);
-            const dados = response.data;
-
-            if (dados?.multiplo) {
-                setCepSelecionado(dados.cep);
-                setEnderecosCandidatos(dados.candidatos);
-                setMostrarEscolhaEndereco(true);
-            } else {
-                setMessage('CEPs atualizados com sucesso.');
-            }
-        } catch (error) {
-            setError('Erro ao Atualizar CEP');
-        }
-    };
-
-    return (
-        <div className="bpa-generation-container container">
-            <h1>Gerar Arquivo BPA</h1>
-            <p>Clique abaixo para gerar o arquivo BPA.</p>
-
-            {message && <div className="success-message">{message}</div>}
-            {error && <div className="error-message">Erro: {error}</div>}
-
-            <button
-                onClick={handleGenerateBPA}
-                disabled={loading || bpaEmExecucao}
-                className="botao-gerar-bpa"
-            >
-                {loading || bpaEmExecucao ? 'Gerando BPA...' : 'Gerar e Baixar BPA'}
-            </button>
-
-            <button
-                onClick={AtualizarCEP}
-                disabled={loading || bpaEmExecucao}
-                className="botao-gerar-bpa"
-            >
-                {loading ? 'Atualizando CEP...' : 'Atualizar CEP'}
-            </button>
-
-            <div className="generated-files-section">
-                <h2>Arquivos BPA Gerados</h2>
-                {loadingFiles ? (
-                    <p>Carregando...</p>
-                ) : generatedFiles.length > 0 ? (
-                    <ul className="file-list">
-                        {generatedFiles.map(file => (
-                            <li key={file} className="file-item">
-                                <span>{file}</span>
-                                <div className="file-actions">
-                                    <button
-                                        onClick={() => handleDownloadFile(file)}
-                                        className="botao-icon"
-                                        disabled={bpaEmExecucao}
-                                        title="Baixar"
-                                    >
-                                        <Download size={16} />
-                                    </button>
-                                    <button
-                                        onClick={() => handleDeleteFile(file)}
-                                        className="botao-icon"
-                                        disabled={bpaEmExecucao}
-                                        title="Deletar"
-                                    >
-                                        <Trash2 size={16} />
-                                    </button>
-                                </div>
-                            </li>
-                        ))}
-                    </ul>
-                ) : (
-                    <p>Nenhum arquivo encontrado.</p>
-                )}
-            </div>
+      {progressoCEP > 0 && progressoCEP < 100 && (
+        <div className="progress-bar-container">
+          <div className="progress-bar">
+            <div className="progress-fill" style={{ width: `${progressoCEP}%` }}></div>
+          </div>
+          <span>{progressoCEP}%</span>
         </div>
-    );
+      )}
+
+      <div className="generated-files-section">
+        <h2>Arquivos BPA Gerados</h2>
+        {loadingFiles ? (
+          <p>Carregando...</p>
+        ) : generatedFiles.length > 0 ? (
+          <ul className="file-list">
+            {generatedFiles.map(file => (
+              <li key={file} className="file-item">
+                <span>{file}</span>
+                <div className="file-actions">
+                  <button onClick={() => handleDownloadFile(file)} className="botao-icon" disabled={bpaEmExecucao}>
+                    <Download size={16} />
+                  </button>
+                  <button onClick={() => handleDeleteFile(file)} className="botao-icon" disabled={bpaEmExecucao}>
+                    <Trash2 size={16} />
+                  </button>
+                </div>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p>Nenhum arquivo encontrado.</p>
+        )}
+      </div>
+    </div>
+  );
 }
 
 export default BPAGeneration;
