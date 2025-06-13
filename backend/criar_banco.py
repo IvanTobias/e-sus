@@ -35,7 +35,7 @@ def ensure_database_exists(dbname, user, password, host='localhost', port='5432'
 
 
 from sqlalchemy import text, inspect
-from Conexões import get_local_engine
+from Conexoes import get_local_engine # Changed from Conexões
 
 def ensure_tables_exist():
     engine = get_local_engine()

@@ -1,6 +1,6 @@
 # backend/Gerar_BPA.py
 from socketio_config import socketio  # Importe o socketio do módulo de configuração
-from Conexões import get_local_engine, log_message
+from Conexoes import get_local_engine, log_message
 from sqlalchemy import text
 import logging
 import json
@@ -9,12 +9,16 @@ import time
 import xml.etree.ElementTree as ET
 
 # Configuração do log
+# Consider using the application's logger if available and configured
+# For now, using a basicConfig that might be overridden if the app sets up logging earlier.
 logging.basicConfig(
-    filename='logs_ceps.txt',
+    filename='logs_bpa_gerar.txt', # Changed log filename to be more specific
     level=logging.INFO,
-    format='%(asctime)s - %(levelname)s - %(message)s',
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
     encoding='utf-8'
 )
+logger = logging.getLogger(__name__)
+
 
 def limpar_logradouro(logradouro):
     if logradouro:
@@ -26,9 +30,9 @@ def limpar_logradouro(logradouro):
 def buscar_dados_opencep(cep):
     url = f'https://opencep.com/v1/{cep}.json'
     try:
-        print(f"🔁 Tentando OpenCEP para o CEP: {cep}")
+        logger.info(f"Tentando OpenCEP para o CEP: {cep}")
         response = requests.get(url, timeout=2)
-        time.sleep(0.1)
+        time.sleep(0.1) # Consider if this sleep is necessary or can be removed/reduced
         if response.status_code == 200:
             data = response.json()
             if not data.get('erro'):
@@ -39,15 +43,15 @@ def buscar_dados_opencep(cep):
                     'ibge': data.get('ibge', '')[:6] if data.get('ibge') else ''
                 }
     except Exception as e:
-        print(f"❌ Erro OpenCEP: {e}")
+        logger.error(f"Erro OpenCEP para CEP {cep}: {e}")
     return None
 
 def buscar_dados_viacep(cep):
     url = f'https://viacep.com.br/ws/{cep}/json/'
     try:
-        print(f"🔁 Tentando ViaCEP para o CEP: {cep}")
+        logger.info(f"Tentando ViaCEP para o CEP: {cep}")
         response = requests.get(url, timeout=2)
-        time.sleep(0.5)
+        time.sleep(0.5) # Consider if this sleep is necessary
         if response.status_code == 200:
             data = response.json()
             if not data.get('erro'):
@@ -58,26 +62,26 @@ def buscar_dados_viacep(cep):
                     'ibge': data.get('ibge', '')[:6] if data.get('ibge') else ''
                 }
     except Exception as e:
-        print(f"❌ Erro ViaCEP: {e}")
+        logger.error(f"Erro ViaCEP para CEP {cep}: {e}")
     return None
 
 def buscar_dados_apicep(cep_com_traco):
     url = f'https://cdn.apicep.com/file/apicep/{cep_com_traco}.json'
     try:
-        print(f"🔁 Tentando API CEP para o CEP: {cep_com_traco}")
+        logger.info(f"Tentando API CEP para o CEP: {cep_com_traco}")
         response = requests.get(url, timeout=2)
-        time.sleep(0.5)
+        time.sleep(0.5) # Consider if this sleep is necessary
         if response.status_code == 200:
             data = response.json()
-            if data.get('status') == 200:
+            if data.get('status') == 200: # Check for successful status from API
                 return {
                     'logradouro': limpar_logradouro(data.get('address', '')),
                     'bairro': data.get('district', ''),
                     'cep': data.get('code', cep_com_traco).replace('-', ''),
-                    'ibge': ''
+                    'ibge': '' # API CEP does not seem to provide IBGE directly
                 }
     except Exception as e:
-        print(f"❌ Erro API CEP: {e}")
+        logger.error(f"Erro API CEP para {cep_com_traco}: {e}")
     return None
 
 
@@ -87,159 +91,137 @@ def buscar_por_logradouro_estado_cidade_rua(uf, cidade, logradouro, bairro=None,
 
     url = f'https://viacep.com.br/ws/{uf}/{cidade}/{logradouro}/json/'
     try:
-        print(f"🔁 Tentando busca por logradouro ViaCEP: {logradouro}, Cidade: {cidade}, UF: {uf}")
+        logger.info(f"Tentando busca por logradouro ViaCEP: {logradouro}, Cidade: {cidade}, UF: {uf}")
         response = requests.get(url, timeout=2)
-        time.sleep(0.5)
+        time.sleep(0.5) # Consider if this sleep is necessary
         if response.status_code == 200:
             dados = response.json()
-            if isinstance(dados, list) and dados:
+            if isinstance(dados, list) and dados: # Ensure it's a list and not empty
+                # Prioritize match by bairro if provided
                 if bairro:
                     bairro_lower = bairro.lower().strip()
                     for d in dados:
                         if bairro_lower == d.get('bairro', '').lower().strip():
-                            return [d]
+                            return [d] # Return the first match by bairro
 
+                # If no bairro match or bairro not provided, prioritize by IBGE prefix
                 if cod_ibge_prefix:
                     for d in dados:
                         if d.get('ibge', '').startswith(cod_ibge_prefix):
-                            return [d]
+                            return [d] # Return the first match by IBGE prefix
 
-                return dados
+                return dados # Return all if no specific match found by bairro or IBGE
     except Exception as e:
-        print(f"❌ Erro na busca por logradouro ViaCEP: {e}")
-
+        logger.error(f"Erro na busca por logradouro ViaCEP: {e}")
+    return [] # Return empty list if error or no data
 
 
 def buscar_dados_cep(cep, connection=None):
-    cep = ''.join(filter(str.isdigit, str(cep)))
+    cep = ''.join(filter(str.isdigit, str(cep))) # Ensure CEP contains only digits
     if len(cep) != 8:
+        logger.warning(f"CEP inválido fornecido: {cep}")
         return None
 
+    # 1ª TENTATIVA: OpenCEP (moved up as it seems to be preferred or faster)
+    info = buscar_dados_opencep(cep)
+    if info:
+        logger.info(f"Dados encontrados para CEP {cep} via OpenCEP.")
+        return info
+
+    # 2ª TENTATIVA: ViaCEP (busca normal pelo CEP)
+    info = buscar_dados_viacep(cep)
+    if info:
+        logger.info(f"Dados encontrados para CEP {cep} via ViaCEP.")
+        return info
+
+    # 3ª TENTATIVA: ApiCep
+    info = buscar_dados_apicep(f"{cep[:5]}-{cep[5:]}") # API CEP expects hyphenated format
+    if info:
+        logger.info(f"Dados encontrados para CEP {cep} via ApiCep.")
+        return info
+
+    # Fallback to local DB searches if connection is provided and external APIs failed
     if connection:
         try:
-            # 1ª TENTATIVA: Buscar no banco local correios_ceps pelo CEP diretamente
-            result = connection.execute(
-                text("""
-                    SELECT logradouro, bairro, cep, ibge
-                    FROM correios_ceps
-                    WHERE cep = :cep
-                    LIMIT 1
-                """),
+            # 4ª TENTATIVA: Buscar no banco local correios_ceps pelo CEP diretamente
+            result_local_direct = connection.execute(
+                text("SELECT logradouro, bairro, cep, ibge FROM correios_ceps WHERE cep = :cep LIMIT 1"),
                 {"cep": cep}
             ).fetchone()
 
-            if result:
-                logradouro, bairro, cep_encontrado, ibge = result
-
-                print(f"✅ Encontrado no banco Local direto: {cep, logradouro, bairro, ibge}")
-
+            if result_local_direct:
+                logradouro, bairro, cep_encontrado, ibge = result_local_direct
+                logger.info(f"Dados encontrados para CEP {cep} no banco local (correios_ceps direto).")
                 return {
-                    'logradouro': limpar_logradouro(logradouro),
-                    'bairro': bairro,
-                    'cep': cep_encontrado,
-                    'ibge': str(ibge)[:6] if ibge is not None else ''
+                    'logradouro': limpar_logradouro(logradouro), 'bairro': bairro,
+                    'cep': cep_encontrado, 'ibge': str(ibge)[:6] if ibge else ''
                 }
         except Exception as e:
-            print(f"❌ Erro ao buscar no banco correios_ceps pelo CEP: {e}")
+            logger.error(f"Erro ao buscar no banco correios_ceps pelo CEP {cep}: {e}")
 
-    # 2ª TENTATIVA: OpenCEP
-    info = buscar_dados_opencep(cep)
-    if info:
-        return info
-
-    if connection:
         try:
-            # 3ª TENTATIVA: Busca no tb_bpa para tentar montar logradouro + UF + cidade
-            result = connection.execute(
+            # 5ª TENTATIVA: Busca no tb_bpa para tentar montar logradouro + UF + cidade, then search
+            result_bpa = connection.execute(
                 text("SELECT prd_end_pcnte, prd_bairro_pcnte, prd_ibge FROM tb_bpa WHERE prd_cep_pcnte = :cep LIMIT 1"),
                 {"cep": cep}
             ).fetchone()
 
-            if result:
-                logradouro, bairro, prd_ibge = result
-
-                if prd_ibge:
+            if result_bpa:
+                logradouro_bpa, bairro_bpa, prd_ibge_bpa = result_bpa
+                if prd_ibge_bpa:
                     ibge_info = connection.execute(
                         text("SELECT municipio, uf FROM tb_ibge WHERE ibge LIKE :prefixo LIMIT 1"),
-                        {"prefixo": f"{prd_ibge[:6]}%"}
+                        {"prefixo": f"{prd_ibge_bpa[:6]}%"} # Ensure prefix is 6 digits
                     ).fetchone()
-
                     if ibge_info:
                         municipio, uf = ibge_info
+                        # 5A: Buscar no correios_ceps por logradouro, uf, cidade
+                        result_local_logradouro = connection.execute(
+                            text("SELECT logradouro, bairro, cep, ibge FROM correios_ceps WHERE unaccent(logradouro) ILIKE unaccent(:logradouro) AND ibge = :ibge AND uf = :uf LIMIT 1"),
+                            {"logradouro": f"%{limpar_logradouro(logradouro_bpa)}%", "ibge": prd_ibge_bpa[:6], "uf": uf}
+                        ).fetchone()
+                        if result_local_logradouro:
+                            log_local, bairro_local, cep_local, ibge_local = result_local_logradouro
+                            logger.info(f"Dados encontrados para CEP {cep} no banco local (correios_ceps por logradouro).")
+                            return {'logradouro': limpar_logradouro(log_local), 'bairro': bairro_local, 'cep': cep_local, 'ibge': str(ibge_local)[:6] if ibge_local else ''}
 
-                        # TENTATIVA 3A: Buscar primeiro no banco correios_ceps por UF, cidade, logradouro
-                        try:
-                            candidatos = connection.execute(
-                                text("""
-                                    SELECT logradouro, bairro, cep, ibge
-                                    FROM correios_ceps
-                                    WHERE unaccent(logradouro) ILIKE unaccent(:logradouro)
-                                    AND ibge = :ibge
-                                    AND uf = :uf
-                                    LIMIT 1
-                                """),
-                                {"logradouro": f"%{logradouro}%", "ibge": prd_ibge[:6], "uf": uf}
-                            ).fetchone()
-
-                            if candidatos:
-                                logradouro_local, bairro_local, cep_local, ibge_local = candidatos
-                                print(f"✅ Encontrado no banco Local por logradouro: {logradouro_local}, {bairro_local}, {cep_local}, {ibge_local}")
-                                return {
-                                    'logradouro': limpar_logradouro(logradouro_local),
-                                    'bairro': bairro_local,
-                                    'cep': cep_local,
-                                    'ibge': str(ibge_local)[:6] if ibge_local else ''
-                                }
-                        except Exception as e:
-                            print(f"❌ Erro na busca local correios_ceps por logradouro: {e}")
-
-                        # TENTATIVA 3B: Se não achou no banco, buscar no ViaCEP usando UF, cidade, logradouro
-                        candidatos = buscar_por_logradouro_estado_cidade_rua(
-                            uf=uf, cidade=municipio, logradouro=logradouro,
-                            bairro=bairro, cod_ibge_prefix=prd_ibge[:6]
-                        )
-                        if candidatos:
-                            escolhido = candidatos[0]
-                            novo_cep = escolhido.get('cep', cep).replace('-', '')
-                            if len(novo_cep) != 8:
-                                novo_cep = cep
+                        # 5B: ViaCEP por logradouro, uf, cidade
+                        candidatos_viacep = buscar_por_logradouro_estado_cidade_rua(uf, municipio, limpar_logradouro(logradouro_bpa), bairro_bpa, prd_ibge_bpa[:6])
+                        if candidatos_viacep:
+                            escolhido = candidatos_viacep[0]
+                            logger.info(f"Dados encontrados para CEP {cep} via ViaCEP por logradouro.")
                             return {
                                 'logradouro': limpar_logradouro(escolhido.get('logradouro', '')),
                                 'bairro': escolhido.get('bairro', ''),
-                                'cep': novo_cep,
+                                'cep': escolhido.get('cep', cep).replace('-', ''),
                                 'ibge': escolhido.get('ibge', '')[:6] if escolhido.get('ibge') else ''
                             }
         except Exception as e:
-            print(f"❌ Erro busca local tb_bpa + via correios_ceps/viacep: {e}")
+            logger.error(f"Erro na busca local tb_bpa + correios_ceps/ViaCEP para CEP {cep}: {e}")
 
-    # 4ª TENTATIVA: ViaCEP (busca normal pelo CEP)
-    info = buscar_dados_viacep(cep)
-    if info:
-        return info
-
-    # 5ª TENTATIVA: ApiCep
-    info = buscar_dados_apicep(f"{cep[:5]}-{cep[5:]}")
-    if info:
-        return info
-
+    logger.warning(f"Nenhuma informação encontrada para o CEP {cep} após todas as tentativas.")
     return None
 
 
 def atualizar_enderecos(connection):
-    ceps = connection.execute(text("SELECT DISTINCT prd_cep_pcnte FROM tb_bpa group by 1")).fetchall()
+    # This function is called by a route in bpa_routes.py
+    # It should handle its own transaction if it's a standalone operation.
+    # However, if it's part of a larger transaction managed by the route, then remove commit here.
+    # For now, assuming it should manage its own transaction.
 
-    total = len(ceps)
-    atualizados, substituidos, falhas = 0, 0, 0
+    transaction = None # Initialize transaction variable
+    try:
+        transaction = connection.begin() # Start transaction
 
-    for index, row in enumerate(ceps, 1):
-        cep_original = row[0]
-        info = buscar_dados_cep(cep_original, connection=connection)
+        ceps_query = text("SELECT DISTINCT prd_cep_pcnte FROM tb_bpa WHERE prd_cep_pcnte IS NOT NULL AND prd_cep_pcnte <> '' GROUP BY 1")
+        ceps_result = connection.execute(ceps_query).fetchall()
+        ceps = [row[0] for row in ceps_result] # Extract CEPs from result objects
 
-        if info:
-            novo_cep = info.get('cep', cep_original).replace('-', '')
-            if len(novo_cep) != 8:
-                novo_cep = cep_original
+        total = len(ceps)
+        atualizados, substituidos, falhas = 0, 0, 0
+        logger.info(f"Iniciando atualização de endereços para {total} CEPs únicos.")
 
+<<<<<<< HEAD
             update_fields = []
             params = {'cep_antigo': cep_original, 'novo_cep': novo_cep}
 
@@ -266,38 +248,111 @@ def atualizar_enderecos(connection):
 
             update_result = connection.execute(text(update_sql), params)
 
+=======
+        for index, cep_original in enumerate(ceps, 1):
+            info = buscar_dados_cep(cep_original, connection=connection) # Pass connection for local lookups
+>>>>>>> a3585ff1f4888d9bf1655adc8eefdfde08776d29
 
-            if update_result.rowcount > 0:
-                if novo_cep != cep_original:
-                    substituidos += 1
-                    msg = f"✅ CEP {cep_original} atualizado para {novo_cep}: {info.get('logradouro')}, {info.get('bairro')} (IBGE: {info.get('ibge', '')})"
+            if info:
+                novo_cep = info.get('cep', cep_original).replace('-', '')
+                if len(novo_cep) != 8: # Basic validation for new CEP
+                    novo_cep = cep_original
+
+                update_fields = []
+                params = {'cep_antigo': cep_original}
+
+                # Only add fields to update if they are present in `info` and different from existing
+                # This requires fetching current values or deciding to always update if info is present.
+                # For simplicity, updating if info is present.
+                if info.get('logradouro'):
+                    update_fields.append("prd_end_pcnte = :logradouro")
+                    params['logradouro'] = info['logradouro']
+                if info.get('bairro'):
+                    update_fields.append("prd_bairro_pcnte = :bairro")
+                    params['bairro'] = info['bairro']
+                if info.get('ibge'):
+                    update_fields.append("prd_ibge = :ibge")
+                    params['ibge'] = info['ibge']
+
+                # Always include the new CEP in the update, even if it's the same (for consistency)
+                update_fields.append("prd_cep_pcnte = :novo_cep")
+                params['novo_cep'] = novo_cep
+
+                if update_fields: # Only execute update if there are fields to update
+                    update_sql = f"UPDATE tb_bpa SET {', '.join(update_fields)} WHERE prd_cep_pcnte = :cep_antigo"
+                    update_result = connection.execute(text(update_sql), params)
+
+                    if update_result.rowcount > 0:
+                        if novo_cep != cep_original:
+                            substituidos += 1
+                            logger.info(f"CEP {cep_original} atualizado para {novo_cep}: {info.get('logradouro')}, {info.get('bairro')} (IBGE: {info.get('ibge', '')})")
+                        else:
+                            atualizados += 1
+                            logger.info(f"CEP {cep_original} dados atualizados: {info.get('logradouro')}, {info.get('bairro')} (IBGE: {info.get('ibge', '')})")
+                    else:
+                        # This might happen if the CEP was already updated by a previous iteration if multiple original CEPs map to the same new_cep
+                        logger.warning(f"Nenhuma linha atualizada para CEP {cep_original}. Pode já ter sido processado ou não encontrado.")
                 else:
-                    atualizados += 1
-                    msg = f"✅ CEP {cep_original} atualizado: {info.get('logradouro')}, {info.get('bairro')} (IBGE: {info.get('ibge', '')})"
-                print(msg)
-                logging.info(msg)
+                    logger.info(f"Nenhuma informação nova para atualizar o CEP {cep_original}.")
             else:
                 falhas += 1
-                msg = f"⚠️ Nenhuma linha atualizada para CEP {cep_original}: talvez não encontrado no tb_bpa."
-                print(msg)
-                logging.warning(msg)
+                logger.warning(f"Falha ao buscar dados para o CEP {cep_original}.")
 
+            progresso = (index / total) * 100
+            logger.info(f"Progresso: {index}/{total} ({progresso:.2f}%)")
+            socketio.emit('progress_update', {'tipo': 'cep', 'percentual': int(progresso)})
 
-        progresso = (index / total) * 100
-        print(f"📊 Progresso: {index}/{total} ({progresso:.2f}%)")
-        socketio.emit('progress_update', {'tipo': 'cep', 'percentual': int(progresso)})
+        if transaction: # Commit if transaction was started
+            transaction.commit()
+        logger.info(f"Atualização de endereços concluída. Commit realizado.")
 
-    resumo = f"🔚 Total: {total} | Atualizados: {atualizados} | Substituídos: {substituidos} | Falhas: {falhas}"
-    print(resumo)
-    logging.info(resumo)
-    socketio.emit('progress_update', {'tipo': 'cep', 'percentual': 100})
-
-    try:
-        connection.commit()
     except Exception as e:
-        print(f"⚠️ Não foi possível dar commit automaticamente: {e}")
+        if transaction: # Rollback on error
+            transaction.rollback()
+        logger.error(f"Erro durante atualização de endereços: {e}. Rollback realizado.")
+        socketio.emit('progress_update', {'tipo': 'cep', 'percentual': progresso, 'error': str(e)}) # Send error to client
+        raise # Re-raise the exception to be caught by the route handler
+
+    finally:
+        resumo = f"Total CEPs processados: {total} | Atualizados (dados): {atualizados} | Substituídos (CEP): {substituidos} | Falhas (busca): {falhas}"
+        logger.info(resumo)
+        # Ensure final progress is emitted even if loop was empty
+        socketio.emit('progress_update', {'tipo': 'cep', 'percentual': 100})
 
 
+def update_bpa_address_by_cep(cep: str, logradouro: str, bairro: str) -> bool:
+    """
+    Updates the address (logradouro and bairro) in tb_bpa for a given CEP.
+    """
+    engine = get_local_engine()
+    try:
+        with engine.connect() as conn:
+            transaction = conn.begin()
+            try:
+                update_query = text("""
+                    UPDATE tb_bpa
+                    SET prd_end_pcnte = :logradouro,
+                        prd_bairro_pcnte = :bairro
+                    WHERE prd_cep_pcnte = :cep
+                """)
+                result = conn.execute(update_query, {
+                    'logradouro': logradouro,
+                    'bairro': bairro,
+                    'cep': cep
+                })
+                transaction.commit()
+                logger.info(f"Endereço atualizado para CEP {cep}. Linhas afetadas: {result.rowcount}")
+                return True
+            except Exception as e_inner:
+                if transaction.is_active:
+                    transaction.rollback()
+                logger.error(f"Erro ao executar UPDATE para CEP {cep}: {e_inner}")
+                return False
+    except Exception as e_outer:
+        logger.error(f"Erro de conexão ao tentar atualizar CEP {cep}: {e_outer}")
+        return False
+
+# ... (rest of the Gerar_BPA.py file, including format_field, format_bpa_row, etc.)
 def load_db_config(config_path='config.json'):
     with open(config_path, 'r') as config_file:
         return json.load(config_file)
@@ -378,8 +433,8 @@ def format_bpa_row(row):
             'PRD_UID': format_field(row.get('PRD_UID'), 7, 'NUM', prd_org=prd_org),
             'PRD_CMP': format_field(row.get('PRD_CMP'), 6, 'NUM', prd_org=prd_org),
             'PRD_CBO': format_field(row.get('PRD_CBO'), 6, 'ALFA', prd_org=prd_org),
-            'PRD_FLH': format_field(row.get('PRD_FLH'), 3, 'NUM', prd_org=prd_org),
-            'PRD_SEQ': format_field(row.get('PRD_SEQ'), 2, 'NUM', prd_org=prd_org),
+            'PRD_FLH': format_field(row.get('PRD_FLH'), 3, 'NUM', prd_org=prd_org, field_name='PRD_FLH'),
+            'PRD_SEQ': format_field(row.get('PRD_SEQ'), 2, 'NUM', prd_org=prd_org, field_name='PRD_SEQ'),
             'PRD_PA': format_field(row.get('PRD_PA'), 10, 'NUM', prd_org=prd_org),
             'PRD_IDADE': format_field(row.get('PRD_IDADE'), 3, 'NUM', prd_org=prd_org),
             'PRD_QT_P': format_field(row.get('PRD_QT_P'), 6, 'NUM', prd_org=prd_org, field_name='PRD_QT_P'),
@@ -396,15 +451,15 @@ def format_bpa_row(row):
         'PRD_CNSMED': format_field(row.get('PRD_CNSMED'), 15, 'NUM', prd_org=row.get('PRD_ORG')),
         'PRD_CBO': format_field(row.get('PRD_CBO'), 6, 'NUM', prd_org=row.get('PRD_ORG')),
         'PRD_DTATEN': format_field(row.get('PRD_DTATEN'), 8, 'NUM', prd_org=row.get('PRD_ORG')),        
-        'PRD_FLH': format_field(row.get('PRD_FLH'), 3, 'NUM', prd_org=row.get('PRD_ORG')),
-        'PRD_SEQ': format_field(row.get('PRD_SEQ'), 2, 'NUM', prd_org=row.get('PRD_ORG')),
+        'PRD_FLH': format_field(row.get('PRD_FLH'), 3, 'NUM', prd_org=row.get('PRD_ORG'), field_name='PRD_FLH'),
+        'PRD_SEQ': format_field(row.get('PRD_SEQ'), 2, 'NUM', prd_org=row.get('PRD_ORG'), field_name='PRD_SEQ'),
         'PRD_PA': format_field(row.get('PRD_PA'), 10, 'NUM', prd_org=row.get('PRD_ORG')),
         'PRD_CNSPAC': format_field(row.get('PRD_CNSPAC'), 15, 'NUM', prd_org=row.get('PRD_ORG')),
         'PRD_SEXO': format_field(row.get('PRD_SEXO'), 1, 'ALFA', prd_org=row.get('PRD_ORG')),        
         'PRD_IBGE': format_field(row.get('PRD_IBGE'), 6, 'NUM', prd_org=row.get('PRD_ORG')),        
         'PRD_CID': format_field(row.get('PRD_CID'), 4, 'ALFA', prd_org=row.get('PRD_ORG')),
         'PRD_IDADE': format_field(row.get('PRD_IDADE'), 3, 'NUM', prd_org=row.get('PRD_ORG')),
-        'PRD_QT_P': format_field(row.get('PRD_QT_P'), 6, 'NUM', prd_org=row.get('PRD_ORG')),
+        'PRD_QT_P': format_field(row.get('PRD_QT_P'), 6, 'NUM', prd_org=row.get('PRD_ORG'), field_name='PRD_QT_P'),
         'PRD_CATEN': format_field(row.get('PRD_CATEN'), 2, 'NUM', prd_org=row.get('PRD_ORG')),
         'PRD_NAUT': format_field(row.get('PRD_NAUT'), 13, 'ALFA', prd_org=row.get('PRD_ORG')),
         'PRD_ORG': format_field(row.get('PRD_ORG'), 3, 'ALFA', prd_org=row.get('PRD_ORG')),
@@ -1031,4 +1086,3 @@ def processar_bpa():
 def update_progress(progress):
     # Emite o evento de progresso para o frontend via Socket.IO
     socketio.emit('progress_update', {'tipo': 'bpa', 'percentual': progress})
-

@@ -1,7 +1,31 @@
-#app.py
-# Chame o monkey_patch do eventlet antes de qualquer importação
+import eventlet
+eventlet.monkey_patch()
 
+# Standard Library Imports
+import json
 import logging
+import os
+import sys
+
+# Third-Party Imports
+from flask import request, jsonify, send_file, send_from_directory
+from sqlalchemy import text
+from sqlalchemy.exc import SQLAlchemyError
+
+# Local Application Imports
+from init import app, CORS, cache
+from routes.config_routes import config_bp
+from routes.task_routes import task_bp
+from routes.bpa_routes import bpa_bp
+from routes.dashboard_data_routes import dashboard_data_bp
+from routes.import_config_routes import import_config_bp
+from socketio_config import socketio
+from Common import task_status
+from Conexoes import get_local_engine # Changed from Conexões. This will need to be changed if Conexões.py is successfully renamed
+from Consultas import execute_and_store_queries
+from setup import create_database
+from criar_banco import setup_local_database
+
 
 # Define o nível global de logging
 logging.basicConfig(
@@ -13,7 +37,6 @@ logging.basicConfig(
 logging.getLogger("engineio").setLevel(logging.ERROR)
 logging.getLogger("socketio").setLevel(logging.ERROR)
 logging.getLogger("werkzeug").setLevel(logging.ERROR)
-logging.getLogger("werkzeug").setLevel(logging.ERROR)
 
 # Reduz verbosidade de outros loggers conhecidos
 for logger_name in ['werkzeug', 'sqlalchemy', 'engineio', 'socketio']:
@@ -22,32 +45,9 @@ for logger_name in ['werkzeug', 'sqlalchemy', 'engineio', 'socketio']:
 # Logger da aplicação principal
 logger = logging.getLogger(__name__)
 
-import eventlet
-eventlet.monkey_patch()
-
-# Agora podemos importar os outros módulos
-from init import app, CORS
-from socketio_config import socketio,task_clients, emit_end_task,emit_progress,emit_start_task
-import Gerar_BPA
-import pandas as pd
-import threading
-import os
 os.environ.setdefault("ENV", "instalador")
-import importdados
-from Common import task_status, update_task_status
-from Conexões import get_local_engine
-from Consultas import send_progress_update, execute_long_task, get_progress, execute_and_store_queries, progress, progress_lock, update_progress_safely, log_message
-import json
-from flask import make_response, request, jsonify, send_file, send_from_directory
-from sqlalchemy import create_engine, text
-from sqlalchemy.exc import SQLAlchemyError
-import traceback
-from flask_caching import Cache
-from datetime import datetime
-import sys
-from setup import create_database
+
 create_database()
-from criar_banco import setup_local_database
 setup_local_database()
 # Import Blueprints from current project
 
@@ -76,6 +76,11 @@ except ImportError as e:
 CORS(app)
 
 # Register Blueprints from current project
+app.register_blueprint(config_bp, url_prefix='/api')
+app.register_blueprint(task_bp) # url_prefix is in the blueprint itself
+app.register_blueprint(bpa_bp) # url_prefix is in the blueprint itself
+app.register_blueprint(dashboard_data_bp) # url_prefix is in the blueprint itself
+app.register_blueprint(import_config_bp)
 
 # Register Blueprints from Fiocruz project
 if fiocruz_blueprints_available:
@@ -120,8 +125,8 @@ def serve_react_app(path):
 cancel_requests = {}
 
 # Configuração do cache
-cache = Cache(config={'CACHE_TYPE': 'SimpleCache'})
-cache.init_app(app)
+# cache = Cache(config={'CACHE_TYPE': 'SimpleCache'}) # Cache is now initialized in init.py
+# cache.init_app(app) # init.py handles this
 
 # =================== Endpoints da API ===================
 
@@ -238,165 +243,18 @@ def get_task_status_endpoint(tipo):
 def add_header(response):
     response.headers['Cache-Control'] = 'no-store'
     return response
-
-# Função genérica para exportação
-def export_task(tipo, query, filename, sid):
-    try:
-        logger.info(f"[EXPORT-{tipo.upper()}] Iniciando exportação para {tipo} para sid={sid}")
-        emit_start_task(tipo, sid)
-        update_task_status(tipo, "running")
-        with progress_lock:
-            progress[tipo] = 0
-        update_progress_safely(tipo, 0)
-
-        logger.info(f"[EXPORT-{tipo.upper()}] Enviando progresso inicial (0%) para sid={sid}")
-        emit_progress(tipo, 0, sid)
-
-        update_progress_safely(tipo, 25)
-        logger.info(f"[EXPORT-{tipo.upper()}] Enviando progresso (25%) para sid={sid}")
-        emit_progress(tipo, 25, sid)
-
-        engine = get_local_engine()
-        logger.info(f"[EXPORT-{tipo.upper()}] Conectado ao banco de dados, executando query: {query}")
-        df = pd.read_sql(query, engine)
-        logger.info(f"[EXPORT-{tipo.upper()}] Query executada, {len(df)} linhas retornadas")
-
-        update_progress_safely(tipo, 50)
-        logger.info(f"[EXPORT-{tipo.upper()}] Enviando progresso (50%) para sid={sid}")
-        emit_progress(tipo, 50, sid)
-
-        filepath = os.path.join(os.getcwd(), filename)
-        logger.info(f"[EXPORT-{tipo.upper()}] Salvando arquivo em {filepath}")
-        df.to_excel(filepath, index=False)
-        logger.info(f"[EXPORT-{tipo.upper()}] Arquivo salvo com sucesso")
-
-        update_progress_safely(tipo, 100)
-        logger.info(f"[EXPORT-{tipo.upper()}] Enviando progresso final (100%) para sid={sid}")
-        emit_progress(tipo, 100, sid)
-
-        update_task_status(tipo, "completed")
-        log_message(f"Exportação de {tipo} concluída com sucesso.")
-    except Exception as e:
-        error_message = traceback.format_exc()
-        log_message(f"Erro na exportação de {tipo}: {error_message}")
-        update_task_status(tipo, "failed")
-        update_progress_safely(tipo, 0, error=str(e))
-        logger.error(f"[EXPORT-{tipo.upper()}] Erro durante exportação: {str(e)}")
-        emit_progress(tipo, 0, sid, error=str(e))
-    finally:
-        emit_end_task(tipo, sid)
-        logger.info(f"[EXPORT-{tipo.upper()}] Finalizando tarefa para sid={sid}")
-
-# Rota genérica para exportação
-@app.route('/export/<tipo>', methods=['GET'])
-def export_data(tipo):
-    export_configs = {
-        "cadastro": {
-            "query": "SELECT * FROM tb_cadastro",
-            "filename": "cadastros_exportados.xlsx"
-        },
-        "domiciliofcd": {
-            "query": "SELECT * FROM tb_domicilio",
-            "filename": "domiciliofcd_exportadas.xlsx"
-        },
-        "visitas": {
-            "query": "SELECT * FROM tb_visitas",
-            "filename": "visitas_exportadas.xlsx"
-        },
-        "atendimentos": {
-            "query": "SELECT * FROM tb_atendimentos",
-            "filename": "atendimentos_exportadas.xlsx"
-        },
-        "bpa": {
-            "query": "SELECT * FROM tb_bpa",
-            "filename": "bpa.xlsx"
-        },
-        "iaf": {
-            "query": "SELECT * FROM tb_iaf",
-            "filename": "iaf.xlsx"
-        },
-        "pse": {
-            "query": "SELECT * FROM tb_pse",
-            "filename": "pse.xlsx"
-        },
-        "pse_prof": {
-            "query": "SELECT * FROM tb_pse_prof",
-            "filename": "pse_prof.xlsx"
-        }
-    }
-
-    if tipo not in export_configs:
-        logger.error(f"[EXPORT-{tipo.upper()}] Tipo não suportado: {tipo}")
-        return jsonify({"status": "error", "message": f"Tipo {tipo} não suportado."}), 400
-
-    if task_status.get(tipo) == "running":
-        logger.info(f"[EXPORT-{tipo.upper()}] Tarefa para {tipo} já está em execução.")
-        return jsonify({"status": "error", "message": f"Exportação {tipo} já está em execução."}), 400
-
-    # Verificar se há um cliente associado à tarefa
-    sid = task_clients.get(tipo)
-    if not sid:
-        logger.warning(f"[EXPORT-{tipo.upper()}] Nenhum cliente associado à tarefa {tipo}. Usando emissão global.")
-        sid = None  # Fallback para emissão global
-
-    config = export_configs[tipo]
-    logger.info(f"[EXPORT-{tipo.upper()}] Iniciando thread de exportação para tipo={tipo}, sid={sid}")
-    threading.Thread(target=export_task, args=(tipo, config["query"], config["filename"], sid)).start()
-    return jsonify({"status": "started", "message": "Exportação iniciada com sucesso."})
-
-# Rota para baixar o arquivo exportado
-@app.route('/download-exported-file/<tipo>', methods=['GET'])
-def download_exported_file(tipo):
-    export_configs = {
-        "cadastro": "cadastros_exportados.xlsx",
-        "domiciliofcd": "domiciliofcd_exportadas.xlsx",
-        "visitas": "visitas_exportadas.xlsx",
-        "atendimentos": "atendimentos_exportadas.xlsx",
-        "bpa": "bpa.xlsx",
-        "iaf": "iaf.xlsx",
-        "pse": "pse.xlsx",
-        "pse_prof": "pse_prof.xlsx"
-    }
-
-    if tipo not in export_configs:
-        return jsonify({"status": "error", "message": f"Tipo {tipo} não suportado."}), 400
-
-    # Verificar o status da tarefa
-    current_status = task_status.get(tipo)
-    if current_status == "running":
-        return jsonify({"status": "error", "message": "Exportação ainda em andamento. Aguarde a conclusão."}), 400
-    elif current_status == "failed":
-        return jsonify({"status": "error", "message": "Exportação falhou. Verifique os logs para mais detalhes."}), 400
-    elif current_status != "completed":
-        return jsonify({"status": "error", "message": "Nenhuma exportação concluída para este tipo."}), 400
-
-    try:
-        filename = export_configs[tipo]
-        filepath = os.path.join(os.getcwd(), filename)
-        if not os.path.exists(filepath):
-            return jsonify({"status": "error", "message": "Arquivo não encontrado. Tente exportar novamente."}), 404
-
-        response = make_response(send_file(filepath, as_attachment=True))
-        response.headers["Content-Disposition"] = f"attachment; filename={filename}"
-        response.headers['Content-Type'] = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-        return response
-    except Exception as e:
-        logger.error(f"[DOWNLOAD-{tipo.upper()}] Erro ao baixar o arquivo: {str(e)}")
-        return jsonify({"status": "error", "message": f"Erro ao baixar o arquivo: {str(e)}"}), 500
     
-@app.route('/api/gerar-bpa', methods=['POST'])
-def gerar_bpa_route():
-    try:
-        filepath = Gerar_BPA.criar_arquivo_bpa()
-        if filepath:
-            return send_file(filepath, as_attachment=True)
-        else:
-            return jsonify({"message": "Erro ao gerar BPA: Arquivo não foi criado."}), 500
-    except Exception as e:
-        logger.error(f"Erro ao gerar BPA: {str(e)}")
-        return jsonify({"message": f"Erro ao gerar BPA: {str(e)}"}), 500
+# BPA routes moved to bpa_routes.py:
+# /api/gerar-bpa
+# /api/save-bpa-config
+# /api/load-bpa-config
+# /api/list-bpa-files
+# /api/delete-bpa-file
+# /api/download-bpa-file
+# /api/corrigir-ceps
+# /api/atualizar-cep-escolhido
 
-@app.route('/execute-queries/bpa', methods=['GET'])
+@app.route('/execute-queries/bpa', methods=['GET']) # Keeping this route for now.
 def execute_bpa_queries():
     config_data = request.args.to_dict()
     tipo = 'bpa'
@@ -1238,9 +1096,11 @@ def atualizar_cep_escolhido():
 
 # Inicialização do servidor
 if __name__ == '__main__':
+    # Need to import importdados here if it's used in __main__
+    import importdados # Ensuring importdados is available for the __main__ block
     with app.app_context():  # Garante o contexto da aplicação
         logger.info(f"[STARTUP] Estado inicial de task_status: {task_status}")
-        config = importdados.ensure_auto_update_config()
+        config = importdados.ensure_auto_update_config() # This line requires importdados
         if config['isAutoUpdateOn']:
             if len(importdados.scheduler.get_jobs()) > 0:
                 importdados.scheduler.remove_all_jobs()

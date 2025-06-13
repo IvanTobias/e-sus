@@ -4,7 +4,7 @@ import pandas as pd
 from socketio_config import socketio, emit_start_task, emit_progress, emit_end_task
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import text
-from Conexões import get_external_engine, get_local_engine, log_message
+from Conexoes import get_external_engine, get_local_engine, log_message # Changed from Conexões
 from banco import cancel_query, clean_dataframe
 import logging
 import traceback
