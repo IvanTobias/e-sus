@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Home, Settings, UploadCloud, FileText, Users, UserCheck, Activity, BarChart2, Tv, Edit, PhoneCall, MessageSquare, Tool, BookOpen, Map, Shield, Heart, Activity as ActivityIcon } from 'react-feather'; // Importando mais ícones
+import { Home, Settings, UploadCloud, FileText, Users, UserCheck, Activity, BarChart2, Tv, Edit, PhoneCall, MessageSquare, Tool, BookOpen, Map, Shield, Heart, Activity as ActivityIcon, Database } from 'react-feather'; // Adicionado ícone Database
 
 function Sidebar({ onLoadContent }) {
   const [selectedModule, setSelectedModule] = useState('config'); // Iniciar com 'config' selecionado
@@ -21,6 +21,7 @@ function Sidebar({ onLoadContent }) {
   const modules = [
     { name: 'Configuração DB', id: 'config', icon: Settings, section: 'Config' },
     { name: 'Importar Dados', id: 'import', icon: UploadCloud, section: 'Dados' },
+    { name: 'Integração Fiocruz', id: 'fiocruz_integration', icon: Database, section: 'Dados' }, // Nova opção para Integração Fiocruz
     // Relatórios Originais
     { name: 'Cadastros Orig.', id: 'cadastro', icon: Users, section: 'Relatórios Originais' },
     { name: 'Visitas Orig.', id: 'visitas', icon: UserCheck, section: 'Relatórios Originais' },
@@ -82,4 +83,3 @@ function Sidebar({ onLoadContent }) {
 }
 
 export default Sidebar;
-

@@ -10,6 +10,7 @@ from Consultas import execute_long_task
 from socketio_config import socketio
 from Conexões import log_message
 from Common import AUTO_UPDATE_CONFIG_FILE, task_event, update_last_import
+from init import app
 
 # Inicializar o agendador de tarefas
 scheduler = BackgroundScheduler()
@@ -53,15 +54,14 @@ def release_lock(lock_name):
 
 
 
-from flask import current_app
 
 # Função para executar as importações automáticas
 def auto_update_imports_wrapper():
-    with current_app.app_context():  # Garante que estamos dentro do contexto da aplicação
+    with app.app_context():  # Garante que estamos dentro do contexto da aplicação
         logging.info("Executando autoatualização de importações...")
         # Aqui você pode chamar as funções de importação
         # Por exemplo, para cada tipo de importação:
-        tipos = ['cadastro', 'domiciliofcd', 'bpa', 'visitas', 'atendimentos', 'iaf', 'pse', 'pse_prof']
+        tipos = ['cadastro', 'domiciliofcd', 'bpa', 'visitas', 'atendimentos', 'iaf', 'pse', 'pse_prof','fiocruz']
         for tipo in tipos:
             try:
                 # Lê a configuração atual

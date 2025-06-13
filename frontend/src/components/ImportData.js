@@ -276,26 +276,27 @@ function ImportData() {
       }
     });
 
-    socket.on('end_task', async (tipo) => {
+    socket.on('end_task', async (data) => {
+      const tipo = typeof data === 'string' ? data : data?.tipo;
+
       console.log(`[SOCKET] end_task recebido: tipo=${tipo}`);
       dispatch({ type: 'SET_BOTAO_DESABILITADO', payload: { type: tipo, value: false } });
       dispatch({ type: 'SET_EXECUTANDO', payload: { type: tipo, value: false } });
       dispatch({ type: 'SET_PROGRESSO', payload: { type: tipo, value: 100 } });
       dispatch({ type: 'SET_ARQUIVO_DISPONIVEL', payload: { type: tipo, value: true } });
-    
+
       try {
         const response = await fetch(`${API_BASE_URL}/download-exported-file/${tipo}`);
         if (!response.ok) throw new Error('Falha ao baixar o arquivo');
-    
+
         const blob = await response.blob();
         const url = window.URL.createObjectURL(blob);
         const link = document.createElement('a');
-    
-        // Pega o nome do arquivo enviado pelo backend
+
         const disposition = response.headers.get('Content-Disposition');
         const match = disposition && disposition.match(/filename="?(.+)"?/);
         const filename = match?.[1] || `${tipo}_export.xlsx`;
-    
+
         link.href = url;
         link.setAttribute('download', filename);
         document.body.appendChild(link);
@@ -303,10 +304,11 @@ function ImportData() {
         document.body.removeChild(link);
         window.URL.revokeObjectURL(url);
       } catch (error) {
-        console.error(`[EXPORT-${tipo.toUpperCase()}] Erro ao baixar o arquivo:`, error);
+        console.error(`[EXPORT-${tipo?.toUpperCase?.()}] Erro ao baixar o arquivo:`, error);
         dispatch({ type: 'SET_MENSAGEM_ERRO', payload: { type: tipo, message: `Erro ao baixar: ${error.message}` } });
       }
     });
+
     
 
     return () => {

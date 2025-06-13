@@ -21,7 +21,9 @@ task_status = {
     "iaf": "idle",
     "pse": "idle",
     "pse_prof": "idle",
-    "atendimentos": "idle"
+    "atendimentos": "idle",
+    "fiocruz": "idle",
+    'fiocruz_dimensoes': 'idle'
 }
 
 # Configuração de logging para monitoramento
@@ -45,7 +47,9 @@ def load_config():
                 "iaf": None,
                 "pse": None,
                 "pse_prof": None,
-                "atendimentos": None
+                "atendimentos": None,
+                "fiocruz": None,
+                'fiocruz_dimensoes': None
             }
             print("Arquivo configimport.json criado com valores padrão.")
     return _config_cache

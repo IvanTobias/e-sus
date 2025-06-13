@@ -51,6 +51,9 @@ from criar_banco import setup_local_database
 setup_local_database()
 # Import Blueprints from current project
 
+from foicruz_routes import register_fiocruz_routes
+
+
 # Import Blueprints from Fiocruz project (now under src/)
 try:
     from src.main.routes.diabetes_routes import diabetes_bp
@@ -87,6 +90,8 @@ if fiocruz_blueprints_available:
     app.register_blueprint(smoking_bp, url_prefix="/api/v1/smoking")
     app.register_blueprint(units_bp, url_prefix="/api/v1/units")
     logger.info("Fiocruz dashboard blueprints registered.")
+
+register_fiocruz_routes(app, socketio)
 
 # Ensure the backend directory and src directory are in the Python path
 backend_dir = os.path.dirname(os.path.abspath(__file__))
@@ -170,7 +175,7 @@ def query_progress():
 
 @app.route('/execute-queries/<tipo>', methods=['GET', 'POST'])
 def execute_queries(tipo):
-    if tipo not in ['cadastro', 'domiciliofcd', 'bpa', 'visitas', 'atendimentos', 'iaf', 'pse', 'pse_prof', 'fiocruz']:
+    if tipo not in ['cadastro', 'domiciliofcd', 'bpa', 'visitas', 'atendimentos', 'iaf', 'pse', 'pse_prof', 'fiocruz', 'fiocruz_dimensoes']:
         logger.error(f"Tipo desconhecido: {tipo}")
         return jsonify({"status": "error", "message": "Tipo desconhecido."})
 
@@ -479,7 +484,7 @@ def fetch_contagens():
         COUNT(CASE WHEN t1.co_dim_tipo_saida_cadastro = '2' THEN 1 END) as "Mudou-se",
         COUNT(CASE WHEN t1.co_dim_tipo_saida_cadastro = '3' THEN 1 END) as "Cadastros Ativos",
         COUNT(CASE WHEN t1.co_dim_tipo_saida_cadastro = '3' AND t1.nu_micro_area = 'FA' THEN 1 END) as "Fora de Área",
-        COUNT(CASE WHEN dt_atualizado < (CURRENT_DATE - INTERVAL '1 year') THEN 1 END) as "Cadastros Desatualizados",
+        COUNT(CASE WHEN dt_atualizado < (CURRENT_DATE - INTERVAL '2 year') THEN 1 END) as "Cadastros Desatualizados",
         COUNT(CASE WHEN t1.co_dim_tipo_saida_cadastro = '3' AND LENGTH(TRIM(nu_cns)) = 15 AND nu_cns != '0' THEN 1 END) as "Cadastros com Cns",
         COUNT(CASE WHEN t1.co_dim_tipo_saida_cadastro = '3' AND (LENGTH(TRIM(nu_cns)) != 15 OR nu_cns = '0') THEN 1 END) as "Cadastros com Cpf"
         FROM tb_cadastro t1
@@ -659,7 +664,7 @@ def fetch_detalhes():
         elif tipo == "fora de área":
             query_filters.append("t1.nu_micro_area = 'FA'")
         elif tipo == "cadastros desatualizados":
-            query_filters.append("t1.dt_atualizado < (CURRENT_DATE - INTERVAL '1 year')")
+            query_filters.append("t1.dt_atualizado < (CURRENT_DATE - INTERVAL '2 year')")
         elif tipo == "cadastros com cns":
             query_filters.append("(LENGTH(TRIM(t1.nu_cns)) = 15 AND t1.nu_cns != '0') and co_dim_tipo_saida_cadastro = '3'")
         elif tipo == "cadastros com cpf":

@@ -12,6 +12,32 @@ from Common import task_event, update_task_status, update_last_import
 from contextlib import contextmanager
 import unicodedata
 
+# Importar a lista de comandos SQL de tabelas.py
+try:
+    # Tenta importar diretamente se estiver no mesmo diretório ou PYTHONPATH
+    # Ajuste o caminho se o Consultas.py não estiver na raiz do backend
+    from src.infra.db.repositories.sqls.tabelas import TABELAS as CREATE_TABLE_SQLS
+    print("Definições de tabelas importadas de tabelas.py")
+except ImportError:
+    # Fallback: Tenta ler o arquivo
+    print("Aviso: Falha ao importar TABELAS de tabelas.py. Tentando ler o arquivo.")
+    try:
+        # Ajuste este caminho conforme a estrutura real do seu projeto
+        tabelas_py_path = "C:/Users/ivantp/Downloads/flask-react-project/backend/src/infra/db/repositories/sqls/tabelas.py"
+        with open(tabelas_py_path, 'r', encoding='utf-8') as f:
+            # Executa o código lido no contexto global deste módulo
+            global_namespace = {}
+            exec(f.read(), global_namespace)
+        CREATE_TABLE_SQLS = global_namespace.get('TABELAS', []) # Pega a variável TABELAS
+        if CREATE_TABLE_SQLS:
+            print("Leitura de tabelas.py bem-sucedida.")
+        else:
+            print("Aviso: Variável TABELAS não encontrada ou vazia em tabelas.py.")
+    except Exception as e:
+        print(f"Erro crítico: Não foi possível carregar definições de tabelas de tabelas.py: {e}")
+        CREATE_TABLE_SQLS = [] # Define como vazio para evitar erros posteriores
+
+
 progress = {}  # Variável global para rastreamento de progresso
 cancel_requests = {}  # Variável global para rastreamento de pedidos de cancelamento
 progress_lock = threading.Lock()  # Lock para proteger acesso concorrente ao progresso
@@ -48,6 +74,21 @@ def build_incremental_query(table_name, key_column, base_query, local_engine):
     else:
         return base_query, {}
 
+# --- Helper para Executar SQL Raw (DROP/CREATE) --- #
+def execute_raw_sql(sql_command, local_engine, tipo, task_name):
+    log_message(f"Executando SQL para {task_name} no tipo {tipo}: {sql_command[:100]}...")
+    try:
+        with local_engine.connect() as conn:
+            # DDL statements often manage their own transactions, but explicit commit can help
+            # conn.execute(text("COMMIT")) # May not be needed or could interfere
+            conn.execute(text(sql_command))
+            # conn.execute(text("COMMIT")) # May not be needed
+        log_message(f"SQL para {task_name} executado com sucesso.")
+        return True
+    except Exception as e:
+        error_trace = traceback.format_exc()
+        log_message(f"Erro ao executar SQL para {task_name} ({tipo}): {str(e)}\n{error_trace}")
+        raise Exception(f"Erro ao executar SQL para {task_name}: {str(e)}")
 
 # Função que executa a tarefa e atualiza o status
 def execute_long_task(config_data, tipo):
@@ -216,7 +257,7 @@ def execute_query(query_name, query, external_engine, local_engine, step_size, t
                 log_message(f"Cleaned column names for {query_name}: {df.columns.tolist()}")
 
                 with session_scope(Session) as session:
-                    df.to_sql(query_name, con=session.bind, if_exists='replace' if rows_processed == 0 else 'append', index=False)
+                    df.to_sql(query_name, con=session.bind, if_exists='append', index=False)
 
                 rows_processed += len(rows)
                 log_message(f"Processado {len(rows)} linhas. Total: {rows_processed}/{total_rows}")
@@ -294,7 +335,6 @@ def execute_and_store_queries(config_data, tipo):
         t3.st_problema_rins_nao_sabe,
         t1.nu_cpf_cidadao,
         t3.nu_cns,
-        t1.co_cidadao,
         t2.dt_atualizado,
         t2.dt_nascimento,
         t3.co_seq_fat_cad_individual,
@@ -933,7 +973,7 @@ def execute_and_store_queries(config_data, tipo):
         CASE
         WHEN t1.no_cbo ilike any (array['%AGENTE COMUNIT%RIO DE SA%DE%']) then 'ACS'
         WHEN t1.no_cbo ilike any (array['%AGENTE DE COMBATE %S ENDEMIAS%']) then 'ACE' END AS "CBO_MCAF",
-        CASE WHEN t0.st_acomp_recem_nascido = '0' AND t0.st_acomp_crianca = '0' THEN '0' ELSE '1' END AS "soma_recem_nascido+crianca",
+        CASE WHEN t0.st_acomp_recem_nascido = '0' AND t0.st_acomp_crianca = '0' THEN '0' ELSE '1' END AS "soma_recem_nascido_crianca",
         dt_registro as "DT_VISITA_MCAF",
         to_char(t19.dt_ficha, 'hh24:mi:ss') as hr_min_seg,
         case when t20.ds_anotacao is null then 'NÃO' else 'SIM' end as anotacao,

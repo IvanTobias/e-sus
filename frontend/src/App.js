@@ -12,6 +12,7 @@ import DashboardPage from './components/DashboardPage'; // Import DashboardPage 
 import VisitaPage from './components/VisitasPage';
 import IAFPSEPage from './components/IAFPSEPage';
 import ProntuarioSupport from './components/ProntuarioSupport'; // Import ProntuarioSupport
+import FiocruzIntegrationPage from './components/FiocruzIntegrationPage'; // Importar o componente de Integração Fiocruz
 
 // Import new Power BI style dashboards
 import CadastrosACSDashboard from './components/CadastrosACSDashboard';
@@ -42,6 +43,7 @@ function App() {
         {currentPage === 'home' && <Home />} {/* Example Home route */}
         {currentPage === 'config' && <ConfigDatabase />}
         {currentPage === 'import' && <ImportData />}
+        {currentPage === 'fiocruz_integration' && <FiocruzIntegrationPage />} {/* Nova rota para Integração Fiocruz */}
         {/* Relatórios Originais */}
         {currentPage === 'cadastro' && <CadastrosPage />}
         {currentPage === 'visitas' && <VisitaPage />}
@@ -65,4 +67,3 @@ function App() {
 }
 
 export default App;
-
